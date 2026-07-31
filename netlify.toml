@@ -1,0 +1,11 @@
+# Static marketing site (ShipNative landing). Expo app is unchanged.
+[build]
+  publish = "web"
+  # No build step — pure static HTML
+  command = "echo 'Static site — no build'"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

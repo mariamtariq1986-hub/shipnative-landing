@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShipNative — Gumroad Thumbnail (600×600)</title>
+  <!--
+    EXPORT: Open at 100% zoom → DevTools → select #artboard → Capture node screenshot.
+    Exact size: 600 × 600.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              300: "#5eead4",
+              400: "#2dd4bf",
+              500: "#14b8a6",
+              600: "#0d9488",
+            },
+            slateink: {
+              300: "#cbd5e1",
+              400: "#94a3b8",
+              900: "#0f172a",
+              950: "#020617",
+            },
+            cyan: {
+              400: "#22d3ee",
+            },
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', "system-ui", "sans-serif"],
+          },
+          keyframes: {
+            breathe: {
+              "0%, 100%": { transform: "scale(1)", opacity: "0.55" },
+              "50%": { transform: "scale(1.06)", opacity: "0.9" },
+            },
+            ring: {
+              "0%, 100%": { opacity: "0.35", transform: "scale(0.98)" },
+              "50%": { opacity: "0.7", transform: "scale(1.02)" },
+            },
+          },
+          animation: {
+            breathe: "breathe 4.5s ease-in-out infinite",
+            ring: "ring 5s ease-in-out infinite",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #030508;
+    }
+
+    #artboard {
+      width: 600px;
+      height: 600px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .noise {
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body>
+  <div
+    id="artboard"
+    class="relative flex flex-col items-center justify-center bg-gradient-to-br from-[#0a101c] via-slateink-950 to-[#071018] font-display"
+  >
+    <!-- Atmosphere -->
+    <div class="pointer-events-none absolute inset-0 noise"></div>
+    <div class="pointer-events-none absolute left-1/2 top-[42%] h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-500/25 blur-[90px] animate-breathe"></div>
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400/80 to-transparent"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
+
+    <!-- Soft orbital rings -->
+    <div class="pointer-events-none absolute left-1/2 top-[42%] h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-400/15 animate-ring"></div>
+    <div class="pointer-events-none absolute left-1/2 top-[42%] h-[220px] w-[220px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/5"></div>
+
+    <!-- Brand mark -->
+    <div class="relative z-10 flex flex-col items-center">
+      <div class="relative flex h-[196px] w-[196px] items-center justify-center rounded-[44px] bg-gradient-to-br from-slateink-900 to-[#0a121f] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_30px_80px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <div class="absolute inset-[10px] rounded-[36px] bg-gradient-to-br from-brand-400/10 via-transparent to-cyan-400/10"></div>
+        <!-- Lightning bolt -->
+        <svg
+          viewBox="0 0 64 64"
+          class="relative z-10 h-28 w-28 drop-shadow-[0_0_24px_rgba(45,212,191,0.55)]"
+          fill="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="bolt" x1="12" y1="4" x2="52" y2="60" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#5eead4" />
+              <stop offset="0.55" stop-color="#14b8a6" />
+              <stop offset="1" stop-color="#22d3ee" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M37.2 6.5L16 34.8h13.8L26.4 57.5 48 29.2H34.2L37.2 6.5z"
+            fill="url(#bolt)"
+          />
+        </svg>
+      </div>
+
+      <p class="mt-8 text-[28px] font-bold tracking-tight text-white">
+        Ship<span class="text-brand-400">Native</span>
+      </p>
+      <p class="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.28em] text-slateink-400">
+        Expo · AI · Ship
+      </p>
+    </div>
+  </div>
+</body>
+</html>

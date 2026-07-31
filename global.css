@@ -1,0 +1,9 @@
+/*
+  NativeWind v4 + Tailwind 3.4 theme entry.
+  For NativeWind v5 / Tailwind v4 the equivalent is:
+    @import "tailwindcss/theme.css";
+    @import "nativewind/theme";
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

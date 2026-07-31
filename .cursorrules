@@ -1,0 +1,125 @@
+# Expo Ultimate Starter — Cursor Agent Rules
+
+You are working in a production-ready React Native Expo AI starter kit.
+Follow these rules strictly. Prefer small, focused diffs over rewrites.
+
+## Stack (do not replace without explicit user request)
+
+- Expo SDK 57 + Expo Router (file-based routing)
+- TypeScript (strict)
+- NativeWind v4 + Tailwind CSS 3.4 (`className` styling)
+- Lucide React Native icons
+- Supabase auth (`lib/supabase.ts`, `context/AuthContext.tsx`)
+- Google Gemini via REST (`lib/ai.ts`)
+
+## TypeScript rules
+
+1. Always use strict TypeScript. No `any` unless unavoidable and justified in a one-line comment.
+2. Prefer explicit return types on exported functions and hooks.
+3. Colocate domain types near usage, or add shared types under `types/`.
+4. Env vars must be typed in `types/env.d.ts` and only accessed as `process.env.EXPO_PUBLIC_*`.
+5. Prefer `unknown` + narrowing over loose casts.
+6. Keep Expo Router typed routes enabled (`experiments.typedRoutes` in `app.json`). Use `Href` / typed `router.push` paths.
+
+## NativeWind / styling constraints
+
+1. Style with NativeWind `className` only. Avoid `StyleSheet.create` unless a library API requires style objects (e.g. tabBarStyle).
+2. Use the project palette: deep slate (`slateink-*`) + teal accent (`brand-*`). Support light and dark (`dark:` variants).
+3. Do not introduce purple/indigo “AI slop” themes, neon glow spam, or emoji-as-UI.
+4. Keep layouts calm and high-converting: clear hierarchy, generous spacing, rounded-2xl/3xl surfaces, minimal chrome.
+5. New Tailwind tokens belong in `tailwind.config.js` — do not hardcode one-off hex values when a token exists.
+6. Import `global.css` only from `app/_layout.tsx`.
+
+## Expo Router structure (do not break)
+
+```
+app/
+  _layout.tsx          # AuthProvider + ThemeProvider + root Stack
+  index.tsx            # Auth redirect gate
+  (auth)/
+    _layout.tsx
+    login.tsx
+    register.tsx
+  (tabs)/
+    _layout.tsx        # Dashboard / AI Assistant / Paywall tabs
+    index.tsx
+    ai-assistant.tsx
+    paywall.tsx
+```
+
+Rules for agents:
+
+1. Never move auth or tab routes outside their groups without updating redirects in `app/index.tsx`, `(auth)/_layout.tsx`, and `(tabs)/_layout.tsx`.
+2. New authenticated screens go under `app/(tabs)/` or a new protected group with a layout guard.
+3. New public/auth screens go under `app/(auth)/`.
+4. Shared UI goes in `components/`; business logic in `lib/`; providers in `context/`.
+5. Do not reintroduce `App.tsx` as the entry — `package.json` main is `expo-router/entry`.
+6. Preserve bottom tabs: Dashboard, AI Assistant, Paywall/Settings.
+
+## Architecture conventions
+
+1. Auth only through `useAuth()` from `context/AuthContext.tsx`.
+2. Theme only through `useTheme()` from `context/ThemeContext.tsx`.
+3. AI calls only through `lib/ai.ts` (never call Gemini URLs directly from screens).
+4. Supabase client only from `lib/supabase.ts`.
+5. Keep screens presentational where possible; extract reusable pieces into `components/`.
+6. Handlers must be functional (no TODO stubs). If a third-party service is missing, degrade gracefully with clear user messaging (demo auth / demo AI / Alert for IAP).
+
+## Quality bar
+
+1. Run `npm run typecheck` after substantive changes.
+2. Do not add placeholder “Coming soon” screens when the user asked for working UI.
+3. Prefer Expo-compatible packages (`npx expo install …`).
+4. Avoid unnecessary `useMemo` / `useCallback` unless stabilizing expensive work or dependency-sensitive APIs.
+5. Match existing naming: PascalCase components, camelCase functions, kebab-case route files.
+
+---
+
+## Boilerplate prompts (paste into Cursor to generate sub-pages in < 60s)
+
+### 1) New authenticated settings sub-page
+
+```
+Create app/(tabs)/settings.tsx as a Settings screen using NativeWind (slateink + brand palette) and Lucide icons.
+Include sections: Profile summary from useAuth(), theme toggle via useTheme(), Sign out button, and links row.
+Register it in app/(tabs)/_layout.tsx as a fourth tab OR hide it from the tab bar and navigate from Dashboard.
+Use TypeScript, no StyleSheet, no stubs. Keep Expo Router group structure intact.
+```
+
+### 2) New AI tool page (summarizer)
+
+```
+Add app/(tabs)/summarizer.tsx: a NativeWind form with a multiline input, tone selector (neutral/friendly/executive), and a result panel.
+On submit, call streamChatCompletion from lib/ai.ts with a system-style instruction baked into the user prompt.
+Show streaming text updates. Add a tab or Dashboard quick-action to open it. Strict TypeScript, Lucide icons, light/dark support.
+```
+
+### 3) Auth-gated modal feature
+
+```
+Create app/modal-feedback.tsx as a stack modal screen (register in app/_layout.tsx with presentation: 'modal').
+Form: rating 1–5, message TextField, submit Button. On submit Alert success and router.back().
+Guard with useAuth(); if no session, Redirect to /(auth)/login. NativeWind only, match existing UI components in components/ui.
+```
+
+### 4) Paywall feature flag card
+
+```
+Update app/(tabs)/paywall.tsx to add a third enterprise tier card ($199/yr) with a feature checklist and selected-state border using brand-500.
+Keep monthly/annual toggle working for existing tiers. Upgrade/Restore handlers must remain functional (Alert stubs OK). No purple theme.
+```
+
+### 5) Reusable empty state component
+
+```
+Create components/ui/EmptyState.tsx accepting title, description, actionLabel?, onAction?.
+Use Lucide Inbox icon, NativeWind classes, and dark mode. Use it in the AI Assistant when messages length is 0 after clearing chat.
+Export clean props types. Do not modify unrelated files.
+```
+
+### 6) Supabase profile fetch hook
+
+```
+Create hooks/useProfile.ts that reads the current user from useAuth() and returns { email, displayName, initials }.
+Use it on the Dashboard header. Strict TypeScript, no any, no new dependencies.
+```
