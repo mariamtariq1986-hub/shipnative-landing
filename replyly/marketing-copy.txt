@@ -66,8 +66,8 @@ Pro: $12/mo unlimited
 
 Works offline with smart templates (no API bill). Optional Gemini key if you want richer AI.
 
-Live: [YOUR_REPLYLY_URL]
-App: [YOUR_REPLYLY_URL]/app
+Live: https://replyly-kappa.vercel.app
+App: https://replyly-kappa.vercel.app/app
 
 Would love feedback from anyone who handles WhatsApp for a shop.
 
@@ -87,7 +87,7 @@ Stack: static HTML + Tailwind CDN + localStorage limits + templated engine (opti
 
 No backend for MVP. Deployed on Vercel as its own project.
 
-Try it: [YOUR_REPLYLY_URL]
+Try it: https://replyly-kappa.vercel.app
 
 Curious what vertical I should specialize next — clinics vs restaurants?
 
