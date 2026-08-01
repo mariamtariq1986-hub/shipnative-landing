@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "@/context/AuthContext";
+import { PremiumProvider } from "@/context/PremiumContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 
 function RootNavigator() {
@@ -26,7 +27,9 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
         <AuthProvider>
-          <RootNavigator />
+          <PremiumProvider>
+            <RootNavigator />
+          </PremiumProvider>
         </AuthProvider>
       </ThemeProvider>
     </GestureHandlerRootView>

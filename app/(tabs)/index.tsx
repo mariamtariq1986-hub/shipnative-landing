@@ -2,6 +2,8 @@ import { router } from "expo-router";
 import {
   Bot,
   ChartNoAxesCombined,
+  Crown,
+  Lock,
   Moon,
   Sparkles,
   Sun,
@@ -10,6 +12,7 @@ import {
 import { Pressable, Text, View } from "react-native";
 import { Screen } from "@/components/ui/Screen";
 import { useAuth } from "@/context/AuthContext";
+import { usePremium } from "@/context/PremiumContext";
 import { useTheme } from "@/context/ThemeContext";
 
 const stats = [
@@ -18,36 +21,60 @@ const stats = [
   { label: "Saved drafts", value: "7", hint: "Ready to reuse" },
 ];
 
-const actions = [
-  {
-    title: "Open AI Assistant",
-    subtitle: "Chat, stream, and iterate on ideas",
-    href: "/(tabs)/ai-assistant" as const,
-    icon: Bot,
-  },
-  {
-    title: "Upgrade plan",
-    subtitle: "Unlock higher limits & priority models",
-    href: "/(tabs)/paywall" as const,
-    icon: Zap,
-  },
-];
-
 export default function DashboardScreen() {
   const { user, signOut } = useAuth();
   const { isDark, toggleTheme } = useTheme();
+  const { isPremium } = usePremium();
   const name =
     (user?.user_metadata?.full_name as string | undefined) ||
     user?.email?.split("@")[0] ||
     "Creator";
 
+  const actions = [
+    {
+      title: "Open AI Assistant",
+      subtitle: "Chat, stream, and iterate on ideas",
+      href: "/(tabs)/ai-assistant" as const,
+      icon: Bot,
+      locked: false,
+    },
+    {
+      title: isPremium ? "Manage plan" : "Upgrade plan",
+      subtitle: isPremium
+        ? "You're on Premium — view benefits anytime"
+        : "Unlock higher limits & priority models",
+      href: "/(tabs)/paywall" as const,
+      icon: Zap,
+      locked: false,
+    },
+    {
+      title: "Pro prompt library",
+      subtitle: isPremium
+        ? "Synced templates and launch checklists"
+        : "Premium — unlock saved prompt sync",
+      href: "/(tabs)/paywall" as const,
+      icon: Crown,
+      locked: !isPremium,
+    },
+  ];
+
   return (
     <Screen>
       <View className="mb-6 flex-row items-start justify-between">
         <View className="flex-1 pr-3">
-          <Text className="text-sm font-medium uppercase tracking-widest text-brand-600 dark:text-brand-400">
-            Dashboard
-          </Text>
+          <View className="flex-row flex-wrap items-center gap-2">
+            <Text className="text-sm font-medium uppercase tracking-widest text-brand-600 dark:text-brand-400">
+              Dashboard
+            </Text>
+            {isPremium ? (
+              <View className="flex-row items-center gap-1 rounded-full bg-brand-500/15 px-2.5 py-1">
+                <Crown size={12} color="#14b8a6" />
+                <Text className="text-[11px] font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
+                  Premium
+                </Text>
+              </View>
+            ) : null}
+          </View>
           <Text className="mt-2 text-3xl font-bold text-slateink-900 dark:text-white">
             Welcome back, {name}
           </Text>
@@ -128,6 +155,7 @@ export default function DashboardScreen() {
                   {action.subtitle}
                 </Text>
               </View>
+              {action.locked ? <Lock size={18} color="#94a3b8" /> : null}
             </Pressable>
           );
         })}

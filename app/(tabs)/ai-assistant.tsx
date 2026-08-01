@@ -1,5 +1,6 @@
+import { router } from "expo-router";
 import { Bot, SendHorizontal, Sparkles } from "lucide-react-native";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -10,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { usePremium } from "@/context/PremiumContext";
 import {
   createMessageId,
   isGeminiConfigured,
@@ -23,7 +25,11 @@ const SUGGESTIONS = [
   "Draft an onboarding checklist",
 ];
 
+/** Soft upgrade nudge after this many user messages (chat still works). */
+const FREE_MESSAGE_NUDGE_AT = 5;
+
 export default function AiAssistantScreen() {
+  const { isPremium } = usePremium();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome",
@@ -36,6 +42,13 @@ export default function AiAssistantScreen() {
   const [streaming, setStreaming] = useState(false);
   const listRef = useRef<FlatList<ChatMessage>>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  const userMessageCount = useMemo(
+    () => messages.filter((m) => m.role === "user").length,
+    [messages],
+  );
+  const showUpgradeNudge =
+    !isPremium && userMessageCount >= FREE_MESSAGE_NUDGE_AT;
 
   useEffect(() => {
     return () => {
@@ -177,6 +190,16 @@ export default function AiAssistantScreen() {
         />
 
         <View className="border-t border-slateink-200 px-4 py-3 dark:border-slateink-800">
+          {showUpgradeNudge ? (
+            <Pressable
+              onPress={() => router.push("/(tabs)/paywall")}
+              className="mb-3 rounded-2xl border border-brand-500/30 bg-brand-500/10 px-4 py-3"
+            >
+              <Text className="text-sm font-medium text-brand-700 dark:text-brand-300">
+                Enjoying the assistant? Upgrade for unlimited chats and priority models.
+              </Text>
+            </Pressable>
+          ) : null}
           <View className="flex-row items-end gap-2 rounded-3xl border border-slateink-200 bg-white px-3 py-2 dark:border-slateink-700 dark:bg-slateink-900">
             <TextInput
               value={input}

@@ -7,10 +7,11 @@
   <!--
     EXPORT: Open at 100% zoom → DevTools → select #artboard → Capture node screenshot.
     Exact size: 600 × 600.
+    v1.1 — monetization-ready (subtle IAP cue).
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -35,6 +36,7 @@
           },
           fontFamily: {
             display: ['"Space Grotesk"', "system-ui", "sans-serif"],
+            mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
           },
           keyframes: {
             breathe: {
@@ -121,8 +123,8 @@
       <p class="mt-8 text-[28px] font-bold tracking-tight text-white">
         Ship<span class="text-brand-400">Native</span>
       </p>
-      <p class="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.28em] text-slateink-400">
-        Expo · AI · Ship
+      <p class="mt-2 font-mono text-[11px] font-semibold uppercase tracking-[0.32em] text-slateink-400">
+        IAP
       </p>
     </div>
   </div>

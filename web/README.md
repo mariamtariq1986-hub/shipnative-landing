@@ -5,21 +5,31 @@ Pure HTML landing page for free hosting on **Vercel** or **Netlify**. No build s
 | File | Purpose |
 |------|---------|
 | `index.html` | Deployable landing (standalone; Buy CTAs use real Gumroad `href`s) |
-| `vercel.json` | Optional clean URLs + basic headers (used when Root Directory = `web`) |
+| `vercel.json` | Used only if Vercel **Root Directory** is set to `web` |
+
+Prefer the **repo-root** [`../vercel.json`](../vercel.json): it sets `outputDirectory` to `web`, so importing the Git repo without changing Root Directory still serves this landing (and avoids Expo-root 404s).
 
 Gumroad’s custom landing still lives at the repo root: [`../landing.html`](../landing.html) (permalink `orrtfl`). Keep that file and `web/index.html` in sync when you edit copy or CTAs.
 
 ## Deploy (1–2 steps)
 
-### Vercel
+### Vercel (recommended)
 
 1. Import this Git repo on [vercel.com](https://vercel.com).
-2. Set **Root Directory** to `web` → Deploy.
+2. Leave **Root Directory** empty / `.` (repo root).
+3. Confirm settings (root `vercel.json` should override):
+   - **Framework Preset:** Other
+   - **Build Command:** empty (skip)
+   - **Output Directory:** `web`
+   - **Install Command:** empty (skip)
+4. Deploy. **Redeploy** after pulling this config if an older deploy 404’d.
 
-Or CLI from this folder:
+Alternative: set **Root Directory** to `web` (then this folder’s `vercel.json` applies; leave Output Directory empty).
+
+Or CLI from the **repo root**:
 
 ```bash
-npx vercel
+npx vercel --yes
 ```
 
 ### Netlify

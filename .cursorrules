@@ -11,6 +11,7 @@ Follow these rules strictly. Prefer small, focused diffs over rewrites.
 - Lucide React Native icons
 - Supabase auth (`lib/supabase.ts`, `context/AuthContext.tsx`)
 - Google Gemini via REST (`lib/ai.ts`)
+- RevenueCat IAP (`lib/purchases.ts`, `context/PremiumContext.tsx`) — demo fallback without keys; real store purchases need a development build (not Expo Go)
 
 ## TypeScript rules
 
@@ -60,10 +61,11 @@ Rules for agents:
 
 1. Auth only through `useAuth()` from `context/AuthContext.tsx`.
 2. Theme only through `useTheme()` from `context/ThemeContext.tsx`.
-3. AI calls only through `lib/ai.ts` (never call Gemini URLs directly from screens).
-4. Supabase client only from `lib/supabase.ts`.
-5. Keep screens presentational where possible; extract reusable pieces into `components/`.
-6. Handlers must be functional (no TODO stubs). If a third-party service is missing, degrade gracefully with clear user messaging (demo auth / demo AI / Alert for IAP).
+3. Premium / IAP only through `usePremium()` from `context/PremiumContext.tsx` (RevenueCat via `lib/purchases.ts`).
+4. AI calls only through `lib/ai.ts` (never call Gemini URLs directly from screens).
+5. Supabase client only from `lib/supabase.ts`.
+6. Keep screens presentational where possible; extract reusable pieces into `components/`.
+7. Handlers must be functional (no TODO stubs). If a third-party service is missing, degrade gracefully with clear user messaging (demo auth / demo AI / demo IAP).
 
 ## Quality bar
 
@@ -106,7 +108,7 @@ Guard with useAuth(); if no session, Redirect to /(auth)/login. NativeWind only,
 
 ```
 Update app/(tabs)/paywall.tsx to add a third enterprise tier card ($199/yr) with a feature checklist and selected-state border using brand-500.
-Keep monthly/annual toggle working for existing tiers. Upgrade/Restore handlers must remain functional (Alert stubs OK). No purple theme.
+Keep monthly/annual toggle working for existing tiers. Wire upgrade/restore through usePremium() (RevenueCat or demo mode). No purple theme.
 ```
 
 ### 5) Reusable empty state component

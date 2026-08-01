@@ -1,6 +1,6 @@
 # ShipNative
 
-A production-ready React Native Expo starter kit for shipping AI-powered mobile apps faster. ShipNative includes auth, theming, an AI assistant, and a paywall UI — wired with conventions that keep Cursor (and other AI coding agents) productive without breaking your architecture.
+A production-ready React Native Expo starter kit for shipping AI-powered mobile apps faster. ShipNative includes auth, theming, an AI assistant, and **monetization-ready** RevenueCat IAP — wired with conventions that keep Cursor (and other AI coding agents) productive without breaking your architecture.
 
 **Features**
 
@@ -8,7 +8,8 @@ A production-ready React Native Expo starter kit for shipping AI-powered mobile 
 - **NativeWind v4** — Tailwind CSS 3.4 styling via `className`
 - **Supabase auth** — email/password with secure session storage
 - **Google Gemini AI** — streaming chat via REST (`lib/ai.ts`)
-- **Paywall UI** — subscription tiers with monthly/annual toggle
+- **RevenueCat IAP** — real store purchases via `react-native-purchases`, with demo fallback when keys are missing
+- **Paywall UI** — monthly/annual toggle, restore, premium entitlement state
 - **Light & dark theme** — system-aware slate + teal palette
 - **TypeScript** — strict mode throughout
 
@@ -67,7 +68,7 @@ ShipNative follows a clear separation: routes in `app/`, providers in `context/`
 
 ```
 app/
-  _layout.tsx          # Root Stack + AuthProvider + ThemeProvider
+  _layout.tsx          # Root Stack + Auth + Theme + Premium providers
   index.tsx            # Auth redirect gate (session → tabs / login)
   (auth)/
     _layout.tsx        # Public auth group guard
@@ -77,15 +78,17 @@ app/
     _layout.tsx        # Bottom tabs: Dashboard / AI Assistant / Paywall
     index.tsx          # Dashboard
     ai-assistant.tsx   # Streaming Gemini chat
-    paywall.tsx        # Subscription / settings-style paywall
+    paywall.tsx        # RevenueCat / demo paywall
 
 context/
   AuthContext.tsx      # useAuth() — Supabase or demo session
   ThemeContext.tsx     # useTheme() — light / dark / system
+  PremiumContext.tsx   # usePremium() — RevenueCat or demo entitlement
 
 lib/
   supabase.ts          # Supabase client + isSupabaseConfigured
   ai.ts                # streamChatCompletion + Gemini / demo streaming
+  purchases.ts         # RevenueCat init, offerings, purchase, restore
 
 components/
   ui/                  # Button, TextField, Screen, etc.
@@ -100,6 +103,7 @@ types/
 |---------|-----------------|
 | Auth | `useAuth()` from `context/AuthContext.tsx` |
 | Theme | `useTheme()` from `context/ThemeContext.tsx` |
+| Premium / IAP | `usePremium()` from `context/PremiumContext.tsx` (RevenueCat via `lib/purchases.ts`) |
 | AI calls | `streamChatCompletion` in `lib/ai.ts` (do not call Gemini URLs from screens) |
 | Supabase client | `lib/supabase.ts` only |
 | Entry | `expo-router/entry` (no `App.tsx`) |
@@ -126,6 +130,10 @@ Copy `.env.example` to `.env`. Expo exposes only variables prefixed with `EXPO_P
 EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 EXPO_PUBLIC_GEMINI_API_KEY=your-gemini-api-key
+
+EXPO_PUBLIC_REVENUECAT_API_KEY_IOS=your-revenuecat-ios-api-key
+EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID=your-revenuecat-android-api-key
+EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID=premium
 ```
 
 ### Supabase (auth)
@@ -145,6 +153,37 @@ Leave the placeholder values (or omit real keys) to use **demo auth** — no Sup
 
 The kit calls Gemini `gemini-2.0-flash` through `lib/ai.ts` (`streamChatCompletion`). Without a real key, the assistant streams a local demo reply so you can still build and theme the chat UI.
 
+### RevenueCat (in-app purchases)
+
+ShipNative’s paywall is **monetization-ready** for the apps *you* ship (subscriptions inside your product). Buying the ShipNative kit itself is on Gumroad — IAP is for your end users.
+
+1. Create a project at [RevenueCat](https://www.revenuecat.com/).
+2. Add your **iOS** and **Android** apps (bundle id / package must match `app.json`).
+3. Create an **entitlement** (e.g. `premium`) and set `EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID` to the same id.
+4. Create App Store / Play subscription products (e.g. monthly + annual), then attach them in RevenueCat.
+5. Create an **Offering** named `default` with **Monthly** and **Annual** packages linked to those products.
+6. Copy the platform **API keys** (Public app-specific keys) into:
+   - `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS`
+   - `EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID`
+
+Without keys (or on web / when the native SDK cannot configure), the kit runs **demo IAP**: Upgrade / Restore simulate Premium via AsyncStorage and show a clear banner on the paywall.
+
+#### Expo Go vs development builds
+
+`react-native-purchases` needs **native modules**. Real App Store / Play purchases **do not work in Expo Go**.
+
+Use a development build:
+
+```bash
+npx expo install expo-dev-client
+npx expo prebuild
+npx expo run:ios
+# or
+npx expo run:android
+```
+
+Or build with [EAS Build](https://docs.expo.dev/develop/development-builds/introduction/). Sandbox / license-test accounts are still required for store testing.
+
 ### After editing `.env`
 
 Restart the Expo process (`npx expo start`). Env vars are read at bundler start; a hot reload alone may not pick them up.
@@ -157,7 +196,7 @@ ShipNative ships with a detailed **`.cursorrules`** file at the project root. Cu
 
 - Expo Router group structure (`(auth)`, `(tabs)`)
 - NativeWind `className` styling (slateink + brand palette, light/dark)
-- Auth via `useAuth()`, AI via `lib/ai.ts`, Supabase via `lib/supabase.ts`
+- Auth via `useAuth()`, premium via `usePremium()`, AI via `lib/ai.ts`, Supabase via `lib/supabase.ts`
 - Strict TypeScript and no stub “coming soon” screens
 
 ### Workflow
@@ -193,17 +232,18 @@ These prompts are designed so you can scaffold sub-pages in under a minute witho
 
 ## Marketing site (Vercel / Netlify)
 
-Static landing lives in [`web/`](web/) so it never conflicts with Expo Router.
+Static landing lives in [`web/`](web/) so it never conflicts with Expo Router. Root [`vercel.json`](vercel.json) sets `outputDirectory` to `web` so Vercel serves the landing even if Root Directory is left at the repo root (avoids Expo-root `NOT_FOUND` 404s).
 
 | Path | Use |
 |------|-----|
-| `web/index.html` | Deployable landing (set host root / publish dir to `web`) |
+| `web/index.html` | Deployable landing |
+| `vercel.json` | Vercel: Other / no install / no build / output `web` |
 | `landing.html` | Gumroad custom landing (permalink `orrtfl`) — keep in sync with `web/index.html` |
 | `marketing/` | Cover / thumbnail artboards for the Gumroad listing |
 
 **Deploy**
 
-1. **Vercel:** Import the repo → set **Root Directory** to `web` → Deploy.
+1. **Vercel:** Import the repo → leave **Root Directory** empty → Framework **Other**, empty Build/Install, Output **`web`** (or rely on root `vercel.json`) → Deploy. Redeploy after config changes.
 2. **Netlify:** Import the repo (root `netlify.toml` publishes `web`) → Deploy. Or drag-and-drop the `web` folder.
 
 Buy CTAs point to [https://mariamtariq72.gumroad.com/l/shipnative](https://mariamtariq72.gumroad.com/l/shipnative). Details: [`web/README.md`](web/README.md).
@@ -227,7 +267,13 @@ ShipNative degrades gracefully when keys are missing or still set to `.env.examp
 - Active when `EXPO_PUBLIC_GEMINI_API_KEY` is missing or still `your-gemini-api-key`.
 - `streamChatCompletion` streams a local demo message word-by-word so the AI Assistant UI works without Gemini.
 
-You can explore Dashboard, auth flows, theming, and the chat UI before connecting production services.
+**Demo IAP** (`lib/purchases.ts` + `context/PremiumContext.tsx`)
+
+- Active when RevenueCat keys are missing/placeholders, on web, or when the native SDK fails to configure (including Expo Go without a successful configure).
+- **Upgrade Now** sets a local Premium flag in AsyncStorage; **Restore** reads it back.
+- Paywall shows: *Demo mode — add RevenueCat keys for real IAP*.
+
+You can explore Dashboard, auth, theming, chat, and the paywall before connecting production services.
 
 ### Common issues
 
@@ -237,6 +283,9 @@ You can explore Dashboard, auth flows, theming, and the chat UI before connectin
 | Stale Metro / weird cache | Clear cache: `npx expo start -c` |
 | Auth always demo | Replace placeholder Supabase URL/key; placeholders containing `your-project` or `your-supabase-anon-key` keep demo mode on. |
 | AI always demo reply | Set a real `EXPO_PUBLIC_GEMINI_API_KEY` and restart Expo. |
+| IAP always demo / purchases fail in Expo Go | Add RevenueCat keys **and** run a [development build](#expo-go-vs-development-builds) (`expo-dev-client` / `prebuild` / EAS). Store IAP cannot run in Expo Go. |
+| Offering prices stay at $9.99 / $79.99 | Ensure RevenueCat offering `default` has Monthly + Annual packages attached to store products. |
+| Premium purchase but app stays free | Confirm `EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID` matches the entitlement id attached to your products. |
 | Type errors after edits | Run `npm run typecheck`. |
 | NativeWind classes not applying | Ensure `global.css` is imported only from `app/_layout.tsx`; restart with `-c` if styles look wrong. |
 | Module resolution / path aliases | Project uses `@/` → project root (see `tsconfig.json`). Prefer `@/lib/...`, `@/context/...`, etc. |
