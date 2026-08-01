@@ -5,6 +5,7 @@ Pure HTML landing page for free hosting on **Vercel** or **Netlify**. No build s
 | File | Purpose |
 |------|---------|
 | `index.html` | Deployable landing (standalone; Buy CTAs use real Gumroad `href`s) |
+| `lead-magnet.html` | Free “Expo AI App Setup Checklist” (printable / Save as PDF) |
 | `vercel.json` | Used only if Vercel **Root Directory** is set to `web` |
 
 Prefer the **repo-root** [`../vercel.json`](../vercel.json): it sets `outputDirectory` to `web`, so importing the Git repo without changing Root Directory still serves this landing (and avoids Expo-root 404s).
@@ -42,5 +43,6 @@ Or drag-and-drop only the contents of `web/` in the Netlify UI.
 ## CTAs & images
 
 - **Buy / Get it / Product page** → `https://mariamtariq72.gumroad.com/l/shipnative`
+- **Free checklist** → `lead-magnet.html` (live: `https://shipnative-landing.vercel.app/lead-magnet.html` after redeploy)
 - **Cover / thumbnail** → absolute Gumroad CDN URLs (`https://public-files.gumroad.com/...`) — valid on Vercel/Netlify
 - `data-gumroad-action="buy"` is kept for Gumroad embeds but **standalone hosting relies on `href`**, not those attributes

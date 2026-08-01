@@ -1,0 +1,39 @@
+ShipNative — free checklist share blurbs
+========================================
+Promote the FREE checklist. Soft mention of the kit is fine; avoid hard sell.
+Live URL (after Vercel redeploy): https://shipnative-landing.vercel.app/lead-magnet.html
+
+
+--- Dev.to comment / reply ---
+If you’re wiring Expo Router + Supabase + an AI chat + a paywall, this free checklist saved me from the usual “works until cold start / Expo Go IAP” footguns:
+
+https://shipnative-landing.vercel.app/lead-magnet.html
+
+Covers auth gates, NativeWind theme, Gemini client isolation, RevenueCat (dev build vs Expo Go), env placeholders, and a demo-mode gate before you buy API keys. Bookmark or Save as PDF — no email wall.
+
+
+--- WhatsApp / DM ---
+Free Expo AI app setup checklist (Router, Supabase, Gemini, RevenueCat, env + demo mode). Printable / Save as PDF, no signup:
+
+https://shipnative-landing.vercel.app/lead-magnet.html
+
+Handy if you’re about to spend a weekend gluing the same stack again.
+
+
+--- Reddit (r/reactnative, r/expo, etc.) ---
+Title idea: Free checklist: Expo AI app setup (Router, Supabase, Gemini, RevenueCat)
+
+Body:
+I keep seeing the same setup traps — auth redirects only on the login screen, Gemini fetch URLs in components, assuming IAP works in Expo Go, treating placeholder env values as “configured.”
+
+I put together a free, no-email checklist you can bookmark or Save as PDF:
+
+https://shipnative-landing.vercel.app/lead-magnet.html
+
+Sections: Expo Router gates, NativeWind/theme, Supabase session, Gemini chat client, RevenueCat paywall, env vars, demo mode before keys, and a final ship gate.
+
+If it’s useful, cool. If you want the whole stack already wired, there’s an optional starter linked at the bottom — checklist stands alone either way.
+
+
+--- One-line CTA (bio / tweet / pin) ---
+Free Expo AI setup checklist (auth · AI · paywall) → https://shipnative-landing.vercel.app/lead-magnet.html

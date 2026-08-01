@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expo AI App Setup Checklist — ShipNative</title>
+  <meta name="description" content="A practical checklist for shipping an Expo AI app: Router, NativeWind, Supabase auth, Gemini chat, RevenueCat IAP, env vars, demo mode, and launch gates." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --paper: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --soft: #64748b;
+      --line: rgba(15, 23, 42, 0.1);
+      --accent: #0d9488;
+      --accent-bright: #14b8a6;
+      --accent-soft: rgba(20, 184, 166, 0.12);
+      --hero-a: #e8f7f5;
+      --hero-b: #f8fafc;
+      --hero-c: #dff4ff;
+      --check-border: #cbd5e1;
+      --tip-bg: #f1f5f9;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 8% -8%, var(--hero-a), transparent 55%),
+        radial-gradient(ellipse 70% 45% at 92% 0%, var(--hero-c), transparent 50%),
+        linear-gradient(180deg, var(--hero-b), var(--bg) 40%, var(--bg));
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: #0f766e; }
+
+    .wrap {
+      width: min(820px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1.5rem 0 3.5rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 0.9rem;
+      background: linear-gradient(135deg, #2dd4bf, #0d9488);
+      color: #020617;
+      box-shadow: 0 10px 28px rgba(20, 184, 166, 0.28);
+    }
+
+    .brand-mark svg { width: 1.15rem; height: 1.15rem; }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-top: 0.15rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border-radius: 9999px;
+      padding: 0.55rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 90%, transparent);
+      color: var(--ink);
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+      color: var(--ink);
+    }
+
+    .btn-primary {
+      border: 0;
+      background: linear-gradient(135deg, #14b8a6, #0891b2);
+      color: #020617;
+      box-shadow: 0 10px 24px rgba(20, 184, 166, 0.3);
+    }
+
+    .btn-primary:hover { filter: brightness(1.04); color: #020617; }
+
+    .paper {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 1.5rem;
+      padding: 2rem 1.5rem 2.25rem;
+      box-shadow: 0 24px 60px rgba(2, 6, 23, 0.08);
+    }
+
+    @media (min-width: 640px) {
+      .paper { padding: 2.5rem 2.75rem 2.75rem; }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(13, 148, 136, 0.25);
+      background: var(--accent-soft);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #0f766e;
+      margin: 0 0 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.85rem, 4vw, 2.45rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+    }
+
+    .lede {
+      margin: 1rem 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 38rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem 1.1rem;
+      margin-top: 1.15rem;
+      padding-top: 1.15rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.85rem;
+      color: var(--soft);
+    }
+
+    .meta strong { color: var(--ink); font-weight: 600; }
+
+    .bookmark {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.9rem;
+      background: var(--tip-bg);
+      border: 1px dashed color-mix(in srgb, var(--accent) 35%, var(--line));
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .toc {
+      margin: 1.5rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    @media (min-width: 640px) {
+      .toc { grid-template-columns: 1fr 1fr; }
+    }
+
+    .toc a {
+      display: flex;
+      align-items: baseline;
+      gap: 0.55rem;
+      padding: 0.45rem 0.6rem;
+      border-radius: 0.65rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .toc a:hover { background: var(--accent-soft); color: #0f766e; }
+
+    .toc .n {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      min-width: 1.4rem;
+    }
+
+    section.block {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+      break-inside: avoid;
+    }
+
+    section.block h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-intro {
+      margin: 0 0 0.9rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .checks {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .checks li {
+      display: grid;
+      grid-template-columns: 1.15rem 1fr;
+      gap: 0.7rem;
+      align-items: start;
+    }
+
+    .checks input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.15rem;
+      height: 1.15rem;
+      margin: 0.15rem 0 0;
+      border: 1.5px solid var(--check-border);
+      border-radius: 0.3rem;
+      background: #fff;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .checks input[type="checkbox"]:checked {
+      background: var(--accent-bright);
+      border-color: var(--accent-bright);
+    }
+
+    .checks input[type="checkbox"]:checked::after {
+      content: "";
+      position: absolute;
+      left: 0.32rem;
+      top: 0.08rem;
+      width: 0.28rem;
+      height: 0.55rem;
+      border: solid #020617;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .checks label {
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    .checks .hint {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.84rem;
+      color: var(--soft);
+      font-weight: 400;
+    }
+
+    .checks code,
+    .inline-code {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.82em;
+      padding: 0.08rem 0.32rem;
+      border-radius: 0.3rem;
+      background: var(--accent-soft);
+      color: #0f766e;
+    }
+
+    .tip {
+      margin-top: 0.9rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.85rem;
+      background: var(--tip-bg);
+      border-left: 3px solid var(--accent-bright);
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .tip strong { color: var(--ink); }
+
+    .cta {
+      margin-top: 2.25rem;
+      padding: 1.4rem 1.25rem;
+      border-radius: 1.15rem;
+      background: linear-gradient(145deg, #0f172a 0%, #020617 55%, #07131f 100%);
+      color: #e2e8f0;
+      break-inside: avoid;
+    }
+
+    .cta h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .cta p {
+      margin: 0.55rem 0 0;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      max-width: 36rem;
+    }
+
+    .cta-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+
+    .cta .btn-primary { color: #020617; }
+    .cta .btn-ghost {
+      border-color: rgba(148, 163, 184, 0.28);
+      background: transparent;
+      color: #e2e8f0;
+    }
+    .cta .btn-ghost:hover {
+      border-color: rgba(45, 212, 191, 0.55);
+      color: #5eead4;
+    }
+
+    .footer-note {
+      margin-top: 1.25rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--soft);
+    }
+
+    .footer-note a { color: var(--accent); }
+
+    @media print {
+      @page {
+        margin: 12mm 14mm;
+        size: A4;
+      }
+
+      body {
+        background: #fff !important;
+        color: #000;
+        font-size: 10.5pt;
+      }
+
+      .toolbar .actions,
+      .no-print { display: none !important; }
+
+      .wrap {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .paper {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
+      }
+
+      .brand-mark { box-shadow: none; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+      a { color: inherit; text-decoration: none; }
+
+      .toc { display: none; }
+
+      section.block {
+        break-inside: avoid;
+        margin-top: 1.1rem;
+        padding-top: 0.85rem;
+      }
+
+      .checks input[type="checkbox"] {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .cta {
+        border: 1.5pt solid #0d9488;
+        background: #f8fafc !important;
+        color: #0f172a;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .cta h2 { color: #0f172a; }
+      .cta p { color: #334155; }
+      .cta .btn { display: none; }
+
+      .cta::after {
+        content: "Get the full kit: https://mariamtariq72.gumroad.com/l/shipnative  ·  Landing: https://shipnative-landing.vercel.app";
+        display: block;
+        margin-top: 0.75rem;
+        font-size: 9pt;
+        color: #0f766e;
+        word-break: break-all;
+      }
+
+      .footer-note { margin-top: 0.75rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <a class="brand" href="index.html" aria-label="ShipNative home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M18.5 4L8 17.5h7.2L13.5 28 24 14.5h-7.2L18.5 4z" fill="currentColor"/></svg>
+        </span>
+        <span>
+          <span class="brand-name">ShipNative</span>
+          <span class="brand-sub">Free checklist</span>
+        </span>
+      </a>
+      <div class="actions no-print">
+        <button type="button" class="btn" onclick="window.print()" aria-label="Print or save as PDF">
+          Save as PDF
+        </button>
+        <a class="btn btn-primary" href="https://mariamtariq72.gumroad.com/l/shipnative">Get the kit · $40</a>
+      </div>
+    </div>
+
+    <article class="paper">
+      <p class="eyebrow">Expo · AI · Monetization</p>
+      <h1>Expo AI App Setup Checklist</h1>
+      <p class="lede">
+        A practical gate list for shipping a React Native Expo app with auth, theming, streaming AI chat, and a paywall — without rediscovering the same pitfalls every weekend.
+      </p>
+
+      <div class="meta">
+        <span><strong>~45–90 min</strong> to walk once</span>
+        <span><strong>Stack:</strong> Expo SDK 57 · Router · NativeWind · Supabase · Gemini · RevenueCat</span>
+        <span><strong>by</strong> ShipNative <span aria-hidden="true">·</span> buildsby_mariam</span>
+      </div>
+
+      <p class="bookmark">
+        No signup. Bookmark this page (or Save as PDF) and check items as you build. When you want the wired kit instead of DIY glue, the soft CTA is at the bottom.
+      </p>
+
+      <ol class="toc" aria-label="Checklist sections">
+        <li><a href="#router"><span class="n">01</span> Expo Router &amp; auth gates</a></li>
+        <li><a href="#nativewind"><span class="n">02</span> NativeWind &amp; theme</a></li>
+        <li><a href="#supabase"><span class="n">03</span> Supabase auth</a></li>
+        <li><a href="#ai"><span class="n">04</span> Gemini / AI chat</a></li>
+        <li><a href="#iap"><span class="n">05</span> RevenueCat / paywall</a></li>
+        <li><a href="#env"><span class="n">06</span> Env vars</a></li>
+        <li><a href="#demo"><span class="n">07</span> Demo mode</a></li>
+        <li><a href="#ship"><span class="n">08</span> Ship checklist</a></li>
+      </ol>
+
+      <section class="block" id="router">
+        <h2>1. Expo Router &amp; auth gates</h2>
+        <p class="section-intro">File-based routes are easy; session redirects are where apps feel broken. Lock this before polishing UI.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="r1" />
+            <label for="r1">
+              Use Expo Router groups: <code>(auth)</code> for login/register, <code>(tabs)</code> for authenticated shell.
+              <span class="hint">Keep <code>app/index.tsx</code> as a redirect gate — not a marketing page inside the app.</span>
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="r2" />
+            <label for="r2">
+              Unauthenticated users hitting tabs redirect to login; authenticated users hitting auth screens redirect into tabs.
+              <span class="hint">Guard in layout files so every nested screen inherits the rule.</span>
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="r3" />
+            <label for="r3">
+              Enable typed routes (<code>experiments.typedRoutes</code>) and use typed <code>Href</code> / <code>router.push</code> paths.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="r4" />
+            <label for="r4">
+              Bottom tabs cover the money path: Dashboard → AI Assistant → Paywall/Settings.
+              <span class="hint">Don’t bury the paywall three menus deep if you plan to monetize.</span>
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="r5" />
+            <label for="r5">
+              Confirm cold start: kill app → reopen → session still routes correctly (Secure Store / session restore).
+            </label>
+          </li>
+        </ul>
+        <p class="tip"><strong>Trap:</strong> Putting auth logic only on the login screen. Layout-level redirects catch deep links and tab restores.</p>
+      </section>
+
+      <section class="block" id="nativewind">
+        <h2>2. NativeWind &amp; theme</h2>
+        <p class="section-intro">Ship one palette and light/dark early so every new screen doesn’t invent hex values.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="n1" />
+            <label for="n1">
+              NativeWind v4 + Tailwind configured; style with <code>className</code> (avoid <code>StyleSheet.create</code> unless a library requires it).
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="n2" />
+            <label for="n2">
+              Import <code>global.css</code> once from the root layout — not per screen.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="n3" />
+            <label for="n3">
+              Define brand tokens in <code>tailwind.config.js</code> (e.g. deep slate + teal accent) and use them everywhere.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="n4" />
+            <label for="n4">
+              Theme toggle works on first paint (persist preference; respect system until user chooses).
+              <span class="hint">Check login, chat bubbles, and paywall cards in both modes.</span>
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="n5" />
+            <label for="n5">
+              Touch targets ≥ 44px; contrast holds on muted body text over elevated surfaces.
+            </label>
+          </li>
+        </ul>
+      </section>
+
+      <section class="block" id="supabase">
+        <h2>3. Supabase auth</h2>
+        <p class="section-intro">Auth is not “a form.” It’s session persistence, error copy, and a path that works before keys exist.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="s1" />
+            <label for="s1">
+              Single Supabase client module (<code>lib/supabase.ts</code>); screens never construct their own client.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="s2" />
+            <label for="s2">
+              Auth state lives in a provider/context (<code>useAuth()</code>) — login, register, sign-out, session.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="s3" />
+            <label for="s3">
+              Session persisted with Expo Secure Store (or equivalent) so iOS/Android restarts keep the user in.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="s4" />
+            <label for="s4">
+              Email/password flows show human errors (invalid credentials, weak password, network) — not raw SDK dumps.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="s5" />
+            <label for="s5">
+              Supabase dashboard: email auth enabled; redirect URLs set if you add magic links / OAuth later.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="s6" />
+            <label for="s6">
+              Sign-out clears session and lands on login without a white flash or stuck spinner.
+            </label>
+          </li>
+        </ul>
+        <p class="tip"><strong>Tip:</strong> Keep anon key in <code>EXPO_PUBLIC_*</code> only. Never ship the service role key in the mobile app.</p>
+      </section>
+
+      <section class="block" id="ai">
+        <h2>4. Gemini / AI chat</h2>
+        <p class="section-intro">Isolate the API client so screens stay presentational and you can swap models later.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="a1" />
+            <label for="a1">
+              All Gemini calls go through one module (e.g. <code>lib/ai.ts</code>) — no fetch URLs hard-coded in screens.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="a2" />
+            <label for="a2">
+              Chat UI supports user/assistant bubbles, empty state, and a clear “thinking / streaming” state.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="a3" />
+            <label for="a3">
+              Streaming (or progressive updates) works; abort/cancel doesn’t leave a half-dead message stuck forever.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="a4" />
+            <label for="a4">
+              Missing/invalid API key fails gracefully with actionable copy (“add <code>EXPO_PUBLIC_GEMINI_API_KEY</code>”).
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="a5" />
+            <label for="a5">
+              Rate-limit / 429 / network errors surface a retry path — don’t silently swallow.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="a6" />
+            <label for="a6">
+              Prompt suggestions or a starter prompt exist so the first open doesn’t feel empty.
+            </label>
+          </li>
+        </ul>
+        <p class="tip"><strong>Security note:</strong> Client-side Gemini keys are fine for demos/MVPs. For production traffic, prefer a thin backend proxy when abuse becomes real.</p>
+      </section>
+
+      <section class="block" id="iap">
+        <h2>5. RevenueCat / IAP paywall</h2>
+        <p class="section-intro">Store purchases need a development build — Expo Go will not exercise real IAP. Design for that from day one.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="i1" />
+            <label for="i1">
+              Premium state exposed via one hook/context (<code>usePremium()</code>), not scattered <code>AsyncStorage</code> flags.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="i2" />
+            <label for="i2">
+              Paywall UI: at least monthly + annual, selected state, feature checklist, restore purchases.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="i3" />
+            <label for="i3">
+              RevenueCat products + entitlement ID match env (<code>EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID</code>, default often <code>premium</code>).
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="i4" />
+            <label for="i4">
+              Separate iOS / Android API keys; configure only on native (skip web / Expo Go cleanly).
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="i5" />
+            <label for="i5">
+              Gated feature(s) check premium before running (e.g. unlimited AI) and route to paywall when locked.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="i6" />
+            <label for="i6">
+              Test on a <strong>development build</strong> / TestFlight / internal testing — not Expo Go — before App Store submit.
+            </label>
+          </li>
+        </ul>
+      </section>
+
+      <section class="block" id="env">
+        <h2>6. Environment variables</h2>
+        <p class="section-intro">Wrong env is the #1 “it works on my machine” for Expo teams. Treat placeholders as first-class.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="e1" />
+            <label for="e1">
+              Copy <code>.env.example</code> → <code>.env</code>; never commit real secrets.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="e2" />
+            <label for="e2">
+              Only <code>EXPO_PUBLIC_*</code> vars are read in the app; types declared (e.g. <code>types/env.d.ts</code>).
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="e3" />
+            <label for="e3">
+              Required keys documented:
+              <span class="hint"><code>EXPO_PUBLIC_SUPABASE_URL</code> · <code>EXPO_PUBLIC_SUPABASE_ANON_KEY</code> · <code>EXPO_PUBLIC_GEMINI_API_KEY</code> · <code>EXPO_PUBLIC_REVENUECAT_API_KEY_IOS</code> · <code>EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID</code> · optional entitlement ID</span>
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="e4" />
+            <label for="e4">
+              Placeholder detection: treat values like <code>your-*-api-key</code> as “not configured,” not as real keys.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="e5" />
+            <label for="e5">
+              After changing <code>.env</code>, restart Metro with a clean cache when values don’t stick.
+            </label>
+          </li>
+        </ul>
+      </section>
+
+      <section class="block" id="demo">
+        <h2>7. Demo mode (ship before keys)</h2>
+        <p class="section-intro">Buyers and teammates should click around before wiring dashboards. Demo mode is a product feature.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="d1" />
+            <label for="d1">
+              Auth works without Supabase keys (local/demo session) with clear UI labeling that it’s demo.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="d2" />
+            <label for="d2">
+              AI chat returns a scripted/streamed demo reply when Gemini isn’t configured — not a crash.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="d3" />
+            <label for="d3">
+              Paywall upgrade/restore simulates premium in demo mode; messaging explains real IAP needs a dev build + RevenueCat keys.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="d4" />
+            <label for="d4">
+              Switching from demo → real keys doesn’t leave stale “fake premium” or orphan sessions.
+            </label>
+          </li>
+        </ul>
+        <p class="tip"><strong>Why this matters:</strong> Demo mode turns your repo into a live demo for sales pages and Gumroad previews — not a wall of setup instructions.</p>
+      </section>
+
+      <section class="block" id="ship">
+        <h2>8. Ship checklist (before you call it done)</h2>
+        <p class="section-intro">The last mile is boring. That’s why it ships late if you don’t list it.</p>
+        <ul class="checks">
+          <li>
+            <input type="checkbox" id="p1" />
+            <label for="p1">
+              <code>npm run typecheck</code> (or <code>tsc --noEmit</code>) is clean.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="p2" />
+            <label for="p2">
+              Smoke path on device: register/login → chat once → open paywall → restore → sign out → sign in.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="p3" />
+            <label for="p3">
+              App icons, splash, <code>app.json</code> name/slug/bundle IDs set for the product you’re shipping (not the starter defaults).
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="p4" />
+            <label for="p4">
+              Privacy policy + terms linked from settings/paywall if you collect auth or process payments.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="p5" />
+            <label for="p5">
+              EAS / store listing: screenshots for both platforms; IAP products approved in App Store Connect / Play Console.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="p6" />
+            <label for="p6">
+              Kill placeholder copy (“Your App”, lorem, TODO) in user-visible strings.
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="p7" />
+            <label for="p7">
+              Decide production AI path: keep client key for low traffic, or move to a proxy before launch marketing spikes.
+            </label>
+          </li>
+        </ul>
+      </section>
+
+      <aside class="cta" aria-label="Get the full ShipNative kit">
+        <h2>Want this already wired?</h2>
+        <p>
+          ShipNative is the production-ready Expo AI starter with Supabase Auth, NativeWind, streaming Gemini chat, and a RevenueCat paywall — demo mode included — so your first commit can be a real feature.
+        </p>
+        <div class="cta-links no-print">
+          <a class="btn btn-primary" href="https://mariamtariq72.gumroad.com/l/shipnative">Get ShipNative · $40</a>
+          <a class="btn btn-ghost" href="https://shipnative-landing.vercel.app">View landing</a>
+          <a class="btn btn-ghost" href="index.html">Back to overview</a>
+        </div>
+      </aside>
+
+      <p class="footer-note">
+        Free checklist from <strong>ShipNative</strong>
+        <span aria-hidden="true"> · </span>
+        optional credit <a href="https://mariamtariq72.gumroad.com" rel="noopener">buildsby_mariam</a>
+        <span class="no-print" aria-hidden="true"> · </span>
+        <span class="no-print">Bookmark this page · or use Save as PDF above</span>
+      </p>
+    </article>
+  </div>
+</body>
+</html>
