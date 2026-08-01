@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commit Crime Scene — GitHub Case File</title>
+  <meta name="description" content="Enter a GitHub username. Get a funny detective case-file card: charges, chaos score, verdict. Download PNG. Free — by ShipNative." />
+  <meta name="theme-color" content="#0c1220" />
+  <meta property="og:title" content="Commit Crime Scene — GitHub Case File" />
+  <meta property="og:description" content="Turn any public GitHub profile into a shareable detective case file. Free viral tool by ShipNative." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              300: "#5eead4",
+              400: "#2dd4bf",
+              500: "#14b8a6",
+              600: "#0d9488",
+              700: "#0f766e",
+            },
+            noir: {
+              50: "#f4f6f8",
+              100: "#e8ecf1",
+              200: "#c9d2dc",
+              300: "#9aabbc",
+              400: "#6b8096",
+              500: "#4a6076",
+              600: "#364859",
+              700: "#273646",
+              800: "#1a2533",
+              900: "#111925",
+              950: "#0a1018",
+            },
+            tape: "#e8d54a",
+            stamp: "#c23b3b",
+          },
+          fontFamily: {
+            dossier: ['"Special Elite"', "Courier New", "monospace"],
+            ui: ['"IBM Plex Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          keyframes: {
+            fadeUp: {
+              from: { opacity: "0", transform: "translateY(16px)" },
+              to: { opacity: "1", transform: "translateY(0)" },
+            },
+            stampIn: {
+              "0%": { opacity: "0", transform: "scale(1.35) rotate(-18deg)" },
+              "60%": { opacity: "1", transform: "scale(0.96) rotate(-10deg)" },
+              "100%": { opacity: "1", transform: "scale(1) rotate(-12deg)" },
+            },
+            tapeSway: {
+              "0%, 100%": { transform: "rotate(-2deg)" },
+              "50%": { transform: "rotate(1.5deg)" },
+            },
+            pulseLine: {
+              "0%, 100%": { opacity: "0.35" },
+              "50%": { opacity: "0.8" },
+            },
+          },
+          animation: {
+            "fade-up": "fadeUp 0.55s ease-out both",
+            stamp: "stampIn 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) both",
+            "tape-sway": "tapeSway 6s ease-in-out infinite",
+            "pulse-line": "pulseLine 3.2s ease-in-out infinite",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0a1018;
+      --ink: #e8ecf1;
+      --muted: #9aabbc;
+      --paper: #f3efe6;
+      --paper-ink: #1a1a1a;
+      --line: rgba(232, 236, 241, 0.12);
+      --accent: #14b8a6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 70% 45% at 15% -5%, rgba(20, 184, 166, 0.12), transparent 55%),
+        radial-gradient(ellipse 55% 40% at 90% 10%, rgba(194, 59, 59, 0.08), transparent 50%),
+        linear-gradient(180deg, #0c1220 0%, #0a1018 45%, #070c12 100%);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .crime-grid {
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(ellipse 75% 60% at 50% 15%, black 15%, transparent 72%);
+    }
+
+    .noise {
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .tape {
+      background: repeating-linear-gradient(
+        -45deg,
+        #e8d54a,
+        #e8d54a 10px,
+        #111925 10px,
+        #111925 20px
+      );
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    .dossier {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%),
+        radial-gradient(ellipse at 20% 0%, rgba(194, 59, 59, 0.06), transparent 40%),
+        #f3efe6;
+      color: #1a1a1a;
+      box-shadow:
+        0 0 0 1px rgba(26, 26, 26, 0.08),
+        0 24px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .dossier::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.07;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+      border-radius: inherit;
+    }
+
+    .ruled {
+      background-image: repeating-linear-gradient(
+        transparent,
+        transparent 27px,
+        rgba(26, 37, 51, 0.08) 27px,
+        rgba(26, 37, 51, 0.08) 28px
+      );
+    }
+
+    .stamp {
+      font-family: "Special Elite", "Courier New", monospace;
+      border: 3px solid currentColor;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.88;
+      mix-blend-mode: multiply;
+      filter: contrast(1.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #14b8a6, #0f766e);
+      color: #041016;
+      font-weight: 700;
+      transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 24px rgba(20, 184, 166, 0.28);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(232, 236, 241, 0.16);
+      background: rgba(17, 25, 37, 0.65);
+      color: var(--ink);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(20, 184, 166, 0.45);
+      background: rgba(20, 184, 166, 0.08);
+    }
+
+    .field:focus {
+      outline: none;
+      border-color: rgba(20, 184, 166, 0.65);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #14b8a6;
+      outline-offset: 3px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @media print {
+      body { background: white; }
+      .no-print { display: none !important; }
+      #case-card { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-brand-500 focus:px-4 focus:py-2 focus:text-noir-950">
+    Skip to content
+  </a>
+
+  <div class="crime-grid pointer-events-none fixed inset-0" aria-hidden="true"></div>
+  <div class="noise fixed inset-0" aria-hidden="true"></div>
+
+  <!-- Crime scene tape -->
+  <div class="tape no-print relative z-30 h-3 w-full animate-tape-sway" aria-hidden="true"></div>
+
+  <header class="no-print relative z-20 mx-auto flex w-full max-w-5xl items-center justify-between px-5 py-5 sm:px-8">
+    <a href="index.html" class="group flex items-center gap-3 text-inherit no-underline">
+      <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700" aria-hidden="true">
+        <svg viewBox="0 0 32 32" class="h-5 w-5 text-noir-950" fill="none">
+          <path d="M18.5 4L8 17.5h7.2L13.5 28 24 14.5h-7.2L18.5 4z" fill="currentColor" />
+        </svg>
+      </div>
+      <div>
+        <p class="font-ui text-base font-bold tracking-tight">Commit Crime Scene</p>
+        <p class="font-dossier text-[11px] tracking-wide text-brand-400">by ShipNative</p>
+      </div>
+    </a>
+    <nav class="flex items-center gap-2 sm:gap-3" aria-label="Secondary">
+      <a href="lead-magnet.html" class="hidden rounded-full px-3 py-2 text-sm font-semibold text-noir-300 transition hover:text-brand-300 sm:inline-flex">
+        Free checklist
+      </a>
+      <a href="index.html" class="btn-ghost rounded-full px-3 py-2 text-sm font-semibold sm:px-4">
+        ShipNative
+      </a>
+    </nav>
+  </header>
+
+  <main id="main" class="relative z-10 mx-auto w-full max-w-5xl px-5 pb-16 pt-2 sm:px-8">
+    <!-- Hero: one composition -->
+    <section class="animate-fade-up mx-auto max-w-2xl text-center" aria-labelledby="hero-title">
+      <p class="font-dossier mb-3 text-sm tracking-[0.2em] text-stamp uppercase">
+        Dept. of Digital Misdemeanors
+      </p>
+      <h1 id="hero-title" class="font-dossier text-4xl leading-tight text-noir-50 sm:text-5xl md:text-[3.35rem]">
+        Commit Crime Scene
+      </h1>
+      <p class="mx-auto mt-4 max-w-lg font-ui text-base text-noir-300 sm:text-lg">
+        Drop a GitHub username. We open a case file: charges, chaos score, and a verdict you can screenshot.
+      </p>
+
+      <form id="case-form" class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-stretch" autocomplete="off">
+        <label for="username" class="sr-only">GitHub username</label>
+        <div class="relative flex-1">
+          <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-ui text-noir-400" aria-hidden="true">@</span>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            inputmode="text"
+            spellcheck="false"
+            autocorrect="off"
+            autocapitalize="none"
+            maxlength="39"
+            pattern="[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}"
+            placeholder="octocat"
+            required
+            class="field w-full rounded-2xl border border-white/10 bg-noir-900/80 py-3.5 pl-9 pr-4 font-ui text-base text-noir-50 placeholder:text-noir-500"
+          />
+        </div>
+        <button type="submit" id="investigate-btn" class="btn-primary rounded-2xl px-6 py-3.5 font-ui text-sm sm:min-w-[10.5rem]">
+          Investigate
+        </button>
+      </form>
+
+      <p id="status" class="mt-3 min-h-[1.5rem] font-ui text-sm text-noir-400" role="status" aria-live="polite"></p>
+
+      <div id="error-panel" class="mt-2 hidden rounded-2xl border border-stamp/40 bg-stamp/10 px-4 py-3 text-left" role="alert">
+        <p id="error-text" class="font-ui text-sm text-noir-100"></p>
+        <button type="button" id="demo-btn" class="btn-ghost mt-3 rounded-xl px-4 py-2 font-ui text-sm font-semibold">
+          Generate demo case
+        </button>
+      </div>
+    </section>
+
+    <!-- Case file card -->
+    <section id="result" class="mt-10 hidden" aria-label="Case file result">
+      <div class="no-print mb-4 flex flex-wrap items-center justify-center gap-2 sm:justify-end">
+        <button type="button" id="download-btn" class="btn-primary rounded-xl px-4 py-2.5 font-ui text-sm">
+          Download PNG
+        </button>
+        <button type="button" id="copy-link-btn" class="btn-ghost rounded-xl px-4 py-2.5 font-ui text-sm font-semibold">
+          Copy link
+        </button>
+        <button type="button" id="share-btn" class="btn-ghost rounded-xl px-4 py-2.5 font-ui text-sm font-semibold">
+          Share
+        </button>
+      </div>
+
+      <div class="flex justify-center">
+        <article
+          id="case-card"
+          class="dossier relative w-full max-w-[420px] animate-fade-up overflow-hidden rounded-sm px-6 pb-7 pt-5 sm:max-w-[460px]"
+        >
+          <!-- Mini tape on card -->
+          <div class="tape absolute -left-6 top-5 h-7 w-28 -rotate-12 opacity-90" aria-hidden="true"></div>
+          <div class="tape absolute -right-8 top-8 h-6 w-32 rotate-[18deg] opacity-80" aria-hidden="true"></div>
+
+          <header class="relative border-b-2 border-dashed border-noir-800/25 pb-3">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="font-dossier text-[10px] tracking-[0.25em] text-stamp uppercase">Confidential // Case File</p>
+                <p id="case-id" class="font-dossier mt-1 text-xs text-noir-600">CASE-0000</p>
+              </div>
+              <p class="font-dossier text-[10px] tracking-wide text-noir-500">ShipNative PD</p>
+            </div>
+          </header>
+
+          <div class="relative mt-5 flex items-start gap-4">
+            <div class="relative shrink-0">
+              <img
+                id="suspect-avatar"
+                src=""
+                alt=""
+                width="88"
+                height="88"
+                class="h-[88px] w-[88px] rounded-sm border-2 border-noir-800/30 object-cover grayscale contrast-125"
+                crossorigin="anonymous"
+              />
+              <div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-stamp ring-2 ring-[#f3efe6]" aria-hidden="true"></div>
+            </div>
+            <div class="min-w-0 flex-1 pt-0.5">
+              <p class="font-dossier text-[11px] tracking-[0.18em] text-noir-500 uppercase">Suspect</p>
+              <h2 id="suspect-name" class="font-dossier mt-1 truncate text-2xl leading-none text-noir-900"></h2>
+              <p id="suspect-handle" class="font-ui mt-1 text-sm text-noir-600"></p>
+              <p id="suspect-bio" class="font-ui mt-2 line-clamp-2 text-xs leading-relaxed text-noir-500"></p>
+            </div>
+          </div>
+
+          <div class="relative mt-5 grid grid-cols-3 gap-2">
+            <div class="rounded-sm border border-noir-800/15 bg-white/40 px-2 py-2 text-center">
+              <p class="font-dossier text-[10px] tracking-wide text-noir-500 uppercase">Chaos</p>
+              <p id="stat-chaos" class="font-dossier mt-1 text-xl text-noir-900">—</p>
+            </div>
+            <div class="rounded-sm border border-noir-800/15 bg-white/40 px-2 py-2 text-center">
+              <p class="font-dossier text-[10px] tracking-wide text-noir-500 uppercase">Repos</p>
+              <p id="stat-repos" class="font-dossier mt-1 text-xl text-noir-900">—</p>
+            </div>
+            <div class="rounded-sm border border-noir-800/15 bg-white/40 px-2 py-2 text-center">
+              <p class="font-dossier text-[10px] tracking-wide text-noir-500 uppercase">Witnesses</p>
+              <p id="stat-followers" class="font-dossier mt-1 text-xl text-noir-900">—</p>
+            </div>
+          </div>
+
+          <div class="ruled relative mt-5 min-h-[7.5rem] rounded-sm border border-noir-800/10 px-3 py-2">
+            <p class="font-dossier text-[11px] tracking-[0.18em] text-stamp uppercase">Charges / M.O.</p>
+            <ul id="charges-list" class="font-ui mt-2 space-y-1.5 text-sm leading-snug text-noir-800"></ul>
+          </div>
+
+          <div class="relative mt-4">
+            <p class="font-dossier text-[11px] tracking-[0.18em] text-noir-500 uppercase">Known languages</p>
+            <p id="languages" class="font-ui mt-1.5 text-sm text-noir-700">—</p>
+          </div>
+
+          <div class="relative mt-5 flex items-end justify-between gap-3 border-t border-noir-800/15 pt-4">
+            <div class="min-w-0">
+              <p class="font-dossier text-[11px] tracking-[0.18em] text-noir-500 uppercase">Verdict class</p>
+              <p id="verdict" class="font-dossier mt-1 text-xl text-noir-900 sm:text-2xl"></p>
+              <p id="created-line" class="font-ui mt-1 text-xs text-noir-500"></p>
+            </div>
+            <div
+              id="stamp"
+              class="stamp animate-stamp shrink-0 px-3 py-2 text-center text-sm leading-tight text-stamp"
+              aria-hidden="true"
+            >
+              CASE<br />CLOSED
+            </div>
+          </div>
+
+          <p class="font-dossier relative mt-5 text-center text-[10px] tracking-[0.15em] text-noir-400 uppercase">
+            commitcrimescene · shipnative-landing.vercel.app
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Soft CTAs -->
+    <aside class="no-print mx-auto mt-14 max-w-xl animate-fade-up text-center" aria-label="More from ShipNative">
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent animate-pulse-line" aria-hidden="true"></div>
+      <p class="font-dossier mt-8 text-sm tracking-wide text-noir-400">
+        Finished the case? Keep shipping.
+      </p>
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <a href="lead-magnet.html" class="btn-ghost rounded-xl px-4 py-2.5 font-ui text-sm font-semibold no-underline">
+          Free Expo AI checklist
+        </a>
+        <a
+          href="https://mariamtariq72.gumroad.com/l/shipnative"
+          class="rounded-xl bg-white/5 px-4 py-2.5 font-ui text-sm font-semibold text-brand-300 no-underline ring-1 ring-brand-500/30 transition hover:bg-brand-500/10"
+          rel="noopener noreferrer"
+        >
+          ShipNative kit →
+        </a>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="no-print relative z-10 border-t border-white/5 py-8 text-center">
+    <p class="font-ui text-xs text-noir-500">
+      Built for fun · Not affiliated with GitHub ·
+      <a href="index.html" class="text-brand-400 no-underline hover:underline">ShipNative</a>
+    </p>
+  </footer>
+
+  <div class="tape no-print relative z-30 h-3 w-full" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
+  <script>
+(function () {
+  "use strict";
+
+  // Note: browsers forbid setting User-Agent on fetch; Accept is enough for public API.
+  var GH_HEADERS = {
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+
+  var form = document.getElementById("case-form");
+  var usernameInput = document.getElementById("username");
+  var investigateBtn = document.getElementById("investigate-btn");
+  var statusEl = document.getElementById("status");
+  var errorPanel = document.getElementById("error-panel");
+  var errorText = document.getElementById("error-text");
+  var demoBtn = document.getElementById("demo-btn");
+  var resultSection = document.getElementById("result");
+  var downloadBtn = document.getElementById("download-btn");
+  var copyLinkBtn = document.getElementById("copy-link-btn");
+  var shareBtn = document.getElementById("share-btn");
+
+  var currentCase = null;
+
+  function setStatus(msg) {
+    statusEl.textContent = msg || "";
+  }
+
+  function hideError() {
+    errorPanel.classList.add("hidden");
+    errorText.textContent = "";
+  }
+
+  function showError(msg) {
+    errorText.textContent = msg;
+    errorPanel.classList.remove("hidden");
+  }
+
+  function sanitizeUsername(raw) {
+    var s = String(raw || "").trim().replace(/^@/, "");
+    if (!/^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/.test(s)) {
+      return null;
+    }
+    return s;
+  }
+
+  function hashString(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  function yearDiff(dateStr) {
+    var created = new Date(dateStr);
+    if (isNaN(created.getTime())) return 0;
+    var ms = Date.now() - created.getTime();
+    return Math.max(0, ms / (365.25 * 24 * 60 * 60 * 1000));
+  }
+
+  function topLanguages(repos) {
+    var counts = {};
+    for (var i = 0; i < repos.length; i++) {
+      var lang = repos[i].language;
+      if (!lang) continue;
+      counts[lang] = (counts[lang] || 0) + 1;
+    }
+    return Object.keys(counts)
+      .sort(function (a, b) { return counts[b] - counts[a]; })
+      .slice(0, 4);
+  }
+
+  function chaosScore(user, repos, langs) {
+    var years = yearDiff(user.created_at);
+    var repoRate = years > 0.25 ? user.public_repos / years : user.public_repos * 2;
+    var forkiness = 0;
+    var archived = 0;
+    for (var i = 0; i < repos.length; i++) {
+      if (repos[i].fork) forkiness += 1;
+      if (repos[i].archived) archived += 1;
+    }
+    var score = Math.round(
+      Math.min(99, Math.max(7,
+        repoRate * 6 +
+        Math.min(user.followers, 500) * 0.04 +
+        langs.length * 4 +
+        forkiness * 0.8 +
+        archived * 1.5 +
+        (user.bio ? 3 : 8)
+      ))
+    );
+    return score;
+  }
+
+  function pickVerdict(user, repos, langs, chaos) {
+    var years = yearDiff(user.created_at);
+    var forkCount = repos.filter(function (r) { return r.fork; }).length;
+    var hasAiHint =
+      /ai|gpt|llm|openai|gemini|claude|copilot/i.test(user.bio || "") ||
+      repos.some(function (r) {
+        return /ai|gpt|llm|openai|gemini|claude|copilot/i.test(r.name || "") ||
+          /ai|gpt|llm/i.test(r.description || "");
+      });
+    var depHeavy =
+      langs.indexOf("JavaScript") !== -1 ||
+      langs.indexOf("TypeScript") !== -1 ||
+      langs.indexOf("Python") !== -1;
+
+    if (hasAiHint) return "AI Co-Conspirator";
+    if (user.public_repos >= 80 || (years > 0 && user.public_repos / years >= 25)) return "Serial Shipper";
+    if (user.followers > 200 && user.public_repos < 15) return "PR Ghost";
+    if (forkCount > repos.length * 0.45 && repos.length > 8) return "Dependency Hoarder";
+    if (chaos >= 70 && user.public_repos > 20) return "Weekend Bandit";
+    if (langs.length <= 1 && user.public_repos > 5) return "Mono-Repo Mobster";
+    if (years >= 8 && chaos < 40) return "Cold Case Committer";
+    if (depHeavy && chaos >= 55) return "Package Deal Felon";
+    if (user.public_repos < 3) return "Suspect at Large";
+    var pool = ["Commit Scrawler", "Branch Burglar", "Merge Conflict Artist", "Issue File Clerk"];
+    return pool[hashString(user.login) % pool.length];
+  }
+
+  function buildCharges(user, repos, langs, verdict) {
+    var years = Math.floor(yearDiff(user.created_at));
+    var charges = [];
+    var langLine = langs.length
+      ? "Operating with " + langs.slice(0, 3).join(", ") + " in broad daylight"
+      : "Refusing to declare a primary language (suspicious)";
+    charges.push(langLine);
+
+    if (user.public_repos >= 50) {
+      charges.push("Flooding the evidence locker with " + user.public_repos + " public repos");
+    } else if (user.public_repos >= 15) {
+      charges.push("Maintaining " + user.public_repos + " open investigations (a.k.a. repos)");
+    } else {
+      charges.push("Traveling light: only " + user.public_repos + " public repos on record");
+    }
+
+    if (user.followers >= 100) {
+      charges.push("Recruiting " + user.followers + " witnesses (followers) — possible cult");
+    } else if (user.following > user.followers * 3 && user.following > 20) {
+      charges.push("Following everyone, befriending no one (" + user.following + " follows)");
+    } else {
+      charges.push("Keeping a low profile with " + user.followers + " followers");
+    }
+
+    if (years >= 1) {
+      charges.push("Active since ~" + years + " year" + (years === 1 ? "" : "s") + " — statute of limitations expired");
+    } else {
+      charges.push("Fresh face on the scene (account under a year old)");
+    }
+
+    if (/todo|wip|hack|broken/i.test(user.bio || "")) {
+      charges.push("Confessed in bio: still a WIP");
+    } else if (!user.bio) {
+      charges.push("No bio. Classic. Denies everything.");
+    }
+
+    if (verdict === "AI Co-Conspirator") {
+      charges.push("Suspected collaboration with non-human accomplices");
+    }
+
+    return charges.slice(0, 5);
+  }
+
+  function stampForCase(user, chaos) {
+    // "Closed" if they ship a lot or have followers; otherwise still at large
+    var closed = user.public_repos >= 10 || user.followers >= 25 || chaos >= 60;
+    return closed
+      ? { label: "CASE\nCLOSED", closed: true }
+      : { label: "STILL AT\nLARGE", closed: false };
+  }
+
+  function caseIdFromLogin(login) {
+    var h = hashString(login.toLowerCase());
+    return "CASE-" + String(h % 9000 + 1000);
+  }
+
+  function analyze(user, repos) {
+    var langs = topLanguages(repos);
+    var chaos = chaosScore(user, repos, langs);
+    var verdict = pickVerdict(user, repos, langs, chaos);
+    var charges = buildCharges(user, repos, langs, verdict);
+    var stamp = stampForCase(user, chaos);
+    return {
+      login: user.login,
+      name: user.name || user.login,
+      avatar: user.avatar_url,
+      bio: user.bio || "No statement on file.",
+      public_repos: user.public_repos,
+      followers: user.followers,
+      following: user.following,
+      created_at: user.created_at,
+      langs: langs,
+      chaos: chaos,
+      verdict: verdict,
+      charges: charges,
+      stamp: stamp,
+      caseId: caseIdFromLogin(user.login),
+      demo: !!user._demo,
+    };
+  }
+
+  function renderCase(data) {
+    currentCase = data;
+    document.getElementById("case-id").textContent = data.caseId;
+    var avatar = document.getElementById("suspect-avatar");
+    avatar.src = data.avatar;
+    avatar.alt = "Avatar of " + data.name;
+    document.getElementById("suspect-name").textContent = data.name;
+    document.getElementById("suspect-handle").textContent = "@" + data.login + (data.demo ? " · DEMO" : "");
+    document.getElementById("suspect-bio").textContent = data.bio;
+    document.getElementById("stat-chaos").textContent = String(data.chaos);
+    document.getElementById("stat-repos").textContent = String(data.public_repos);
+    document.getElementById("stat-followers").textContent = String(data.followers);
+
+    var list = document.getElementById("charges-list");
+    list.innerHTML = "";
+    for (var i = 0; i < data.charges.length; i++) {
+      var li = document.createElement("li");
+      li.textContent = "• " + data.charges[i];
+      list.appendChild(li);
+    }
+
+    document.getElementById("languages").textContent =
+      data.langs.length ? data.langs.join(" · ") : "Unknown (evidence sealed)";
+    document.getElementById("verdict").textContent = data.verdict;
+
+    var created = new Date(data.created_at);
+    document.getElementById("created-line").textContent = isNaN(created.getTime())
+      ? ""
+      : "First seen " + created.toLocaleDateString(undefined, { year: "numeric", month: "short" });
+
+    var stampEl = document.getElementById("stamp");
+    stampEl.innerHTML = data.stamp.label.replace("\n", "<br />");
+    stampEl.classList.toggle("text-stamp", data.stamp.closed);
+    stampEl.classList.toggle("text-brand-700", !data.stamp.closed);
+    stampEl.classList.remove("animate-stamp");
+    void stampEl.offsetWidth;
+    stampEl.classList.add("animate-stamp");
+
+    resultSection.classList.remove("hidden");
+    resultSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.set("u", data.login);
+      if (data.demo) url.searchParams.set("demo", "1");
+      else url.searchParams.delete("demo");
+      history.replaceState(null, "", url.pathname + url.search);
+    } catch (e) { /* ignore */ }
+  }
+
+  function demoUser() {
+    return {
+      login: "octocrime",
+      name: "Ada Commit",
+      avatar_url: "https://avatars.githubusercontent.com/u/583231?v=4",
+      bio: "I neither confirm nor deny the existence of force-pushes.",
+      public_repos: 42,
+      followers: 128,
+      following: 64,
+      created_at: "2015-03-15T00:00:00Z",
+      _demo: true,
+    };
+  }
+
+  function demoRepos() {
+    return [
+      { language: "TypeScript", fork: false, archived: false, name: "ship-it", description: "expo ai starter vibes" },
+      { language: "TypeScript", fork: false, archived: false, name: "paywall-palace", description: "" },
+      { language: "JavaScript", fork: true, archived: false, name: "left-pad-again", description: "" },
+      { language: "Python", fork: false, archived: true, name: "night-scripts", description: "weekend only" },
+      { language: "Go", fork: false, archived: false, name: "cli-getaway", description: "" },
+      { language: "TypeScript", fork: false, archived: false, name: "gemini-whisper", description: "ai chat" },
+      { language: "Rust", fork: false, archived: false, name: "blazingly-maybe", description: "" },
+      { language: "JavaScript", fork: true, archived: false, name: "node-modules-graveyard", description: "deps" },
+    ];
+  }
+
+  async function ghFetch(url) {
+    var res = await fetch(url, { headers: GH_HEADERS });
+    return res;
+  }
+
+  async function investigate(username) {
+    hideError();
+    setStatus("Dusting for fingerprints…");
+    investigateBtn.disabled = true;
+
+    try {
+      var userRes = await ghFetch("https://api.github.com/users/" + encodeURIComponent(username));
+
+      if (userRes.status === 404) {
+        setStatus("");
+        showError("No suspect by that name. Check the spelling — or generate a demo case for screenshots.");
+        return;
+      }
+
+      if (userRes.status === 403 || userRes.status === 429) {
+        setStatus("");
+        showError("GitHub rate limit hit the precinct. Try again later, or generate a demo case so the viral loop lives on.");
+        return;
+      }
+
+      if (!userRes.ok) {
+        setStatus("");
+        showError("The evidence room is locked (HTTP " + userRes.status + "). Demo case still works.");
+        return;
+      }
+
+      var user = await userRes.json();
+
+      var repos = [];
+      try {
+        var reposRes = await ghFetch(
+          "https://api.github.com/users/" + encodeURIComponent(username) + "/repos?per_page=100&sort=updated"
+        );
+        if (reposRes.ok) {
+          repos = await reposRes.json();
+          if (!Array.isArray(repos)) repos = [];
+        }
+      } catch (repoErr) {
+        repos = [];
+      }
+
+      var data = analyze(user, repos);
+      renderCase(data);
+      setStatus(data.demo ? "Demo case filed." : "Case filed. Stamp it. Share it.");
+    } catch (err) {
+      setStatus("");
+      showError("Couldn’t reach GitHub from this browser (CORS, network, or rate limit). Generate a demo case instead.");
+    } finally {
+      investigateBtn.disabled = false;
+    }
+  }
+
+  function runDemo() {
+    hideError();
+    var data = analyze(demoUser(), demoRepos());
+    renderCase(data);
+    setStatus("Demo case filed — safe for screenshots.");
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var u = sanitizeUsername(usernameInput.value);
+    if (!u) {
+      showError("That doesn’t look like a GitHub username. Letters, numbers, hyphens only.");
+      return;
+    }
+    usernameInput.value = u;
+    investigate(u);
+  });
+
+  demoBtn.addEventListener("click", runDemo);
+
+  downloadBtn.addEventListener("click", async function () {
+    var card = document.getElementById("case-card");
+    if (!card || !currentCase) return;
+    if (typeof html2canvas !== "function") {
+      setStatus("PNG tool failed to load. Try again or use your OS screenshot.");
+      return;
+    }
+    downloadBtn.disabled = true;
+    setStatus("Developing the photo…");
+    try {
+      var canvas = await html2canvas(card, {
+        backgroundColor: "#f3efe6",
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        logging: false,
+      });
+      var link = document.createElement("a");
+      link.download = "commit-crime-scene-" + currentCase.login + ".png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      setStatus("PNG downloaded. Post the evidence.");
+    } catch (e) {
+      setStatus("Couldn’t export PNG (avatar CORS sometimes bites). Try demo case or screenshot.");
+    } finally {
+      downloadBtn.disabled = false;
+    }
+  });
+
+  copyLinkBtn.addEventListener("click", async function () {
+    if (!currentCase) return;
+    var url = new URL(window.location.href);
+    url.searchParams.set("u", currentCase.login);
+    if (currentCase.demo) url.searchParams.set("demo", "1");
+    else url.searchParams.delete("demo");
+    var shareUrl = url.toString();
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setStatus("Link copied. Hand it to a co-conspirator.");
+    } catch (e) {
+      window.prompt("Copy this link:", shareUrl);
+    }
+  });
+
+  shareBtn.addEventListener("click", async function () {
+    if (!currentCase) return;
+    var url = new URL(window.location.href);
+    url.searchParams.set("u", currentCase.login);
+    var text =
+      "CASE FILE: @" + currentCase.login + " — verdict: " + currentCase.verdict +
+      " (chaos " + currentCase.chaos + "). Open the Commit Crime Scene:";
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Commit Crime Scene", text: text, url: url.toString() });
+        return;
+      } catch (e) {
+        if (e && e.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(text + " " + url.toString());
+      setStatus("Share text copied.");
+    } catch (e2) {
+      setStatus("Copy the URL from the address bar to share.");
+    }
+  });
+
+  // Deep link ?u=username
+  (function boot() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var u = sanitizeUsername(params.get("u") || "");
+      var wantDemo = params.get("demo") === "1";
+      if (wantDemo && !u) {
+        runDemo();
+        return;
+      }
+      if (u) {
+        usernameInput.value = u;
+        if (wantDemo) runDemo();
+        else investigate(u);
+      }
+    } catch (e) { /* ignore */ }
+  })();
+})();
+  </script>
+</body>
+</html>

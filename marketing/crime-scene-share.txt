@@ -1,0 +1,43 @@
+Commit Crime Scene — launch share blurbs
+========================================
+Fun-first. Soft ShipNative mention OK. No hard sell.
+Live URL: https://shipnative-landing.vercel.app/crime-scene
+
+
+--- Reddit (r/webdev, r/github, r/programming, r/reactnative) ---
+Title idea: I made a free toy that turns your GitHub into a detective case file
+
+Body:
+Made a silly weekend thing: paste a GitHub username, get a “CASE FILE” card with fake charges, a chaos score, and a verdict class (Serial Shipper, PR Ghost, Weekend Bandit, etc.). Download as PNG.
+
+https://shipnative-landing.vercel.app/crime-scene
+
+It’s all client-side against the public GitHub API — no login. If rate limits hit, there’s a demo case so you can still screenshot.
+
+Would love to see what verdict your profile gets.
+
+
+--- Dev.to comment / reply ---
+If you need a 30-second break from shipping: Commit Crime Scene turns a GitHub username into a funny detective dossier (charges, chaos score, downloadable PNG).
+
+https://shipnative-landing.vercel.app/crime-scene
+
+No OAuth. Public API only. Demo mode if GitHub rate-limits you.
+
+
+--- WhatsApp / DM ---
+Quick fun one: put any GitHub username in and get a “crime scene” case-file card (chaos score + verdict). PNG download.
+
+https://shipnative-landing.vercel.app/crime-scene
+
+Try yours and send me the stamp.
+
+
+--- Twitter / X ---
+GitHub username → detective case file.
+Charges. Chaos score. Verdict. PNG.
+Free: https://shipnative-landing.vercel.app/crime-scene
+
+
+--- One-line CTA ---
+Commit Crime Scene: GitHub → funny case-file card → https://shipnative-landing.vercel.app/crime-scene
