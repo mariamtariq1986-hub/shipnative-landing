@@ -1,0 +1,103 @@
+================================================================================
+REPLYLY — Gumroad / product listing copy
+================================================================================
+
+Product name: Replyly — WhatsApp Reply Assistant for Small Businesses
+Price: $12/month (suggested) | Optional annual: $99/year (~2 months free)
+URL placeholder: https://mariamtariq72.gumroad.com/l/replyly
+
+Short headline:
+Reply to WhatsApp customers in seconds — not 20 minutes later.
+
+Subheadline:
+Replyly writes 3 ready-to-send replies for restaurants, clinics, salons, shops, and agents. Paste the message. Copy. Send.
+
+Description (long):
+
+Tired of typing the same WhatsApp answers all day?
+
+Replyly helps small businesses reply faster with polished, on-brand suggestions:
+
+• Pick your business type
+• Paste the customer message
+• Choose Friendly, Professional, or Short
+• Get 3 replies you can copy in one tap
+
+Works in English (with optional Arabic-friendly / mix). Free plan includes 5 generations per day. Pro unlocks unlimited replies for $12/month.
+
+No app install required. Works on your phone. Your messages stay in your browser.
+
+Perfect for:
+– Restaurants & cafés (hours, menus, reservations)
+– Clinics & dentists (appointments, insurance questions)
+– Salons & spas (booking, pricing, availability)
+– Real estate agents (viewings, listings, follow-ups)
+– Retail shops (stock, delivery, returns)
+
+What's included with Pro:
+✓ Unlimited reply generations
+✓ All business types & tones
+✓ Arabic-friendly mix mode
+✓ Optional bring-your-own Gemini key for richer AI replies
+
+Demo unlock code for testers: REPLYLY-PRO
+
+
+Gumroad checkout success note (optional):
+Thanks! Your Pro access code is in the email. Open Replyly → Upgrade → enter your code.
+
+
+================================================================================
+Reddit blurb (r/smallbusiness, r/EntrepreneurRideAlong, r/SideProject)
+================================================================================
+
+Title ideas:
+• I built a tiny tool that writes WhatsApp replies for small shops ($12/mo)
+• Tired of slow WhatsApp replies? Free tool that suggests 3 answers in seconds
+
+Body:
+
+Hey — I run into the same problem with local businesses: customers message on WhatsApp, and replies take forever because the owner is busy.
+
+So I built Replyly: paste a customer message → get 3 ready-to-send replies (friendly / professional / short). Built for restaurants, clinics, salons, retail, and real estate.
+
+Free: 5 generations/day
+Pro: $12/mo unlimited
+
+Works offline with smart templates (no API bill). Optional Gemini key if you want richer AI.
+
+Live: [YOUR_REPLYLY_URL]
+App: [YOUR_REPLYLY_URL]/app
+
+Would love feedback from anyone who handles WhatsApp for a shop.
+
+
+================================================================================
+Dev.to / Indie Hackers short post
+================================================================================
+
+Title: Replyly — WhatsApp reply assistant for small businesses (MVP)
+
+I shipped a small paid web tool: Replyly.
+
+Problem: SMB owners lose sales because WhatsApp replies are slow or inconsistent.
+Solution: Paste message → 3 copy-ready replies by business type + tone.
+Monetization: Free 5/day → Pro $12/mo (Gumroad).
+Stack: static HTML + Tailwind CDN + localStorage limits + templated engine (optional Gemini).
+
+No backend for MVP. Deployed on Vercel as its own project.
+
+Try it: [YOUR_REPLYLY_URL]
+
+Curious what vertical I should specialize next — clinics vs restaurants?
+
+
+================================================================================
+Suggested next step for you
+================================================================================
+
+1. Create Gumroad product at $12/mo (or $99/yr) named "Replyly Pro"
+2. Set product URL to match: https://mariamtariq72.gumroad.com/l/replyly
+3. After purchase, email buyers a unique code OR use REPLYLY-PRO for demos
+4. Soft-launch: 5 Reddit comments + 1 Dev.to post using copy above
+5. Collect 10 waitlist emails via mailto before building Stripe billing

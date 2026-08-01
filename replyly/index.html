@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Replyly — WhatsApp Reply Assistant for Small Businesses</title>
+  <meta name="description" content="Replyly helps shops, clinics, salons, and agents reply faster on WhatsApp. Paste a message, get 3 ready-to-send replies. Free to try." />
+  <meta property="og:title" content="Replyly — WhatsApp replies in seconds" />
+  <meta property="og:description" content="3 polished WhatsApp replies for your business. Free 5/day. Pro $12/mo." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            leaf: {
+              50: '#f0fdf6',
+              100: '#dcfce9',
+              200: '#bbf7d4',
+              300: '#86efb0',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            ink: {
+              50: '#f7f8f7',
+              100: '#eef1ef',
+              200: '#d9dfdb',
+              700: '#3d4a42',
+              800: '#243028',
+              900: '#14201a',
+              950: '#0b1410',
+            }
+          },
+          fontFamily: {
+            display: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            glow: '0 20px 50px -20px rgba(22, 163, 74, 0.45)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg0: #0b1410;
+      --bg1: #14201a;
+      --accent: #25d366;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(37, 211, 102, 0.18), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(22, 163, 74, 0.12), transparent 50%),
+        linear-gradient(180deg, #0b1410 0%, #14201a 45%, #0f1a14 100%);
+      color: #eef1ef;
+      min-height: 100vh;
+    }
+    .noise::before {
+      content: '';
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+    .phone-frame {
+      background: linear-gradient(160deg, #1a2e24, #0f1a14);
+      border: 1px solid rgba(187, 247, 212, 0.12);
+    }
+    .bubble-in {
+      background: #1f2e26;
+      border: 1px solid rgba(187, 247, 212, 0.08);
+    }
+    .bubble-out {
+      background: linear-gradient(135deg, #1fa855, #128c4a);
+    }
+    .fade-up {
+      animation: fadeUp 0.7s ease both;
+    }
+    .fade-up-delay { animation-delay: 0.12s; }
+    .fade-up-delay-2 { animation-delay: 0.22s; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .float-soft {
+      animation: floatSoft 5.5s ease-in-out infinite;
+    }
+    @keyframes floatSoft {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #25d366, #16a34a);
+      box-shadow: 0 12px 30px -12px rgba(37, 211, 102, 0.7);
+    }
+    .btn-primary:hover { filter: brightness(1.05); }
+    .grid-dots {
+      background-image: radial-gradient(rgba(187, 247, 212, 0.09) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+  </style>
+</head>
+<body class="noise">
+  <div class="relative z-10">
+    <header class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8">
+      <a href="/" class="flex items-center gap-2.5">
+        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-leaf-500/15 ring-1 ring-leaf-400/30">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21c4.5 0 8-3.2 8-7.5S16.5 6 12 6 4 9.2 4 13.5c0 1.6.5 3.1 1.4 4.3L4.5 21l3.4-1.2c1.2.7 2.6 1.2 4.1 1.2Z" stroke="#4ade80" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M8.5 13.2h7M8.5 10.5h4.5" stroke="#86efb0" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="font-display text-xl font-semibold tracking-tight text-white">Replyly</span>
+      </a>
+      <nav class="flex items-center gap-3 text-sm">
+        <a href="#how" class="hidden text-ink-200/80 hover:text-white sm:inline">How it works</a>
+        <a href="#pricing" class="hidden text-ink-200/80 hover:text-white sm:inline">Pricing</a>
+        <a href="app.html" class="rounded-full bg-white/5 px-4 py-2 font-medium text-white ring-1 ring-white/10 hover:bg-white/10">Open app</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero: brand first, one composition -->
+      <section class="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-8 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12 md:px-8 md:pb-24 md:pt-14">
+        <div class="grid-dots absolute inset-x-0 top-0 -z-10 h-[70%] opacity-60 md:hidden"></div>
+        <div class="fade-up">
+          <p class="mb-4 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
+            Replyly
+          </p>
+          <h1 class="max-w-xl text-2xl font-medium leading-snug text-leaf-100/95 sm:text-3xl md:text-[2rem]">
+            WhatsApp replies for busy shops — in seconds, not after the customer leaves.
+          </h1>
+          <p class="mt-5 max-w-lg text-base leading-relaxed text-ink-200/75 sm:text-lg">
+            Paste a customer message. Get 3 ready-to-send replies tuned for restaurants, clinics, salons, retail, and real estate.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a href="app.html" class="btn-primary inline-flex items-center justify-center rounded-full px-6 py-3.5 text-base font-semibold text-ink-950 transition">
+              Try free — 5 replies/day
+            </a>
+            <a href="#pricing" class="inline-flex items-center justify-center rounded-full px-5 py-3.5 text-base font-medium text-leaf-100 ring-1 ring-leaf-400/25 hover:bg-leaf-500/10">
+              See Pro — $12/mo
+            </a>
+          </div>
+          <p class="mt-4 text-sm text-ink-200/50">No signup. Works on your phone. English + Arabic-friendly mix.</p>
+        </div>
+
+        <div class="fade-up fade-up-delay float-soft">
+          <div class="phone-frame mx-auto max-w-sm rounded-[2rem] p-4 shadow-glow sm:p-5">
+            <div class="mb-3 flex items-center gap-2 px-1">
+              <span class="h-2.5 w-2.5 rounded-full bg-leaf-400"></span>
+              <span class="text-xs font-medium text-leaf-200/70">Customer chat · demo</span>
+            </div>
+            <div class="space-y-3 rounded-2xl bg-ink-950/60 p-4">
+              <div class="bubble-in max-w-[90%] rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed text-ink-100">
+                Hi, do you have appointments tomorrow afternoon? And what’s the price for a haircut + blow dry?
+              </div>
+              <div class="bubble-out ml-auto max-w-[92%] rounded-2xl rounded-tr-md px-3.5 py-2.5 text-sm leading-relaxed text-white">
+                Hi! Yes — we still have openings tomorrow after 2pm. Haircut + blow dry is $45. Want me to hold 2:30 or 4:00 for you?
+              </div>
+              <div class="rounded-xl border border-dashed border-leaf-400/25 bg-leaf-500/5 px-3 py-2.5">
+                <p class="text-[11px] font-semibold uppercase tracking-wider text-leaf-300/80">Replyly suggestions</p>
+                <p class="mt-1 text-xs text-ink-200/70">Friendly · Professional · Short — tap to copy</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How -->
+      <section id="how" class="border-t border-white/5 bg-black/20">
+        <div class="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
+          <h2 class="font-display text-3xl font-semibold text-white md:text-4xl">How it works</h2>
+          <p class="mt-3 max-w-xl text-ink-200/70">Three steps. Under a minute. Built for owners who live in WhatsApp.</p>
+          <ol class="mt-10 grid gap-6 sm:grid-cols-3">
+            <li class="rounded-3xl bg-white/[0.03] p-6 ring-1 ring-white/10">
+              <span class="font-display text-3xl text-leaf-400/90">1</span>
+              <h3 class="mt-3 text-lg font-semibold text-white">Pick your business</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-200/65">Restaurant, clinic, salon, real estate, retail, or other — so replies sound right.</p>
+            </li>
+            <li class="rounded-3xl bg-white/[0.03] p-6 ring-1 ring-white/10">
+              <span class="font-display text-3xl text-leaf-400/90">2</span>
+              <h3 class="mt-3 text-lg font-semibold text-white">Paste the message</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-200/65">Drop in what the customer wrote. Choose Friendly, Professional, or Short.</p>
+            </li>
+            <li class="rounded-3xl bg-white/[0.03] p-6 ring-1 ring-white/10">
+              <span class="font-display text-3xl text-leaf-400/90">3</span>
+              <h3 class="mt-3 text-lg font-semibold text-white">Copy & send</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-200/65">Get 3 suggestions. One tap to copy. Paste into WhatsApp and move on.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Who -->
+      <section class="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
+        <h2 class="font-display text-3xl font-semibold text-white md:text-4xl">Built for local businesses</h2>
+        <p class="mt-3 max-w-xl text-ink-200/70">Same WhatsApp chaos. Different verticals. Replyly adapts the language.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Restaurants & cafés</span>
+          <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Clinics & dentists</span>
+          <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Salons & spas</span>
+          <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Real estate agents</span>
+          <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Retail shops</span>
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section id="pricing" class="border-t border-white/5 bg-black/20">
+        <div class="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
+          <h2 class="font-display text-3xl font-semibold text-white md:text-4xl">Simple pricing</h2>
+          <p class="mt-3 max-w-xl text-ink-200/70">Start free. Upgrade when WhatsApp gets busy.</p>
+          <div class="mt-10 grid gap-5 md:grid-cols-2 md:gap-6">
+            <div class="rounded-3xl bg-white/[0.03] p-7 ring-1 ring-white/10">
+              <p class="text-sm font-semibold uppercase tracking-wider text-ink-200/50">Free</p>
+              <p class="mt-2 font-display text-4xl font-semibold text-white">$0</p>
+              <ul class="mt-5 space-y-2.5 text-sm text-ink-200/70">
+                <li>5 reply generations per day</li>
+                <li>All business types & tones</li>
+                <li>One-click copy</li>
+                <li>Arabic-friendly mix option</li>
+              </ul>
+              <a href="app.html" class="mt-7 inline-flex w-full items-center justify-center rounded-full bg-white/10 py-3 font-semibold text-white ring-1 ring-white/15 hover:bg-white/15">Start free</a>
+            </div>
+            <div class="rounded-3xl bg-gradient-to-b from-leaf-500/15 to-transparent p-7 ring-1 ring-leaf-400/35 shadow-glow">
+              <p class="text-sm font-semibold uppercase tracking-wider text-leaf-300">Pro</p>
+              <p class="mt-2 font-display text-4xl font-semibold text-white">$12<span class="text-lg font-sans font-medium text-ink-200/60">/mo</span></p>
+              <ul class="mt-5 space-y-2.5 text-sm text-ink-200/80">
+                <li>Unlimited reply generations</li>
+                <li>Everything in Free</li>
+                <li>Priority for busy days</li>
+                <li>Optional bring-your-own Gemini key</li>
+              </ul>
+              <a href="app.html#upgrade" class="btn-primary mt-7 inline-flex w-full items-center justify-center rounded-full py-3 font-semibold text-ink-950">Get Replyly Pro</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="mx-auto max-w-6xl px-5 py-16 text-center md:px-8 md:py-24">
+        <h2 class="fade-up font-display text-3xl font-semibold text-white sm:text-4xl md:text-5xl">Stop typing the same reply twice.</h2>
+        <p class="fade-up fade-up-delay mx-auto mt-4 max-w-lg text-ink-200/70">Open Replyly on your phone next time a customer messages. Copy. Send. Done.</p>
+        <a href="app.html" class="fade-up fade-up-delay-2 btn-primary mt-8 inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-ink-950">
+          Open Replyly free
+        </a>
+      </section>
+    </main>
+
+    <footer class="border-t border-white/5 px-5 py-8 text-center text-sm text-ink-200/45 md:px-8">
+      <p><span class="font-display text-leaf-300/80">Replyly</span> · WhatsApp reply assistant for small businesses</p>
+      <p class="mt-2">Messages stay in your browser · <a href="mailto:hello@replyly.app?subject=Replyly%20waitlist" class="text-leaf-300/70 underline-offset-2 hover:underline">Join waitlist</a></p>
+    </footer>
+  </div>
+</body>
+</html>

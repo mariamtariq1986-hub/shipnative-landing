@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Replyly App — Generate WhatsApp Replies</title>
+  <meta name="description" content="Paste a customer WhatsApp message and get 3 ready-to-send replies. Free 5/day." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            leaf: {
+              50: '#f0fdf6', 100: '#dcfce9', 200: '#bbf7d4', 300: '#86efb0',
+              400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d',
+              800: '#166534', 900: '#14532d',
+            },
+            ink: {
+              50: '#f7f8f7', 100: '#eef1ef', 200: '#d9dfdb',
+              700: '#3d4a42', 800: '#243028', 900: '#14201a', 950: '#0b1410',
+            }
+          },
+          fontFamily: {
+            display: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background:
+        radial-gradient(900px 420px at 0% 0%, rgba(37, 211, 102, 0.14), transparent 55%),
+        radial-gradient(700px 380px at 100% 10%, rgba(22, 163, 74, 0.1), transparent 50%),
+        linear-gradient(180deg, #0b1410 0%, #14201a 50%, #0f1a14 100%);
+      color: #eef1ef;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #25d366, #16a34a);
+      box-shadow: 0 10px 28px -12px rgba(37, 211, 102, 0.65);
+    }
+    .btn-primary:disabled { opacity: 0.55; box-shadow: none; }
+    .chip-active {
+      background: rgba(34, 197, 94, 0.18);
+      color: #bbf7d4;
+      ring-color: rgba(74, 222, 128, 0.45);
+    }
+    .modal-backdrop { background: rgba(8, 16, 12, 0.72); backdrop-filter: blur(6px); }
+    textarea:focus, input:focus, select:focus { outline: none; }
+    .toast {
+      animation: toastIn 0.25s ease both;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="mx-auto flex min-h-screen max-w-xl flex-col px-4 pb-10 pt-4 sm:px-5">
+    <!-- Top bar -->
+    <header class="flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-leaf-500/15 ring-1 ring-leaf-400/30">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21c4.5 0 8-3.2 8-7.5S16.5 6 12 6 4 9.2 4 13.5c0 1.6.5 3.1 1.4 4.3L4.5 21l3.4-1.2c1.2.7 2.6 1.2 4.1 1.2Z" stroke="#4ade80" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="font-display text-lg font-semibold text-white">Replyly</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <span id="usageBadge" class="rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-ink-200/80 ring-1 ring-white/10">5 left today</span>
+        <button type="button" id="settingsBtn" class="rounded-full bg-white/5 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/10 hover:bg-white/10">Settings</button>
+      </div>
+    </header>
+
+    <p class="mt-5 text-sm text-ink-200/60">Paste a customer WhatsApp message → get 3 replies you can copy.</p>
+
+    <!-- Business type -->
+    <section class="mt-5">
+      <label class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Business type</label>
+      <div id="bizTypes" class="mt-2 flex flex-wrap gap-2"></div>
+    </section>
+
+    <!-- Message -->
+    <section class="mt-5">
+      <label for="message" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Customer message</label>
+      <textarea id="message" rows="4" placeholder="e.g. Hi, do you have appointments tomorrow? What's the price?"
+        class="mt-2 w-full resize-y rounded-2xl border border-white/10 bg-ink-950/50 px-4 py-3 text-[15px] leading-relaxed text-white placeholder:text-ink-200/35 focus:border-leaf-400/40"></textarea>
+    </section>
+
+    <!-- Tone -->
+    <section class="mt-5">
+      <label class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Tone</label>
+      <div id="tones" class="mt-2 flex flex-wrap gap-2"></div>
+    </section>
+
+    <!-- Arabic mix -->
+    <section class="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-white/[0.03] px-4 py-3 ring-1 ring-white/10">
+      <div>
+        <p class="text-sm font-medium text-white">Arabic-friendly / mix</p>
+        <p class="text-xs text-ink-200/50">Replies stay mostly English with warm bilingual touches</p>
+      </div>
+      <button type="button" id="arabicToggle" role="switch" aria-checked="false"
+        class="relative h-7 w-12 shrink-0 rounded-full bg-white/10 transition">
+        <span class="absolute left-0.5 top-0.5 h-6 w-6 rounded-full bg-white transition"></span>
+      </button>
+    </section>
+
+    <button type="button" id="generateBtn" class="btn-primary mt-6 w-full rounded-2xl py-3.5 text-base font-semibold text-ink-950 transition active:scale-[0.99]">
+      Generate 3 replies
+    </button>
+
+    <!-- Results -->
+    <section id="results" class="mt-6 hidden space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display text-lg font-semibold text-white">Suggestions</h2>
+        <span id="engineLabel" class="text-xs text-ink-200/45">Template engine</span>
+      </div>
+      <div id="replies" class="space-y-3"></div>
+    </section>
+
+    <p id="errorMsg" class="mt-4 hidden text-sm text-red-300"></p>
+
+    <footer class="mt-auto pt-10 text-center text-xs text-ink-200/40">
+      <a href="index.html" class="hover:text-leaf-300">← Replyly home</a>
+      · Free 5/day · <button type="button" id="upgradeLink" class="text-leaf-300/80 hover:underline">Pro $12/mo</button>
+    </footer>
+  </div>
+
+  <!-- Upgrade modal -->
+  <div id="upgradeModal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-3xl bg-ink-900 p-6 shadow-2xl ring-1 ring-leaf-400/25" role="dialog" aria-labelledby="upgradeTitle">
+      <h2 id="upgradeTitle" class="font-display text-2xl font-semibold text-white">You've used today's free replies</h2>
+      <p class="mt-2 text-sm leading-relaxed text-ink-200/70">
+        Replyly Pro is <strong class="text-leaf-300">$12/mo</strong> for unlimited WhatsApp reply suggestions — built for busy shops.
+      </p>
+      <a id="payBtn" href="https://mariamtariq72.gumroad.com/l/replyly" target="_blank" rel="noopener"
+        class="btn-primary mt-5 flex w-full items-center justify-center rounded-2xl py-3 font-semibold text-ink-950">
+        Pay $12/mo on Gumroad
+      </a>
+      <a href="mailto:hello@replyly.app?subject=Replyly%20Pro%20waitlist&body=I'd%20like%20unlimited%20WhatsApp%20replies."
+        class="mt-3 flex w-full items-center justify-center rounded-2xl bg-white/5 py-3 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/10">
+        Coming soon — join waitlist
+      </a>
+      <div class="mt-5 border-t border-white/10 pt-4">
+        <label for="promoCode" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Have a Pro code?</label>
+        <div class="mt-2 flex gap-2">
+          <input id="promoCode" type="text" placeholder="REPLYLY-PRO" autocomplete="off"
+            class="flex-1 rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+          <button type="button" id="unlockBtn" class="rounded-xl bg-leaf-500/20 px-4 py-2.5 text-sm font-semibold text-leaf-200 ring-1 ring-leaf-400/30 hover:bg-leaf-500/30">Unlock</button>
+        </div>
+        <p id="promoError" class="mt-2 hidden text-xs text-red-300">Invalid code. Try REPLYLY-PRO for demo.</p>
+      </div>
+      <button type="button" id="closeUpgrade" class="mt-5 w-full text-center text-sm text-ink-200/50 hover:text-white">Not now</button>
+    </div>
+  </div>
+
+  <!-- Settings modal -->
+  <div id="settingsModal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-3xl bg-ink-900 p-6 shadow-2xl ring-1 ring-white/15" role="dialog" aria-labelledby="settingsTitle">
+      <h2 id="settingsTitle" class="font-display text-2xl font-semibold text-white">Settings</h2>
+      <p class="mt-2 text-sm text-ink-200/65">Optional advanced: paste your own Gemini API key for richer AI replies. Stored only in this browser.</p>
+      <label for="geminiKey" class="mt-5 block text-xs font-semibold uppercase tracking-wider text-ink-200/50">Gemini API key</label>
+      <input id="geminiKey" type="password" placeholder="AIza… (optional)"
+        class="mt-2 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+      <div class="mt-3 flex gap-2">
+        <button type="button" id="saveKeyBtn" class="flex-1 rounded-xl bg-leaf-500/20 py-2.5 text-sm font-semibold text-leaf-200 ring-1 ring-leaf-400/30">Save key</button>
+        <button type="button" id="clearKeyBtn" class="rounded-xl bg-white/5 px-4 py-2.5 text-sm text-ink-200 ring-1 ring-white/10">Clear</button>
+      </div>
+      <p id="keyStatus" class="mt-2 text-xs text-ink-200/45">No key saved — using free template engine.</p>
+      <div class="mt-5 rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/10">
+        <p class="text-sm font-medium text-white">Pro status</p>
+        <p id="proStatus" class="mt-1 text-xs text-ink-200/60">Free plan</p>
+        <button type="button" id="openUpgradeFromSettings" class="mt-3 text-sm font-medium text-leaf-300 hover:underline">Upgrade / enter code</button>
+      </div>
+      <button type="button" id="closeSettings" class="mt-5 w-full text-center text-sm text-ink-200/50 hover:text-white">Close</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast pointer-events-none fixed bottom-6 left-1/2 z-[60] hidden -translate-x-1/2 rounded-full bg-leaf-600 px-4 py-2 text-sm font-medium text-white shadow-lg">Copied</div>
+
+  <script>
+(function () {
+  'use strict';
+
+  const FREE_LIMIT = 5;
+  const PROMO_CODE = 'REPLYLY-PRO';
+  const GUMROAD_URL = 'https://mariamtariq72.gumroad.com/l/replyly';
+  const LS = {
+    pro: 'replyly_pro',
+    usage: 'replyly_usage',
+    gemini: 'replyly_gemini_key',
+    biz: 'replyly_biz',
+    tone: 'replyly_tone',
+    arabic: 'replyly_arabic',
+  };
+
+  const BIZ = [
+    { id: 'restaurant', label: 'Restaurant' },
+    { id: 'clinic', label: 'Clinic' },
+    { id: 'salon', label: 'Salon' },
+    { id: 'realestate', label: 'Real Estate' },
+    { id: 'retail', label: 'Retail' },
+    { id: 'other', label: 'Other' },
+  ];
+  const TONES = [
+    { id: 'friendly', label: 'Friendly' },
+    { id: 'professional', label: 'Professional' },
+    { id: 'short', label: 'Short' },
+  ];
+
+  let state = {
+    biz: localStorage.getItem(LS.biz) || 'salon',
+    tone: localStorage.getItem(LS.tone) || 'friendly',
+    arabic: localStorage.getItem(LS.arabic) === '1',
+  };
+
+  // ——— Storage helpers ———
+  function todayKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function getUsage() {
+    try {
+      const raw = localStorage.getItem(LS.usage);
+      if (!raw) return { date: todayKey(), count: 0 };
+      const parsed = JSON.parse(raw);
+      if (parsed.date !== todayKey()) return { date: todayKey(), count: 0 };
+      return { date: parsed.date, count: Number(parsed.count) || 0 };
+    } catch {
+      return { date: todayKey(), count: 0 };
+    }
+  }
+
+  function setUsage(count) {
+    localStorage.setItem(LS.usage, JSON.stringify({ date: todayKey(), count }));
+  }
+
+  function isPro() {
+    return localStorage.getItem(LS.pro) === '1';
+  }
+
+  function setPro(on) {
+    localStorage.setItem(LS.pro, on ? '1' : '0');
+  }
+
+  function remaining() {
+    if (isPro()) return Infinity;
+    return Math.max(0, FREE_LIMIT - getUsage().count);
+  }
+
+  function getGeminiKey() {
+    return (localStorage.getItem(LS.gemini) || '').trim();
+  }
+
+  // ——— UI chips ———
+  function renderChips() {
+    const bizEl = document.getElementById('bizTypes');
+    bizEl.innerHTML = BIZ.map(function (b) {
+      const active = state.biz === b.id;
+      return '<button type="button" data-biz="' + b.id + '" class="rounded-full px-3.5 py-1.5 text-sm ring-1 transition ' +
+        (active ? 'chip-active ring-leaf-400/45' : 'bg-white/5 text-ink-200/80 ring-white/10 hover:bg-white/10') + '">' + b.label + '</button>';
+    }).join('');
+
+    const toneEl = document.getElementById('tones');
+    toneEl.innerHTML = TONES.map(function (t) {
+      const active = state.tone === t.id;
+      return '<button type="button" data-tone="' + t.id + '" class="rounded-full px-3.5 py-1.5 text-sm ring-1 transition ' +
+        (active ? 'chip-active ring-leaf-400/45' : 'bg-white/5 text-ink-200/80 ring-white/10 hover:bg-white/10') + '">' + t.label + '</button>';
+    }).join('');
+  }
+
+  function updateUsageBadge() {
+    const badge = document.getElementById('usageBadge');
+    if (isPro()) {
+      badge.textContent = 'Pro · unlimited';
+      badge.className = 'rounded-full bg-leaf-500/15 px-3 py-1 text-xs font-medium text-leaf-200 ring-1 ring-leaf-400/30';
+    } else {
+      const left = remaining();
+      badge.textContent = left + ' left today';
+      badge.className = 'rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-ink-200/80 ring-1 ring-white/10';
+    }
+  }
+
+  function setArabicUI() {
+    const btn = document.getElementById('arabicToggle');
+    const knob = btn.querySelector('span');
+    btn.setAttribute('aria-checked', state.arabic ? 'true' : 'false');
+    if (state.arabic) {
+      btn.classList.add('bg-leaf-500');
+      btn.classList.remove('bg-white/10');
+      knob.style.transform = 'translateX(1.25rem)';
+    } else {
+      btn.classList.remove('bg-leaf-500');
+      btn.classList.add('bg-white/10');
+      knob.style.transform = 'translateX(0)';
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.remove('hidden');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(function () { t.classList.add('hidden'); }, 1600);
+  }
+
+  function openModal(id) {
+    const el = document.getElementById(id);
+    el.classList.remove('hidden');
+    el.classList.add('flex');
+  }
+
+  function closeModal(id) {
+    const el = document.getElementById(id);
+    el.classList.add('hidden');
+    el.classList.remove('flex');
+  }
+
+  // ——— Intent / keyword detection ———
+  function detectIntents(text) {
+    const t = text.toLowerCase();
+    const intents = [];
+    const rules = [
+      { id: 'price', re: /price|cost|how much|fee|rate|رسوم|سعر|كم/ },
+      { id: 'hours', re: /open|hours|timing|when are you|close|موعد|دوام|مفتوح/ },
+      { id: 'booking', re: /book|appoint|reserv|available|slot|tomorrow|today|حجز|موعد|بكرة/ },
+      { id: 'location', re: /where|address|location|map|directions|وين|عنوان|موقع/ },
+      { id: 'delivery', re: /deliver|pickup|shipping|توصيل|استلام/ },
+      { id: 'menu', re: /menu|what do you (have|offer)|services|قائمة|خدمات/ },
+      { id: 'complaint', re: /complaint|refund|wrong|late|bad|angry|مشكلة|استرجاع/ },
+      { id: 'thanks', re: /thank|thanks|شكر/ },
+      { id: 'viewing', re: /viewing|visit|tour|showing|معاينة|شقة|فيلا/ },
+      { id: 'stock', re: /in stock|available|size|colour|color|متوفر|مقاس/ },
+    ];
+    rules.forEach(function (r) {
+      if (r.re.test(t)) intents.push(r.id);
+    });
+    if (!intents.length) intents.push('general');
+    return intents;
+  }
+
+  function bizNoun(biz) {
+    const map = {
+      restaurant: 'our restaurant',
+      clinic: 'our clinic',
+      salon: 'our salon',
+      realestate: 'our agency',
+      retail: 'our shop',
+      other: 'us',
+    };
+    return map[biz] || 'us';
+  }
+
+  function greeting(tone, arabic) {
+    if (arabic) {
+      if (tone === 'short') return ['Hi!', 'مرحبا!', 'Hello!'][Math.floor(Math.random() * 3)];
+      if (tone === 'professional') return ['Hello,', 'Good day,', 'مرحبا،'][Math.floor(Math.random() * 3)];
+      return ['Hi there!', 'Hello!', 'مرحبا! 😊'][Math.floor(Math.random() * 3)];
+    }
+    if (tone === 'short') return ['Hi!', 'Hello!', 'Hey!'][Math.floor(Math.random() * 3)];
+    if (tone === 'professional') return ['Hello,', 'Good day,', 'Thank you for reaching out.'][Math.floor(Math.random() * 3)];
+    return ['Hi there!', 'Hello!', 'Thanks for messaging!'][Math.floor(Math.random() * 3)];
+  }
+
+  function closing(tone, arabic) {
+    if (tone === 'short') return arabic ? ['Let me know.', 'خبرني.', 'Thanks!'][Math.floor(Math.random() * 3)] : ['Let me know.', 'Thanks!', 'Ping me anytime.'][Math.floor(Math.random() * 3)];
+    if (tone === 'professional') return arabic ? ['Happy to help further.', 'Looking forward to assisting you.', 'Please tell us how you\'d like to proceed.'][Math.floor(Math.random() * 3)] : ['Happy to help further.', 'Looking forward to assisting you.', 'Please let us know how you\'d like to proceed.'][Math.floor(Math.random() * 3)];
+    return arabic ? ['Happy to help! 🌿', 'Anytime — just message us.', 'We\'re here if you need anything!'][Math.floor(Math.random() * 3)] : ['Happy to help!', 'Anytime — just message us.', 'We\'re here if you need anything!'][Math.floor(Math.random() * 3)];
+  }
+
+  function bodyFor(intent, biz, tone, arabic) {
+    const n = bizNoun(biz);
+    const bodies = {
+      price: {
+        restaurant: [
+          'Our prices depend on the dishes — happy to share the menu or quote a specific item.',
+          'I can send today\'s prices right away. Which dishes are you looking at?',
+          'Sure — tell me what you\'d like and I\'ll confirm the exact total.',
+        ],
+        clinic: [
+          'Consultation fees vary by service. Share what you need and I\'ll confirm the price.',
+          'Happy to quote you. Is this a first visit or a follow-up?',
+          'I can send our fee list for that service — which one are you asking about?',
+        ],
+        salon: [
+          'Pricing depends on the service and hair length. Which treatment are you after?',
+          'Happy to quote you — haircut, color, or a package?',
+          'I can send our price list. Want the full menu or one service?',
+        ],
+        realestate: [
+          'Happy to share pricing / asking details for that property. Which listing did you mean?',
+          'I can send the price and payment notes. Are you looking to rent or buy?',
+          'Sure — I\'ll confirm the current asking price and any fees.',
+        ],
+        retail: [
+          'I can check the price for you. Do you have the product name or a photo?',
+          'Happy to confirm — which item and size?',
+          'Sure, I\'ll look up the current price and any offers.',
+        ],
+        other: [
+          'Happy to confirm pricing. Could you share a bit more detail?',
+          'Sure — tell me which service/product and I\'ll quote you.',
+          'I can send the price shortly. What exactly do you need?',
+        ],
+      },
+      hours: {
+        restaurant: [
+          'We\'re open daily — message us your preferred time and we\'ll confirm if the kitchen is available.',
+          'Our usual hours are lunch through late evening. When were you hoping to come by?',
+          'Yes — we\'re open today. What time works for you?',
+        ],
+        clinic: [
+          'Our clinic hours run weekdays with limited weekend slots. Which day works best?',
+          'We can check openings for your preferred day. Morning or afternoon?',
+          'Yes, we\'re open — tell me a day/time and I\'ll confirm.',
+        ],
+        salon: [
+          'We\'re open most days; evenings fill up fast. What day were you thinking?',
+          'Happy to check our schedule. Weekday or weekend?',
+          'Yes — we have hours today. Prefer morning or afternoon?',
+        ],
+        realestate: [
+          'I\'m available for calls/viewings most weekdays. What time suits you?',
+          'Happy to schedule around your hours. Morning or evening preferred?',
+          'Yes — I can make time. Which day works?',
+        ],
+        retail: [
+          'Our shop hours are posted in the status — when were you planning to visit?',
+          'We\'re open today. Need anything held before you come?',
+          'Yes, we\'re open. What time should we expect you?',
+        ],
+        other: [
+          'We\'re available most business hours. When works for you?',
+          'Happy to confirm our hours for your visit.',
+          'Yes — tell me a time and I\'ll check.',
+        ],
+      },
+      booking: {
+        restaurant: [
+          'We\'d love to reserve a table. How many guests and what time?',
+          'Sure — I can check availability. Party size + preferred time?',
+          'Happy to book you in. Name, guests, and time please?',
+        ],
+        clinic: [
+          'I can help book an appointment. Preferred day and morning/afternoon?',
+          'Yes — we have openings. New patient or returning?',
+          'Happy to schedule you. What service and which day?',
+        ],
+        salon: [
+          'I can book that for you. Preferred stylist, day, and time?',
+          'Yes — we still have slots. Tomorrow afternoon okay, or another day?',
+          'Happy to hold a time. Haircut, color, or both?',
+        ],
+        realestate: [
+          'I can arrange a viewing. Which property and what times work this week?',
+          'Yes — happy to schedule a visit. Weekday evening or weekend?',
+          'Let\'s book a slot. Are you available tomorrow?',
+        ],
+        retail: [
+          'I can reserve that item for pickup. Name and when you\'ll come by?',
+          'Sure — I\'ll hold it if it\'s in stock. Preferred pickup time?',
+          'Happy to book a pickup slot for you.',
+        ],
+        other: [
+          'Happy to book that. Preferred date and time?',
+          'Yes — tell me when works and I\'ll confirm.',
+          'I can schedule you in. What day suits you?',
+        ],
+      },
+      location: {
+        restaurant: ['I\'ll send our location pin right away. Parking is nearby.', 'We\'re easy to find — I can share Google Maps.', 'Sharing our address/pin now.'],
+        clinic: ['I\'ll send the clinic address and parking notes.', 'Happy to share our location pin.', 'Here\'s how to find us — I can drop a map link.'],
+        salon: ['I\'ll send our salon pin. Street parking is usually available.', 'Sharing location now.', 'Easy to find — I\'ll text the map.'],
+        realestate: ['I\'ll send the property pin and meeting point.', 'Happy to share exact location for the viewing.', 'Sending the map link now.'],
+        retail: ['I\'ll share our shop location.', 'Here\'s how to find us — map pin coming.', 'Sending address now.'],
+        other: ['I\'ll send our location details.', 'Happy to share the address/pin.', 'Sending directions now.'],
+      },
+      delivery: {
+        restaurant: ['Yes, we offer delivery/pickup. Your area and order?', 'We can deliver — share your location and I\'ll confirm.', 'Pickup or delivery? I\'ll set it up.'],
+        clinic: ['We can advise on prescriptions/reports pickup. What do you need?', 'Happy to arrange pickup of documents.', 'Tell me what you need collected and when.'],
+        salon: ['We mainly do in-salon visits; products can be set aside for pickup.', 'Pickup for products is fine — when will you come?', 'I can prepare your items for collection.'],
+        realestate: ['I can courier documents if needed. What should I send?', 'Happy to arrange soft-copy first, then originals.', 'Tell me the best way to get papers to you.'],
+        retail: ['We offer delivery/pickup depending on the item. Your area?', 'Yes — I can arrange delivery. Address + item?', 'Pickup is available today. Prefer delivery?'],
+        other: ['We can arrange delivery or pickup. What do you prefer?', 'Share your area and I\'ll confirm options.', 'Happy to help with delivery details.'],
+      },
+      menu: {
+        restaurant: ['I can send today\'s menu and specials.', 'Happy to share what we\'re serving — any dietary needs?', 'I\'ll send the menu right over.'],
+        clinic: ['Here are the main services we offer — tell me what you need.', 'I can outline treatment options for you.', 'Happy to walk you through available services.'],
+        salon: ['I\'ll send our service menu with timings.', 'Hair, nails, or spa? I\'ll share the right list.', 'Happy to send packages and prices.'],
+        realestate: ['I can share matching listings. Budget and bedrooms?', 'Happy to send options that fit your criteria.', 'Tell me area + budget and I\'ll shortlist.'],
+        retail: ['I can send available products/categories.', 'Happy to share what\'s in stock for that line.', 'Tell me what you\'re looking for and I\'ll list options.'],
+        other: ['I\'ll share what we offer.', 'Happy to outline our services/products.', 'Tell me what you need and I\'ll send options.'],
+      },
+      complaint: {
+        restaurant: ['I\'m really sorry about that — please tell me what went wrong so we can fix it.', 'Apologies. We want to make this right. Order details?', 'Sorry for the trouble. I\'ll escalate this and get back quickly.'],
+        clinic: ['I\'m sorry for the inconvenience. Please share details so we can resolve it.', 'Apologies — your experience matters. Can you share what happened?', 'Sorry about this. I\'ll look into it immediately.'],
+        salon: ['I\'m sorry it didn\'t meet expectations. Happy to offer a fix or rebooking.', 'Apologies — tell me what happened and we\'ll make it right.', 'Sorry for that. I can arrange a complimentary adjustment if helpful.'],
+        realestate: ['Sorry for the frustration. Let me clarify and fix the next steps.', 'Apologies — I\'ll follow up personally on this.', 'I understand. Here\'s how we\'ll resolve it.'],
+        retail: ['I\'m sorry about that. We can arrange exchange/return — order details?', 'Apologies. Happy to replace or refund per our policy.', 'Sorry for the inconvenience. I\'ll sort this out today.'],
+        other: ['I\'m sorry about this. Please share details so we can help.', 'Apologies — we\'ll make it right.', 'Sorry for the trouble. I\'m on it.'],
+      },
+      thanks: {
+        restaurant: ['You\'re welcome — see you soon!', 'Our pleasure. Enjoy!', 'Anytime — thanks for choosing us!'],
+        clinic: ['You\'re welcome. Wishing you good health.', 'Happy to help. Take care.', 'Anytime — we\'re here for you.'],
+        salon: ['You\'re welcome! Can\'t wait to see you.', 'Our pleasure ✨', 'Anytime — thank you!'],
+        realestate: ['You\'re welcome. Happy to help with the next step.', 'My pleasure — talk soon.', 'Anytime.'],
+        retail: ['You\'re welcome! Enjoy your purchase.', 'Happy to help anytime.', 'Thanks for shopping with us!'],
+        other: ['You\'re welcome!', 'Happy to help.', 'Anytime!'],
+      },
+      viewing: {
+        restaurant: ['Happy to welcome you for a visit. When works?', 'Come by anytime during open hours — want a table held?', 'We\'d love to host you. Preferred time?'],
+        clinic: ['We can arrange a visit/consultation. Preferred slot?', 'Happy to schedule your visit.', 'Yes — let\'s book a time to come in.'],
+        salon: ['You\'re welcome to visit for a consult. Shall I book a slot?', 'Happy to show you options in person. When suits?', 'Yes — come by, or I can reserve a chair.'],
+        realestate: ['I can arrange a viewing this week. Which property interest you most?', 'Yes — let\'s schedule a viewing. Morning or evening?', 'Happy to show you around. Bring ID and we\'ll meet on site.'],
+        retail: ['You\'re welcome to try it in store. When will you visit?', 'Happy to set items aside for your visit.', 'Yes — come by and we\'ll help you choose.'],
+        other: ['Happy to arrange a visit. When works?', 'Yes — let\'s find a time.', 'Tell me when you\'re free and I\'ll confirm.'],
+      },
+      stock: {
+        restaurant: ['I\'ll check availability for that item today.', 'Let me confirm if it\'s on today\'s menu.', 'Happy to check — one moment while I confirm.'],
+        clinic: ['I\'ll confirm availability for that service/slot.', 'Let me check and get back with options.', 'Happy to verify — which date?'],
+        salon: ['I\'ll check if that service/product is available.', 'Let me confirm stock/slots for you.', 'Happy to check — color/brand preference?'],
+        realestate: ['I\'ll confirm if that unit is still available.', 'Let me verify status and get back shortly.', 'Happy to check availability and terms.'],
+        retail: ['I\'ll check stock for size/color now.', 'Let me confirm if it\'s available for pickup.', 'Happy to verify — which variant?'],
+        other: ['I\'ll check availability for you.', 'Let me confirm and reply shortly.', 'Happy to verify that.'],
+      },
+      general: {
+        restaurant: ['Thanks for messaging ' + n + '. How can we help with your order or reservation?', 'Happy to help — food, booking, or hours?', 'Thanks for reaching out. What do you need today?'],
+        clinic: ['Thanks for contacting ' + n + '. How can we assist?', 'Happy to help with appointments or questions.', 'Thanks for messaging. Tell us what you need.'],
+        salon: ['Thanks for messaging ' + n + '! How can we help today?', 'Happy to help with booking or pricing.', 'Thanks for reaching out — what are you looking for?'],
+        realestate: ['Thanks for contacting me. How can I help with your property search?', 'Happy to assist — buying, renting, or viewing?', 'Thanks for your message. What are you looking for?'],
+        retail: ['Thanks for messaging ' + n + '. How can we help?', 'Happy to check products or orders for you.', 'Thanks for reaching out — what do you need?'],
+        other: ['Thanks for your message. How can we help?', 'Happy to assist — tell us a bit more.', 'Thanks for contacting us. What do you need?'],
+      },
+    };
+
+    const pack = bodies[intent] || bodies.general;
+    const list = pack[biz] || pack.other || bodies.general.other;
+    let line = list[Math.floor(Math.random() * list.length)];
+    if (arabic && Math.random() > 0.45) {
+      const extras = [' إن شاء الله', ' — خبرني', ' متى يناسبك؟'];
+      if (tone !== 'professional' && Math.random() > 0.5) line += extras[Math.floor(Math.random() * extras.length)];
+    }
+    if (tone === 'short') {
+      line = line.replace(/Happy to |I can |We\'d love to |Thanks for messaging[^.]+\.\s*/gi, '').replace(/\s+/g, ' ').trim();
+      if (line.length > 120) line = line.slice(0, 117) + '…';
+    }
+    return line;
+  }
+
+  function buildOneReply(message, biz, tone, arabic, variation) {
+    const intents = detectIntents(message);
+    // Rotate primary intent by variation index for diversity
+    const intent = intents[variation % intents.length];
+    const g = greeting(tone, arabic);
+    const body = bodyFor(intent, biz, tone, arabic);
+    const c = closing(tone, arabic);
+
+    // Secondary nudge if multiple intents
+    let extra = '';
+    if (intents.length > 1 && variation === 1) {
+      const second = intents[(variation + 1) % intents.length];
+      if (second !== intent) {
+        const nudge = bodyFor(second, biz, 'short', arabic);
+        extra = ' Also: ' + nudge.charAt(0).toLowerCase() + nudge.slice(1);
+      }
+    }
+
+    if (tone === 'short') {
+      return (g + ' ' + body + (extra ? extra : '')).replace(/\s+/g, ' ').trim();
+    }
+    return (g + ' ' + body + extra + ' ' + c).replace(/\s+/g, ' ').trim();
+  }
+
+  function generateTemplateReplies(message, biz, tone, arabic) {
+    const out = [];
+    const seen = {};
+    let guard = 0;
+    while (out.length < 3 && guard < 20) {
+      guard++;
+      const r = buildOneReply(message, biz, tone, arabic, out.length + guard);
+      const key = r.slice(0, 48);
+      if (!seen[key]) {
+        seen[key] = true;
+        out.push(r);
+      }
+    }
+    while (out.length < 3) {
+      out.push(buildOneReply(message, biz, tone, arabic, out.length + 10));
+    }
+    return out;
+  }
+
+  async function generateGeminiReplies(message, biz, tone, arabic, apiKey) {
+    const bizLabel = (BIZ.find(function (b) { return b.id === biz; }) || {}).label || biz;
+    const toneLabel = (TONES.find(function (t) { return t.id === tone; }) || {}).label || tone;
+    const langNote = arabic
+      ? 'Write mostly in English with light Arabic-friendly touches (short phrases like مرحبا or إن شاء الله where natural).'
+      : 'Write in clear English.';
+    const prompt = 'You help small businesses reply on WhatsApp.\nBusiness type: ' + bizLabel + '\nTone: ' + toneLabel + '\n' + langNote + '\nCustomer message:\n"""' + message + '"""\n\nReturn ONLY a JSON array of exactly 3 short WhatsApp reply strings. No markdown. Ready to copy-paste. Keep each under 280 characters.';
+
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(apiKey);
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.8, maxOutputTokens: 512 },
+      }),
+    });
+    if (!res.ok) throw new Error('Gemini request failed (' + res.status + ')');
+    const data = await res.json();
+    const text = (((data.candidates || [])[0] || {}).content || {}).parts;
+    const raw = (text && text[0] && text[0].text) || '';
+    const match = raw.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('Unexpected Gemini response');
+    const arr = JSON.parse(match[0]);
+    if (!Array.isArray(arr) || arr.length < 3) throw new Error('Need 3 replies');
+    return arr.slice(0, 3).map(String);
+  }
+
+  function renderReplies(list, engine) {
+    const box = document.getElementById('replies');
+    document.getElementById('engineLabel').textContent = engine;
+    document.getElementById('results').classList.remove('hidden');
+    box.innerHTML = list.map(function (text, i) {
+      const labels = ['Option A', 'Option B', 'Option C'];
+      return (
+        '<article class="rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10">' +
+          '<div class="mb-2 flex items-center justify-between gap-2">' +
+            '<span class="text-xs font-semibold uppercase tracking-wider text-leaf-300/80">' + labels[i] + '</span>' +
+            '<button type="button" data-copy="' + i + '" class="rounded-full bg-leaf-500/15 px-3 py-1 text-xs font-semibold text-leaf-200 ring-1 ring-leaf-400/30 hover:bg-leaf-500/25">Copy</button>' +
+          '</div>' +
+          '<p class="reply-text text-[15px] leading-relaxed text-ink-100 whitespace-pre-wrap"></p>' +
+        '</article>'
+      );
+    }).join('');
+    const nodes = box.querySelectorAll('.reply-text');
+    list.forEach(function (text, i) { nodes[i].textContent = text; });
+    box.querySelectorAll('[data-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const idx = Number(btn.getAttribute('data-copy'));
+        const text = list[idx];
+        navigator.clipboard.writeText(text).then(function () {
+          showToast('Copied to clipboard');
+          btn.textContent = 'Copied';
+          setTimeout(function () { btn.textContent = 'Copy'; }, 1200);
+        }).catch(function () {
+          showToast('Copy failed — select manually');
+        });
+      });
+    });
+  }
+
+  async function onGenerate() {
+    const message = document.getElementById('message').value.trim();
+    const err = document.getElementById('errorMsg');
+    err.classList.add('hidden');
+    if (!message) {
+      err.textContent = 'Paste a customer message first.';
+      err.classList.remove('hidden');
+      return;
+    }
+    if (!isPro() && remaining() <= 0) {
+      openModal('upgradeModal');
+      return;
+    }
+
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+
+    try {
+      let replies;
+      let engine = 'Template engine';
+      const key = getGeminiKey();
+      if (key) {
+        try {
+          replies = await generateGeminiReplies(message, state.biz, state.tone, state.arabic, key);
+          engine = 'Gemini (your key)';
+        } catch (e) {
+          replies = generateTemplateReplies(message, state.biz, state.tone, state.arabic);
+          engine = 'Template engine (Gemini fallback)';
+        }
+      } else {
+        replies = generateTemplateReplies(message, state.biz, state.tone, state.arabic);
+      }
+
+      if (!isPro()) {
+        const u = getUsage();
+        setUsage(u.count + 1);
+      }
+      updateUsageBadge();
+      renderReplies(replies, engine);
+
+      if (!isPro() && remaining() <= 0) {
+        // Soft nudge after last free gen
+        setTimeout(function () { openModal('upgradeModal'); }, 600);
+      }
+    } catch (e) {
+      err.textContent = (e && e.message) || 'Something went wrong.';
+      err.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate 3 replies';
+    }
+  }
+
+  function refreshSettingsUI() {
+    const key = getGeminiKey();
+    document.getElementById('geminiKey').value = key;
+    document.getElementById('keyStatus').textContent = key
+      ? 'Key saved locally — Gemini will be tried first.'
+      : 'No key saved — using free template engine.';
+    document.getElementById('proStatus').textContent = isPro()
+      ? 'Pro unlocked · unlimited generations'
+      : 'Free plan · ' + remaining() + ' left today';
+  }
+
+  // ——— Events ———
+  document.getElementById('bizTypes').addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-biz]');
+    if (!btn) return;
+    state.biz = btn.getAttribute('data-biz');
+    localStorage.setItem(LS.biz, state.biz);
+    renderChips();
+  });
+
+  document.getElementById('tones').addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-tone]');
+    if (!btn) return;
+    state.tone = btn.getAttribute('data-tone');
+    localStorage.setItem(LS.tone, state.tone);
+    renderChips();
+  });
+
+  document.getElementById('arabicToggle').addEventListener('click', function () {
+    state.arabic = !state.arabic;
+    localStorage.setItem(LS.arabic, state.arabic ? '1' : '0');
+    setArabicUI();
+  });
+
+  document.getElementById('generateBtn').addEventListener('click', onGenerate);
+
+  document.getElementById('upgradeLink').addEventListener('click', function () { openModal('upgradeModal'); });
+  document.getElementById('closeUpgrade').addEventListener('click', function () { closeModal('upgradeModal'); });
+  document.getElementById('upgradeModal').addEventListener('click', function (e) {
+    if (e.target.id === 'upgradeModal') closeModal('upgradeModal');
+  });
+
+  document.getElementById('unlockBtn').addEventListener('click', function () {
+    const code = document.getElementById('promoCode').value.trim().toUpperCase();
+    const pe = document.getElementById('promoError');
+    if (code === PROMO_CODE) {
+      setPro(true);
+      pe.classList.add('hidden');
+      updateUsageBadge();
+      refreshSettingsUI();
+      closeModal('upgradeModal');
+      showToast('Replyly Pro unlocked');
+    } else {
+      pe.classList.remove('hidden');
+    }
+  });
+
+  document.getElementById('settingsBtn').addEventListener('click', function () {
+    refreshSettingsUI();
+    openModal('settingsModal');
+  });
+  document.getElementById('closeSettings').addEventListener('click', function () { closeModal('settingsModal'); });
+  document.getElementById('settingsModal').addEventListener('click', function (e) {
+    if (e.target.id === 'settingsModal') closeModal('settingsModal');
+  });
+  document.getElementById('saveKeyBtn').addEventListener('click', function () {
+    const v = document.getElementById('geminiKey').value.trim();
+    if (v) localStorage.setItem(LS.gemini, v);
+    else localStorage.removeItem(LS.gemini);
+    refreshSettingsUI();
+    showToast('Settings saved');
+  });
+  document.getElementById('clearKeyBtn').addEventListener('click', function () {
+    localStorage.removeItem(LS.gemini);
+    document.getElementById('geminiKey').value = '';
+    refreshSettingsUI();
+    showToast('Key cleared');
+  });
+  document.getElementById('openUpgradeFromSettings').addEventListener('click', function () {
+    closeModal('settingsModal');
+    openModal('upgradeModal');
+  });
+
+  document.getElementById('payBtn').href = GUMROAD_URL;
+
+  // Init
+  renderChips();
+  setArabicUI();
+  updateUsageBadge();
+
+  if (location.hash === '#upgrade') {
+    openModal('upgradeModal');
+  }
+})();
+  </script>
+</body>
+</html>
