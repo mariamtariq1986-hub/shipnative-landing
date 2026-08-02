@@ -28,10 +28,13 @@ Do **not** deploy this from the ShipNative root — keep this folder as its own 
 
 | Feature | Details |
 |--------|---------|
+| Business profile | Name, type, services/prices, hours, location, WhatsApp # (`localStorage`) |
+| Quick intents | Price, Booking, Location, Hours, Complaint, Thanks |
 | Business types | Restaurant, Clinic, Salon, Real Estate, Retail, Other |
 | Tones | Friendly / Professional / Short |
-| Output | 3 reply suggestions + one-click copy |
-| Language | English default; optional Arabic-friendly / mix |
+| Output | 3 suggestions + Copy + Send on WhatsApp (`wa.me`) |
+| History | Last 15 replies with re-copy |
+| Language | English default; stronger Arabic-friendly / mix |
 | Free tier | 5 generations per day (`localStorage` by date) |
 | Pro | `$12/mo` — unlimited; unlock via code `REPLYLY-PRO` or Gumroad |
 | AI (optional) | Paste your own Gemini API key in Settings (stored locally) |

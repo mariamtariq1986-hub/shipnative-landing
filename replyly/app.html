@@ -62,6 +62,7 @@
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    [dir="rtl"] .reply-text { text-align: right; }
   </style>
 </head>
 <body>
@@ -82,17 +83,76 @@
       </div>
     </header>
 
-    <p class="mt-5 text-sm text-ink-200/60">Paste a customer WhatsApp message → get 3 replies you can copy.</p>
+    <p class="mt-5 text-sm text-ink-200/60">For messages bots can’t handle — paste a customer WhatsApp message, or tap a quick intent, and get 3 replies.</p>
 
-    <!-- Business type -->
+    <!-- Business profile -->
+    <section class="mt-5 rounded-2xl bg-white/[0.03] ring-1 ring-white/10">
+      <button type="button" id="profileToggle" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left" aria-expanded="false">
+        <div>
+          <p class="text-sm font-semibold text-white">Business profile</p>
+          <p id="profileSummary" class="text-xs text-ink-200/50">Optional — replies use your name, hours, services &amp; area</p>
+        </div>
+        <span id="profileChevron" class="text-ink-200/50 transition">▾</span>
+      </button>
+      <div id="profilePanel" class="hidden border-t border-white/10 px-4 pb-4 pt-3 space-y-3">
+        <div>
+          <label for="profName" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Business name</label>
+          <input id="profName" type="text" placeholder="e.g. Glow Salon Dubai"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+        </div>
+        <div>
+          <label for="profType" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Business type</label>
+          <select id="profType"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white focus:border-leaf-400/40">
+            <option value="restaurant">Restaurant</option>
+            <option value="clinic">Clinic</option>
+            <option value="salon">Salon</option>
+            <option value="realestate">Real Estate</option>
+            <option value="retail">Retail</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="profServices" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Services / prices notes</label>
+          <textarea id="profServices" rows="2" placeholder="e.g. Haircut 80 AED · Color from 250 · Packages available"
+            class="mt-1.5 w-full resize-y rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40"></textarea>
+        </div>
+        <div>
+          <label for="profHours" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Hours</label>
+          <input id="profHours" type="text" placeholder="e.g. Sat–Thu 10am–9pm, Fri closed"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+        </div>
+        <div>
+          <label for="profLocation" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Location / area</label>
+          <input id="profLocation" type="text" placeholder="e.g. JLT Cluster Y, near Metro"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+        </div>
+        <div>
+          <label for="profWhatsapp" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">WhatsApp number <span class="normal-case font-normal text-ink-200/40">(optional)</span></label>
+          <input id="profWhatsapp" type="tel" placeholder="e.g. +971 50 123 4567"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+          <p class="mt-1 text-[11px] text-ink-200/40">Used for “Send on WhatsApp” to a specific number. Digits only in the link.</p>
+        </div>
+        <button type="button" id="saveProfileBtn" class="w-full rounded-xl bg-leaf-500/20 py-2.5 text-sm font-semibold text-leaf-200 ring-1 ring-leaf-400/30 hover:bg-leaf-500/30">Save profile</button>
+      </div>
+    </section>
+
+    <!-- Business type (quick chips — synced with profile) -->
     <section class="mt-5">
       <label class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Business type</label>
       <div id="bizTypes" class="mt-2 flex flex-wrap gap-2"></div>
     </section>
 
+    <!-- Quick intents -->
+    <section class="mt-5">
+      <label class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Quick intent</label>
+      <p class="mt-1 text-xs text-ink-200/45">One tap — works with or without a pasted message</p>
+      <div id="intentBtns" class="mt-2 flex flex-wrap gap-2"></div>
+    </section>
+
     <!-- Message -->
     <section class="mt-5">
-      <label for="message" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Customer message</label>
+      <label for="message" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Customer message <span class="normal-case font-normal text-ink-200/40">(optional if intent selected)</span></label>
       <textarea id="message" rows="4" placeholder="e.g. Hi, do you have appointments tomorrow? What's the price?"
         class="mt-2 w-full resize-y rounded-2xl border border-white/10 bg-ink-950/50 px-4 py-3 text-[15px] leading-relaxed text-white placeholder:text-ink-200/35 focus:border-leaf-400/40"></textarea>
     </section>
@@ -107,7 +167,7 @@
     <section class="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-white/[0.03] px-4 py-3 ring-1 ring-white/10">
       <div>
         <p class="text-sm font-medium text-white">Arabic-friendly / mix</p>
-        <p class="text-xs text-ink-200/50">Replies stay mostly English with warm bilingual touches</p>
+        <p class="text-xs text-ink-200/50">Warm bilingual replies (English + Arabic phrases)</p>
       </div>
       <button type="button" id="arabicToggle" role="switch" aria-checked="false"
         class="relative h-7 w-12 shrink-0 rounded-full bg-white/10 transition">
@@ -126,6 +186,15 @@
         <span id="engineLabel" class="text-xs text-ink-200/45">Template engine</span>
       </div>
       <div id="replies" class="space-y-3"></div>
+    </section>
+
+    <!-- History -->
+    <section id="historySection" class="mt-8 hidden">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="font-display text-lg font-semibold text-white">Recent replies</h2>
+        <button type="button" id="clearHistoryBtn" class="text-xs text-ink-200/45 hover:text-white">Clear</button>
+      </div>
+      <div id="historyList" class="mt-3 space-y-2"></div>
     </section>
 
     <p id="errorMsg" class="mt-4 hidden text-sm text-red-300"></p>
@@ -196,6 +265,7 @@
   const FREE_LIMIT = 5;
   const PROMO_CODE = 'REPLYLY-PRO';
   const GUMROAD_URL = 'https://mariamtariq72.gumroad.com/l/replyly';
+  const HISTORY_MAX = 15;
   const LS = {
     pro: 'replyly_pro',
     usage: 'replyly_usage',
@@ -203,6 +273,8 @@
     biz: 'replyly_biz',
     tone: 'replyly_tone',
     arabic: 'replyly_arabic',
+    profile: 'replyly_profile',
+    history: 'replyly_history',
   };
 
   const BIZ = [
@@ -218,12 +290,33 @@
     { id: 'professional', label: 'Professional' },
     { id: 'short', label: 'Short' },
   ];
+  const INTENTS = [
+    { id: 'price', label: 'Price', labelAr: 'السعر' },
+    { id: 'booking', label: 'Booking', labelAr: 'حجز' },
+    { id: 'location', label: 'Location', labelAr: 'الموقع' },
+    { id: 'hours', label: 'Hours / Open?', labelAr: 'دوام؟' },
+    { id: 'complaint', label: 'Complaint', labelAr: 'شكوى' },
+    { id: 'thanks', label: 'Thanks', labelAr: 'شكر' },
+  ];
+
+  const EMPTY_PROFILE = {
+    name: '',
+    type: '',
+    services: '',
+    hours: '',
+    location: '',
+    whatsapp: '',
+  };
 
   let state = {
     biz: localStorage.getItem(LS.biz) || 'salon',
     tone: localStorage.getItem(LS.tone) || 'friendly',
     arabic: localStorage.getItem(LS.arabic) === '1',
+    forcedIntent: null,
+    profileOpen: false,
   };
+
+  let lastReplies = [];
 
   // ——— Storage helpers ———
   function todayKey() {
@@ -264,6 +357,68 @@
     return (localStorage.getItem(LS.gemini) || '').trim();
   }
 
+  function getProfile() {
+    try {
+      const raw = localStorage.getItem(LS.profile);
+      if (!raw) return Object.assign({}, EMPTY_PROFILE);
+      const p = JSON.parse(raw);
+      return {
+        name: String(p.name || '').trim(),
+        type: String(p.type || '').trim(),
+        services: String(p.services || '').trim(),
+        hours: String(p.hours || '').trim(),
+        location: String(p.location || '').trim(),
+        whatsapp: String(p.whatsapp || '').trim(),
+      };
+    } catch {
+      return Object.assign({}, EMPTY_PROFILE);
+    }
+  }
+
+  function saveProfile(profile) {
+    localStorage.setItem(LS.profile, JSON.stringify(profile));
+  }
+
+  function digitsOnly(phone) {
+    return String(phone || '').replace(/\D/g, '');
+  }
+
+  function waMeUrl(text, phone) {
+    const q = encodeURIComponent(text);
+    const digits = digitsOnly(phone);
+    if (digits) return 'https://wa.me/' + digits + '?text=' + q;
+    return 'https://wa.me/?text=' + q;
+  }
+
+  function getHistory() {
+    try {
+      const raw = localStorage.getItem(LS.history);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr.slice(0, HISTORY_MAX) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function pushHistory(replies) {
+    const prev = getHistory();
+    const stamp = Date.now();
+    const entries = replies.map(function (text, i) {
+      return { id: stamp + '-' + i, text: text, at: stamp };
+    });
+    const next = entries.concat(prev).slice(0, HISTORY_MAX);
+    localStorage.setItem(LS.history, JSON.stringify(next));
+  }
+
+  function clearHistory() {
+    localStorage.removeItem(LS.history);
+  }
+
+  function pick(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
   // ——— UI chips ———
   function renderChips() {
     const bizEl = document.getElementById('bizTypes');
@@ -278,6 +433,16 @@
       const active = state.tone === t.id;
       return '<button type="button" data-tone="' + t.id + '" class="rounded-full px-3.5 py-1.5 text-sm ring-1 transition ' +
         (active ? 'chip-active ring-leaf-400/45' : 'bg-white/5 text-ink-200/80 ring-white/10 hover:bg-white/10') + '">' + t.label + '</button>';
+    }).join('');
+  }
+
+  function renderIntentBtns() {
+    const el = document.getElementById('intentBtns');
+    el.innerHTML = INTENTS.map(function (intent) {
+      const active = state.forcedIntent === intent.id;
+      const label = state.arabic ? (intent.label + ' · ' + intent.labelAr) : intent.label;
+      return '<button type="button" data-intent="' + intent.id + '" class="rounded-full px-3.5 py-1.5 text-sm ring-1 transition ' +
+        (active ? 'chip-active ring-leaf-400/45' : 'bg-white/5 text-ink-200/80 ring-white/10 hover:bg-white/10') + '">' + label + '</button>';
     }).join('');
   }
 
@@ -306,6 +471,7 @@
       btn.classList.add('bg-white/10');
       knob.style.transform = 'translateX(0)';
     }
+    renderIntentBtns();
   }
 
   function showToast(msg) {
@@ -328,21 +494,62 @@
     el.classList.remove('flex');
   }
 
+  function loadProfileForm() {
+    const p = getProfile();
+    document.getElementById('profName').value = p.name;
+    document.getElementById('profType').value = p.type || state.biz;
+    document.getElementById('profServices').value = p.services;
+    document.getElementById('profHours').value = p.hours;
+    document.getElementById('profLocation').value = p.location;
+    document.getElementById('profWhatsapp').value = p.whatsapp;
+    updateProfileSummary();
+  }
+
+  function updateProfileSummary() {
+    const p = getProfile();
+    const el = document.getElementById('profileSummary');
+    if (p.name) {
+      const bits = [p.name];
+      if (p.location) bits.push(p.location);
+      if (p.hours) bits.push('hours set');
+      el.textContent = bits.join(' · ');
+    } else if (p.hours || p.services || p.location) {
+      el.textContent = 'Profile saved — replies will use your details';
+    } else {
+      el.textContent = 'Optional — replies use your name, hours, services & area';
+    }
+  }
+
+  function setProfileOpen(open) {
+    state.profileOpen = open;
+    const panel = document.getElementById('profilePanel');
+    const chevron = document.getElementById('profileChevron');
+    const btn = document.getElementById('profileToggle');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      panel.classList.remove('hidden');
+      chevron.style.transform = 'rotate(180deg)';
+    } else {
+      panel.classList.add('hidden');
+      chevron.style.transform = 'rotate(0)';
+    }
+  }
+
   // ——— Intent / keyword detection ———
   function detectIntents(text) {
     const t = text.toLowerCase();
     const intents = [];
     const rules = [
-      { id: 'price', re: /price|cost|how much|fee|rate|رسوم|سعر|كم/ },
-      { id: 'hours', re: /open|hours|timing|when are you|close|موعد|دوام|مفتوح/ },
-      { id: 'booking', re: /book|appoint|reserv|available|slot|tomorrow|today|حجز|موعد|بكرة/ },
-      { id: 'location', re: /where|address|location|map|directions|وين|عنوان|موقع/ },
-      { id: 'delivery', re: /deliver|pickup|shipping|توصيل|استلام/ },
-      { id: 'menu', re: /menu|what do you (have|offer)|services|قائمة|خدمات/ },
-      { id: 'complaint', re: /complaint|refund|wrong|late|bad|angry|مشكلة|استرجاع/ },
-      { id: 'thanks', re: /thank|thanks|شكر/ },
-      { id: 'viewing', re: /viewing|visit|tour|showing|معاينة|شقة|فيلا/ },
-      { id: 'stock', re: /in stock|available|size|colour|color|متوفر|مقاس/ },
+      { id: 'price', re: /price|cost|how much|fee|rate|رسوم|سعر|كم|بكام|اسعار|أسعار|تكلفة/ },
+      { id: 'hours', re: /open|hours|timing|when are you|close|موعد|دوام|مفتوح|مغلقة|ساعات|متى تفتح|هل انتو/ },
+      { id: 'booking', re: /book|appoint|reserv|available|slot|tomorrow|today|حجز|موعد|بكرة|بكره|احجز|متاح|فاضي/ },
+      { id: 'location', re: /where|address|location|map|directions|وين|عنوان|موقع|فين|لوحة|خريطة/ },
+      { id: 'delivery', re: /deliver|pickup|shipping|توصيل|استلام|ديليفري/ },
+      { id: 'menu', re: /menu|what do you (have|offer)|services|قائمة|خدمات|منيو/ },
+      { id: 'complaint', re: /complaint|refund|wrong|late|bad|angry|مشكلة|استرجاع|سيء|زعلان|تأخير|غلط/ },
+      { id: 'thanks', re: /thank|thanks|شكر|مشكور|يعطيك|تسلم/ },
+      { id: 'viewing', re: /viewing|visit|tour|showing|معاينة|شقة|فيلا|أدور/ },
+      { id: 'stock', re: /in stock|available|size|colour|color|متوفر|مقاس|موجود/ },
     ];
     rules.forEach(function (r) {
       if (r.re.test(t)) intents.push(r.id);
@@ -351,7 +558,8 @@
     return intents;
   }
 
-  function bizNoun(biz) {
+  function bizNoun(biz, profile) {
+    if (profile && profile.name) return profile.name;
     const map = {
       restaurant: 'our restaurant',
       clinic: 'our clinic',
@@ -363,25 +571,103 @@
     return map[biz] || 'us';
   }
 
-  function greeting(tone, arabic) {
+  function greeting(tone, arabic, profile) {
+    const name = profile && profile.name ? profile.name : '';
     if (arabic) {
-      if (tone === 'short') return ['Hi!', 'مرحبا!', 'Hello!'][Math.floor(Math.random() * 3)];
-      if (tone === 'professional') return ['Hello,', 'Good day,', 'مرحبا،'][Math.floor(Math.random() * 3)];
-      return ['Hi there!', 'Hello!', 'مرحبا! 😊'][Math.floor(Math.random() * 3)];
+      if (tone === 'short') return pick(['Hi!', 'مرحبا!', 'أهلاً!', 'هلا!']);
+      if (tone === 'professional') {
+        return pick([
+          'Hello,',
+          'مرحبا،',
+          'السلام عليكم،',
+          name ? ('مرحبا، معك ' + name + '،') : 'Good day,',
+        ]);
+      }
+      return pick([
+        'Hi there!',
+        'مرحبا! 😊',
+        'أهلاً وسهلاً!',
+        name ? ('Hi from ' + name + '!') : 'Hello!',
+        'هلا والله!',
+      ]);
     }
-    if (tone === 'short') return ['Hi!', 'Hello!', 'Hey!'][Math.floor(Math.random() * 3)];
-    if (tone === 'professional') return ['Hello,', 'Good day,', 'Thank you for reaching out.'][Math.floor(Math.random() * 3)];
-    return ['Hi there!', 'Hello!', 'Thanks for messaging!'][Math.floor(Math.random() * 3)];
+    if (tone === 'short') return pick(['Hi!', 'Hello!', 'Hey!']);
+    if (tone === 'professional') {
+      return pick([
+        'Hello,',
+        'Good day,',
+        'Thank you for reaching out.',
+        name ? ('Hello from ' + name + ',') : 'Hello,',
+      ]);
+    }
+    return pick([
+      'Hi there!',
+      'Hello!',
+      'Thanks for messaging!',
+      name ? ('Hi — this is ' + name + '!') : 'Thanks for your message!',
+    ]);
   }
 
   function closing(tone, arabic) {
-    if (tone === 'short') return arabic ? ['Let me know.', 'خبرني.', 'Thanks!'][Math.floor(Math.random() * 3)] : ['Let me know.', 'Thanks!', 'Ping me anytime.'][Math.floor(Math.random() * 3)];
-    if (tone === 'professional') return arabic ? ['Happy to help further.', 'Looking forward to assisting you.', 'Please tell us how you\'d like to proceed.'][Math.floor(Math.random() * 3)] : ['Happy to help further.', 'Looking forward to assisting you.', 'Please let us know how you\'d like to proceed.'][Math.floor(Math.random() * 3)];
-    return arabic ? ['Happy to help! 🌿', 'Anytime — just message us.', 'We\'re here if you need anything!'][Math.floor(Math.random() * 3)] : ['Happy to help!', 'Anytime — just message us.', 'We\'re here if you need anything!'][Math.floor(Math.random() * 3)];
+    if (tone === 'short') {
+      return arabic
+        ? pick(['Let me know.', 'خبرني.', 'تمام؟', 'Thanks!', 'أبشر.'])
+        : pick(['Let me know.', 'Thanks!', 'Ping me anytime.']);
+    }
+    if (tone === 'professional') {
+      return arabic
+        ? pick([
+            'Happy to help further.',
+            'Looking forward to assisting you.',
+            'Please tell us how you\'d like to proceed.',
+            'في خدمتك.',
+            'نورتنا — خبرنا كيف نكمل.',
+          ])
+        : pick([
+            'Happy to help further.',
+            'Looking forward to assisting you.',
+            'Please let us know how you\'d like to proceed.',
+          ]);
+    }
+    return arabic
+      ? pick([
+          'Happy to help! 🌿',
+          'Anytime — just message us.',
+          'We\'re here if you need anything!',
+          'تحت أمرك!',
+          'أبشر، أي شيء ثاني؟',
+        ])
+      : pick(['Happy to help!', 'Anytime — just message us.', 'We\'re here if you need anything!']);
   }
 
-  function bodyFor(intent, biz, tone, arabic) {
-    const n = bizNoun(biz);
+  function profileFacts(intent, profile, arabic) {
+    if (!profile) return '';
+    const bits = [];
+    if ((intent === 'hours' || intent === 'booking' || intent === 'general') && profile.hours) {
+      bits.push(arabic
+        ? ('دوامنا: ' + profile.hours)
+        : ('Our hours: ' + profile.hours));
+    }
+    if ((intent === 'location' || intent === 'booking' || intent === 'general') && profile.location) {
+      bits.push(arabic
+        ? ('موقعنا: ' + profile.location)
+        : ('We\'re in ' + profile.location));
+    }
+    if ((intent === 'price' || intent === 'menu' || intent === 'booking') && profile.services) {
+      const note = profile.services.length > 140
+        ? profile.services.slice(0, 137) + '…'
+        : profile.services;
+      bits.push(arabic
+        ? ('ملاحظات الأسعار/الخدمات: ' + note)
+        : ('Quick note on services/prices: ' + note));
+    }
+    if (!bits.length) return '';
+    // Prefer one strongest fact per reply for readability
+    return bits[0];
+  }
+
+  function bodyFor(intent, biz, tone, arabic, profile) {
+    const n = bizNoun(biz, profile);
     const bodies = {
       price: {
         restaurant: [
@@ -545,35 +831,129 @@
       },
     };
 
-    const pack = bodies[intent] || bodies.general;
-    const list = pack[biz] || pack.other || bodies.general.other;
-    let line = list[Math.floor(Math.random() * list.length)];
-    if (arabic && Math.random() > 0.45) {
-      const extras = [' إن شاء الله', ' — خبرني', ' متى يناسبك؟'];
-      if (tone !== 'professional' && Math.random() > 0.5) line += extras[Math.floor(Math.random() * extras.length)];
+    const arBodies = {
+      price: [
+        'أكيد نقدر نأكد السعر — أي خدمة/منتج تقصد؟',
+        'بأرسل لك التسعيرة الحين. تبي القائمة كاملة ولا خدمة معينة؟',
+        'تمام، قل لي التفاصيل وأعطيك السعر بالضبط.',
+      ],
+      hours: [
+        'إي إحنا فاتحين — متى يناسبك تجي؟',
+        'دوامنا واضح، قل لي اليوم والوقت وأأكد لك.',
+        'موجودين أغلب أيام الأسبوع. تبي صباح ولا مساء؟',
+      ],
+      booking: [
+        'حاضر أحجز لك — أي يوم ووقت تفضل؟',
+        'أكيد في مواعيد. بكرة بعد الظهر يناسبك؟',
+        'نقدر نحجز الحين. الاسم + الوقت المفضل؟',
+      ],
+      location: [
+        'بأرسل لك الموقع/اللوكيشن الحين.',
+        'سهل تلقونا — تبي لوكيشن قوقل ماب؟',
+        'العنوان جاهز، أرسله لك مباشرة.',
+      ],
+      complaint: [
+        'والله آسفين على الإزعاج — قل لي التفاصيل عشان نصلحها.',
+        'نعتذر منك، نبي نعدّل الوضع. وش اللي صار بالضبط؟',
+        'آسف على اللي حصل. بخليه أولوية وأرد عليك بسرعة.',
+      ],
+      thanks: [
+        'العفو! نورتنا 🌿',
+        'تسلم، أي وقت تحتاجنا احنا موجودين.',
+        'حاضرين دايماً — شكراً لك!',
+      ],
+      delivery: [
+        'إي في توصيل/استلام — منطقتك وش تبي؟',
+        'نقدر نرتب التوصيل. العنوان؟',
+        'بيك أب ولا ديليفري؟ رتّبه لك.',
+      ],
+      menu: [
+        'بأرسل لك القائمة/الخدمات الحين.',
+        'قلي وش تبي بالضبط وأوريك الخيارات.',
+        'عندنا خيارات كثيرة — تبي الأسعار مع القائمة؟',
+      ],
+      viewing: [
+        'نقدر نرتب زيارة/معاينة. متى يناسبك؟',
+        'حاضر، خلنا نحجز وقت للمعاينة.',
+        'إي تقدر تزورنا — أحجز لك موعد؟',
+      ],
+      stock: [
+        'بشيك التوفر وأرد عليك الحين.',
+        'خليني أتأكد إذا موجود، دقيقة.',
+        'أكيد، أي مقاس/لون تقصد؟',
+      ],
+      general: [
+        'شكراً لتواصلك مع ' + n + '. كيف نقدر نساعدك؟',
+        'حاضرين — حجز، أسعار، ولا استفسار؟',
+        'أهلاً فيك! قل لنا وش تحتاج اليوم.',
+      ],
+    };
+
+    let line;
+    if (arabic && Math.random() > 0.28 && arBodies[intent]) {
+      line = pick(arBodies[intent]);
+    } else {
+      const pack = bodies[intent] || bodies.general;
+      const list = pack[biz] || pack.other || bodies.general.other;
+      line = pick(list);
+      if (arabic) {
+        const extras = [
+          ' إن شاء الله',
+          ' — خبرني',
+          ' متى يناسبك؟',
+          ' تمام؟',
+          ' أبشر',
+          ' تحت أمرك',
+        ];
+        if (tone !== 'professional' || Math.random() > 0.4) {
+          if (Math.random() > 0.35) line += pick(extras);
+        }
+      }
     }
+
+    const fact = profileFacts(intent, profile, arabic);
+    if (fact) {
+      if (arabic) line += (line.endsWith('.') || line.endsWith('؟') || line.endsWith('!') ? ' ' : '. ') + fact + '.';
+      else line += (line.endsWith('.') ? ' ' : '. ') + fact + '.';
+    } else if (profile && profile.name && intent === 'general' && line.indexOf(profile.name) === -1 && !arabic) {
+      // light brand touch already via bizNoun in general templates
+    }
+
     if (tone === 'short') {
       line = line.replace(/Happy to |I can |We\'d love to |Thanks for messaging[^.]+\.\s*/gi, '').replace(/\s+/g, ' ').trim();
-      if (line.length > 120) line = line.slice(0, 117) + '…';
+      if (line.length > 140) line = line.slice(0, 137) + '…';
     }
     return line;
   }
 
-  function buildOneReply(message, biz, tone, arabic, variation) {
-    const intents = detectIntents(message);
-    // Rotate primary intent by variation index for diversity
+  function resolveIntents(message) {
+    if (state.forcedIntent) {
+      const detected = message ? detectIntents(message) : [];
+      const merged = [state.forcedIntent].concat(detected.filter(function (id) {
+        return id !== state.forcedIntent && id !== 'general';
+      }));
+      return merged.length ? merged : [state.forcedIntent];
+    }
+    return detectIntents(message || '');
+  }
+
+  function buildOneReply(message, biz, tone, arabic, variation, profile) {
+    const intents = resolveIntents(message);
     const intent = intents[variation % intents.length];
-    const g = greeting(tone, arabic);
-    const body = bodyFor(intent, biz, tone, arabic);
+    const g = greeting(tone, arabic, profile);
+    const body = bodyFor(intent, biz, tone, arabic, profile);
     const c = closing(tone, arabic);
 
-    // Secondary nudge if multiple intents
     let extra = '';
     if (intents.length > 1 && variation === 1) {
       const second = intents[(variation + 1) % intents.length];
       if (second !== intent) {
-        const nudge = bodyFor(second, biz, 'short', arabic);
-        extra = ' Also: ' + nudge.charAt(0).toLowerCase() + nudge.slice(1);
+        const nudge = bodyFor(second, biz, 'short', arabic, profile);
+        if (arabic) {
+          extra = ' وأيضاً: ' + nudge;
+        } else {
+          extra = ' Also: ' + nudge.charAt(0).toLowerCase() + nudge.slice(1);
+        }
       }
     }
 
@@ -583,13 +963,13 @@
     return (g + ' ' + body + extra + ' ' + c).replace(/\s+/g, ' ').trim();
   }
 
-  function generateTemplateReplies(message, biz, tone, arabic) {
+  function generateTemplateReplies(message, biz, tone, arabic, profile) {
     const out = [];
     const seen = {};
     let guard = 0;
     while (out.length < 3 && guard < 20) {
       guard++;
-      const r = buildOneReply(message, biz, tone, arabic, out.length + guard);
+      const r = buildOneReply(message, biz, tone, arabic, out.length + guard, profile);
       const key = r.slice(0, 48);
       if (!seen[key]) {
         seen[key] = true;
@@ -597,18 +977,35 @@
       }
     }
     while (out.length < 3) {
-      out.push(buildOneReply(message, biz, tone, arabic, out.length + 10));
+      out.push(buildOneReply(message, biz, tone, arabic, out.length + 10, profile));
     }
     return out;
   }
 
-  async function generateGeminiReplies(message, biz, tone, arabic, apiKey) {
+  function profilePromptBlock(profile) {
+    if (!profile) return '';
+    const lines = [];
+    if (profile.name) lines.push('Business name: ' + profile.name);
+    if (profile.hours) lines.push('Hours: ' + profile.hours);
+    if (profile.location) lines.push('Location/area: ' + profile.location);
+    if (profile.services) lines.push('Services/prices notes: ' + profile.services);
+    if (!lines.length) return '';
+    return '\nBusiness profile (use these facts when relevant — do not invent conflicting details):\n' + lines.join('\n') + '\n';
+  }
+
+  async function generateGeminiReplies(message, biz, tone, arabic, apiKey, profile) {
     const bizLabel = (BIZ.find(function (b) { return b.id === biz; }) || {}).label || biz;
     const toneLabel = (TONES.find(function (t) { return t.id === tone; }) || {}).label || tone;
     const langNote = arabic
-      ? 'Write mostly in English with light Arabic-friendly touches (short phrases like مرحبا or إن شاء الله where natural).'
+      ? 'Write in natural Gulf/MSA-friendly mix: mostly clear English OR Arabic with short bilingual touches (مرحبا، إن شاء الله، خبرني، دوامنا) where natural. Intents must work in Arabic.'
       : 'Write in clear English.';
-    const prompt = 'You help small businesses reply on WhatsApp.\nBusiness type: ' + bizLabel + '\nTone: ' + toneLabel + '\n' + langNote + '\nCustomer message:\n"""' + message + '"""\n\nReturn ONLY a JSON array of exactly 3 short WhatsApp reply strings. No markdown. Ready to copy-paste. Keep each under 280 characters.';
+    const intentNote = state.forcedIntent
+      ? '\nPrimary intent to answer: ' + state.forcedIntent + ' (even if the customer message is empty or vague).'
+      : '';
+    const customerBlock = message
+      ? 'Customer message:\n"""' + message + '"""'
+      : 'Customer message: (none — craft a proactive WhatsApp reply for the intent above)';
+    const prompt = 'You help small businesses reply on WhatsApp for situations bots struggle with.\nBusiness type: ' + bizLabel + '\nTone: ' + toneLabel + '\n' + langNote + intentNote + profilePromptBlock(profile) + '\n' + customerBlock + '\n\nReturn ONLY a JSON array of exactly 3 short WhatsApp reply strings. No markdown. Ready to copy-paste. Keep each under 280 characters. Incorporate profile name/hours/services/location when present and relevant.';
 
     const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(apiKey);
     const res = await fetch(url, {
@@ -630,19 +1027,42 @@
     return arr.slice(0, 3).map(String);
   }
 
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(function () {
+      showToast('Copied to clipboard');
+      if (btn) {
+        const prev = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = prev; }, 1200);
+      }
+    }).catch(function () {
+      showToast('Copy failed — select manually');
+    });
+  }
+
   function renderReplies(list, engine) {
+    lastReplies = list.slice();
     const box = document.getElementById('replies');
+    const profile = getProfile();
+    const waNumber = profile.whatsapp;
     document.getElementById('engineLabel').textContent = engine;
     document.getElementById('results').classList.remove('hidden');
     box.innerHTML = list.map(function (text, i) {
       const labels = ['Option A', 'Option B', 'Option C'];
+      const waHref = waMeUrl(text, waNumber);
+      const waLabel = waNumber
+        ? 'Send on WhatsApp'
+        : 'Send on WhatsApp';
       return (
         '<article class="rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10">' +
           '<div class="mb-2 flex items-center justify-between gap-2">' +
             '<span class="text-xs font-semibold uppercase tracking-wider text-leaf-300/80">' + labels[i] + '</span>' +
-            '<button type="button" data-copy="' + i + '" class="rounded-full bg-leaf-500/15 px-3 py-1 text-xs font-semibold text-leaf-200 ring-1 ring-leaf-400/30 hover:bg-leaf-500/25">Copy</button>' +
           '</div>' +
-          '<p class="reply-text text-[15px] leading-relaxed text-ink-100 whitespace-pre-wrap"></p>' +
+          '<p class="reply-text text-[15px] leading-relaxed text-ink-100 whitespace-pre-wrap" ' + (state.arabic ? 'dir="auto"' : '') + '></p>' +
+          '<div class="mt-3 flex flex-wrap gap-2">' +
+            '<button type="button" data-copy="' + i + '" class="rounded-full bg-leaf-500/15 px-3 py-1.5 text-xs font-semibold text-leaf-200 ring-1 ring-leaf-400/30 hover:bg-leaf-500/25">Copy</button>' +
+            '<a data-wa="' + i + '" href="' + waHref + '" target="_blank" rel="noopener" class="rounded-full bg-[#25d366]/15 px-3 py-1.5 text-xs font-semibold text-[#86efb0] ring-1 ring-[#25d366]/35 hover:bg-[#25d366]/25">' + waLabel + '</a>' +
+          '</div>' +
         '</article>'
       );
     }).join('');
@@ -651,24 +1071,59 @@
     box.querySelectorAll('[data-copy]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const idx = Number(btn.getAttribute('data-copy'));
-        const text = list[idx];
-        navigator.clipboard.writeText(text).then(function () {
-          showToast('Copied to clipboard');
-          btn.textContent = 'Copied';
-          setTimeout(function () { btn.textContent = 'Copy'; }, 1200);
-        }).catch(function () {
-          showToast('Copy failed — select manually');
-        });
+        copyText(list[idx], btn);
       });
     });
+  }
+
+  function renderHistory() {
+    const items = getHistory();
+    const section = document.getElementById('historySection');
+    const list = document.getElementById('historyList');
+    if (!items.length) {
+      section.classList.add('hidden');
+      list.innerHTML = '';
+      return;
+    }
+    section.classList.remove('hidden');
+    const profile = getProfile();
+    list.innerHTML = items.map(function (item) {
+      const preview = item.text.length > 110 ? item.text.slice(0, 107) + '…' : item.text;
+      const waHref = waMeUrl(item.text, profile.whatsapp);
+      return (
+        '<article class="rounded-xl bg-white/[0.03] px-3 py-2.5 ring-1 ring-white/10" data-hist="' + item.id + '">' +
+          '<p class="text-sm leading-snug text-ink-100/90" dir="auto"></p>' +
+          '<div class="mt-2 flex flex-wrap gap-2">' +
+            '<button type="button" data-hist-copy="' + item.id + '" class="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-medium text-leaf-200 ring-1 ring-white/10 hover:bg-white/10">Copy</button>' +
+            '<a href="' + waHref + '" target="_blank" rel="noopener" class="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-medium text-[#86efb0] ring-1 ring-white/10 hover:bg-white/10">WhatsApp</a>' +
+          '</div>' +
+        '</article>'
+      );
+    }).join('');
+    const articles = list.querySelectorAll('[data-hist]');
+    items.forEach(function (item, i) {
+      const p = articles[i].querySelector('p');
+      p.textContent = previewFor(item.text);
+    });
+    list.querySelectorAll('[data-hist-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = btn.getAttribute('data-hist-copy');
+        const found = items.find(function (x) { return x.id === id; });
+        if (found) copyText(found.text, btn);
+      });
+    });
+  }
+
+  function previewFor(text) {
+    return text.length > 110 ? text.slice(0, 107) + '…' : text;
   }
 
   async function onGenerate() {
     const message = document.getElementById('message').value.trim();
     const err = document.getElementById('errorMsg');
     err.classList.add('hidden');
-    if (!message) {
-      err.textContent = 'Paste a customer message first.';
+    if (!message && !state.forcedIntent) {
+      err.textContent = 'Paste a customer message or tap a quick intent first.';
       err.classList.remove('hidden');
       return;
     }
@@ -681,20 +1136,23 @@
     btn.disabled = true;
     btn.textContent = 'Generating…';
 
+    const profile = getProfile();
+    const biz = profile.type || state.biz;
+
     try {
       let replies;
       let engine = 'Template engine';
       const key = getGeminiKey();
       if (key) {
         try {
-          replies = await generateGeminiReplies(message, state.biz, state.tone, state.arabic, key);
+          replies = await generateGeminiReplies(message, biz, state.tone, state.arabic, key, profile);
           engine = 'Gemini (your key)';
         } catch (e) {
-          replies = generateTemplateReplies(message, state.biz, state.tone, state.arabic);
+          replies = generateTemplateReplies(message, biz, state.tone, state.arabic, profile);
           engine = 'Template engine (Gemini fallback)';
         }
       } else {
-        replies = generateTemplateReplies(message, state.biz, state.tone, state.arabic);
+        replies = generateTemplateReplies(message, biz, state.tone, state.arabic, profile);
       }
 
       if (!isPro()) {
@@ -703,9 +1161,10 @@
       }
       updateUsageBadge();
       renderReplies(replies, engine);
+      pushHistory(replies);
+      renderHistory();
 
       if (!isPro() && remaining() <= 0) {
-        // Soft nudge after last free gen
         setTimeout(function () { openModal('upgradeModal'); }, 600);
       }
     } catch (e) {
@@ -734,6 +1193,7 @@
     if (!btn) return;
     state.biz = btn.getAttribute('data-biz');
     localStorage.setItem(LS.biz, state.biz);
+    document.getElementById('profType').value = state.biz;
     renderChips();
   });
 
@@ -745,6 +1205,14 @@
     renderChips();
   });
 
+  document.getElementById('intentBtns').addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-intent]');
+    if (!btn) return;
+    const id = btn.getAttribute('data-intent');
+    state.forcedIntent = state.forcedIntent === id ? null : id;
+    renderIntentBtns();
+  });
+
   document.getElementById('arabicToggle').addEventListener('click', function () {
     state.arabic = !state.arabic;
     localStorage.setItem(LS.arabic, state.arabic ? '1' : '0');
@@ -752,6 +1220,40 @@
   });
 
   document.getElementById('generateBtn').addEventListener('click', onGenerate);
+
+  document.getElementById('profileToggle').addEventListener('click', function () {
+    setProfileOpen(!state.profileOpen);
+  });
+
+  document.getElementById('saveProfileBtn').addEventListener('click', function () {
+    const type = document.getElementById('profType').value || state.biz;
+    const profile = {
+      name: document.getElementById('profName').value.trim(),
+      type: type,
+      services: document.getElementById('profServices').value.trim(),
+      hours: document.getElementById('profHours').value.trim(),
+      location: document.getElementById('profLocation').value.trim(),
+      whatsapp: document.getElementById('profWhatsapp').value.trim(),
+    };
+    saveProfile(profile);
+    state.biz = type;
+    localStorage.setItem(LS.biz, state.biz);
+    renderChips();
+    updateProfileSummary();
+    showToast('Business profile saved');
+  });
+
+  document.getElementById('profType').addEventListener('change', function () {
+    state.biz = document.getElementById('profType').value;
+    localStorage.setItem(LS.biz, state.biz);
+    renderChips();
+  });
+
+  document.getElementById('clearHistoryBtn').addEventListener('click', function () {
+    clearHistory();
+    renderHistory();
+    showToast('History cleared');
+  });
 
   document.getElementById('upgradeLink').addEventListener('click', function () { openModal('upgradeModal'); });
   document.getElementById('closeUpgrade').addEventListener('click', function () { closeModal('upgradeModal'); });
@@ -803,9 +1305,14 @@
   document.getElementById('payBtn').href = GUMROAD_URL;
 
   // Init
+  const savedProfile = getProfile();
+  if (savedProfile.type) state.biz = savedProfile.type;
   renderChips();
+  renderIntentBtns();
   setArabicUI();
   updateUsageBadge();
+  loadProfileForm();
+  renderHistory();
 
   if (location.hash === '#upgrade') {
     openModal('upgradeModal');
