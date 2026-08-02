@@ -74,3 +74,19 @@ Do **not** deploy this from the ShipNative root — keep this folder as its own 
 ## Privacy note
 
 Customer messages and API keys never leave the browser unless the user enables Gemini (then only that request goes to Google). Team invite codes are base64 JSON of the profile — treat them like shared shop notes, not secrets.
+
+## Publishing to App Store / Play Store
+
+Replyly today is a **PWA** (Progressive Web App): installable from the browser via Add to Home Screen, with a service worker for offline shell caching. That path is free and already works.
+
+To ship native store listings later, two practical routes:
+
+1. **Capacitor wrap** — wrap this web app (`index.html` / `app.html`) in a Capacitor shell and submit iOS/Android builds without rewriting the product.
+2. **Rebuild in Expo** — recreate the Replyly UI/flows in the Expo (React Native) starter if you want a fully native codebase and Expo’s store tooling.
+
+Store account costs (approx.):
+
+- **Apple Developer Program** — about **$99/year**
+- **Google Play Console** — about **$25 one-time**
+
+Until then, **Add to Home Screen** remains the free mobile install path.

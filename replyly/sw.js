@@ -1,5 +1,5 @@
 /* Replyly — basic offline shell */
-const CACHE = 'replyly-shell-v1';
+const CACHE = 'replyly-shell-v2';
 const SHELL = [
   '/',
   '/index.html',

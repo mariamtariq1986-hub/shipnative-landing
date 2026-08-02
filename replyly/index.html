@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Replyly — WhatsApp Reply Assistant for Small Businesses</title>
   <meta name="description" content="Replyly helps shops, clinics, salons, and agents reply faster on WhatsApp — for messages bots can’t handle. Save your business profile, get 3 replies, copy or send on WhatsApp. Free to try." />
   <meta property="og:title" content="Replyly — WhatsApp replies in seconds" />
   <meta property="og:description" content="For messages bots can’t handle. Business profile, 3 replies, copy or Send on WhatsApp. Free 5/day. Pro $12/mo." />
   <meta property="og:type" content="website" />
-  <meta name="theme-color" content="#14201a" />
+  <meta name="theme-color" content="#0a1612" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Replyly" />
@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -30,28 +30,34 @@
               200: '#bbf7d4',
               300: '#86efb0',
               400: '#4ade80',
-              500: '#22c55e',
+              500: '#25d366',
               600: '#16a34a',
               700: '#15803d',
               800: '#166534',
               900: '#14532d',
             },
             ink: {
-              50: '#f7f8f7',
-              100: '#eef1ef',
-              200: '#d9dfdb',
+              50: '#f4f7f5',
+              100: '#e8eeea',
+              200: '#c5d0c9',
+              500: '#6b7c72',
               700: '#3d4a42',
-              800: '#243028',
-              900: '#14201a',
-              950: '#0b1410',
+              800: '#1c2a22',
+              900: '#0f1c16',
+              950: '#07110d',
+            },
+            mist: {
+              100: '#e8f5ec',
+              400: '#9fd4b0',
             }
           },
           fontFamily: {
             display: ['Fraunces', 'Georgia', 'serif'],
-            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+            sans: ['Outfit', 'system-ui', 'sans-serif'],
           },
           boxShadow: {
-            glow: '0 20px 50px -20px rgba(22, 163, 74, 0.45)',
+            glow: '0 24px 60px -24px rgba(37, 211, 102, 0.55)',
+            card: '0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -28px rgba(0,0,0,0.55)',
           }
         }
       }
@@ -59,303 +65,393 @@
   </script>
   <style>
     :root {
-      --bg0: #0b1410;
-      --bg1: #14201a;
+      --bg0: #07110d;
+      --bg1: #0f1c16;
       --accent: #25d366;
+      --accent-deep: #128c4a;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'DM Sans', system-ui, sans-serif;
+      font-family: 'Outfit', system-ui, sans-serif;
       background:
-        radial-gradient(1200px 600px at 10% -10%, rgba(37, 211, 102, 0.18), transparent 55%),
-        radial-gradient(900px 500px at 100% 0%, rgba(22, 163, 74, 0.12), transparent 50%),
-        linear-gradient(180deg, #0b1410 0%, #14201a 45%, #0f1a14 100%);
-      color: #eef1ef;
+        radial-gradient(1100px 560px at 8% -8%, rgba(37, 211, 102, 0.2), transparent 58%),
+        radial-gradient(800px 480px at 96% 4%, rgba(159, 212, 176, 0.1), transparent 52%),
+        radial-gradient(700px 400px at 50% 100%, rgba(18, 140, 74, 0.08), transparent 55%),
+        linear-gradient(165deg, #07110d 0%, #0f1c16 42%, #0a1612 100%);
+      color: #e8eeea;
       min-height: 100vh;
+      min-height: 100dvh;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
     }
     .noise::before {
       content: '';
       pointer-events: none;
       position: fixed;
       inset: 0;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       z-index: 0;
     }
+    .mesh {
+      background-image:
+        linear-gradient(rgba(187, 247, 212, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(187, 247, 212, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black, transparent);
+    }
     .phone-frame {
-      background: linear-gradient(160deg, #1a2e24, #0f1a14);
-      border: 1px solid rgba(187, 247, 212, 0.12);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.06), transparent 40%),
+        linear-gradient(160deg, #1a2e24, #0c1813);
+      border: 1px solid rgba(187, 247, 212, 0.14);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 30px 60px -30px rgba(0,0,0,0.7);
     }
     .bubble-in {
-      background: #1f2e26;
-      border: 1px solid rgba(187, 247, 212, 0.08);
+      background: rgba(28, 42, 34, 0.9);
+      border: 1px solid rgba(187, 247, 212, 0.1);
     }
     .bubble-out {
-      background: linear-gradient(135deg, #1fa855, #128c4a);
+      background: linear-gradient(145deg, #2be06f, #128c4a);
+      box-shadow: 0 8px 20px -10px rgba(37, 211, 102, 0.55);
+    }
+    .bubble-messy {
+      background: rgba(40, 36, 32, 0.75);
+      border: 1px dashed rgba(255, 220, 180, 0.18);
+      color: #d8d2c8;
+    }
+    .surface {
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+      box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -28px rgba(0,0,0,0.55);
     }
     .fade-up {
-      animation: fadeUp 0.7s ease both;
+      animation: fadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
     .fade-up-delay { animation-delay: 0.12s; }
-    .fade-up-delay-2 { animation-delay: 0.22s; }
+    .fade-up-delay-2 { animation-delay: 0.24s; }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(18px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .float-soft {
-      animation: floatSoft 5.5s ease-in-out infinite;
+      animation: floatSoft 6s ease-in-out infinite;
     }
     @keyframes floatSoft {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      50% { transform: translateY(-10px); }
     }
     .btn-primary {
-      background: linear-gradient(135deg, #25d366, #16a34a);
-      box-shadow: 0 12px 30px -12px rgba(37, 211, 102, 0.7);
+      background: linear-gradient(135deg, #2be06f 0%, #25d366 42%, #16a34a 100%);
+      box-shadow: 0 14px 34px -14px rgba(37, 211, 102, 0.75), 0 1px 0 rgba(255,255,255,0.25) inset;
+      transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
     }
-    .btn-primary:hover { filter: brightness(1.05); }
-    .grid-dots {
-      background-image: radial-gradient(rgba(187, 247, 212, 0.09) 1px, transparent 1px);
-      background-size: 22px 22px;
+    .btn-primary:hover {
+      filter: brightness(1.06);
+      box-shadow: 0 18px 40px -14px rgba(37, 211, 102, 0.85), 0 1px 0 rgba(255,255,255,0.28) inset;
+    }
+    .btn-primary:active { transform: scale(0.985); }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid rgba(134, 239, 176, 0.85);
+      outline-offset: 3px;
+    }
+    .ba-card {
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    }
+    .ba-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 48px -28px rgba(37, 211, 102, 0.35);
+    }
+    .arrow-flow {
+      animation: pulseSoft 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseSoft {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up, .fade-up-delay, .fade-up-delay-2, .float-soft, .arrow-flow, .ba-card {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
 <body class="noise">
   <div class="relative z-10">
-    <header class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8">
-      <a href="/" class="flex items-center gap-2.5">
-        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-leaf-500/15 ring-1 ring-leaf-400/30">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <header class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8" style="padding-top: max(1.25rem, env(safe-area-inset-top))">
+      <a href="/" class="flex items-center gap-2.5 rounded-xl focus-visible:outline-offset-4">
+        <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-leaf-500/15 ring-1 ring-leaf-400/35 shadow-[0_0_24px_-8px_rgba(37,211,102,0.55)]">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 21c4.5 0 8-3.2 8-7.5S16.5 6 12 6 4 9.2 4 13.5c0 1.6.5 3.1 1.4 4.3L4.5 21l3.4-1.2c1.2.7 2.6 1.2 4.1 1.2Z" stroke="#4ade80" stroke-width="1.7" stroke-linejoin="round"/>
             <path d="M8.5 13.2h7M8.5 10.5h4.5" stroke="#86efb0" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
         </span>
         <span class="font-display text-xl font-semibold tracking-tight text-white">Replyly</span>
       </a>
-      <nav class="flex items-center gap-3 text-sm">
-        <a href="#examples" class="hidden text-ink-200/80 hover:text-white sm:inline">Examples</a>
-        <a href="#how" class="hidden text-ink-200/80 hover:text-white sm:inline">How it works</a>
-        <a href="#pricing" class="hidden text-ink-200/80 hover:text-white sm:inline">Pricing</a>
-        <a href="app.html" class="rounded-full bg-white/5 px-4 py-2 font-medium text-white ring-1 ring-white/10 hover:bg-white/10">Open app</a>
+      <nav class="flex items-center gap-2 text-sm sm:gap-3">
+        <a href="#examples" class="hidden rounded-lg px-2 py-2 text-ink-200/80 transition hover:text-white sm:inline">Examples</a>
+        <a href="#how" class="hidden rounded-lg px-2 py-2 text-ink-200/80 transition hover:text-white sm:inline">How it works</a>
+        <a href="#pricing" class="hidden rounded-lg px-2 py-2 text-ink-200/80 transition hover:text-white sm:inline">Pricing</a>
+        <a href="app.html" class="inline-flex min-h-[44px] items-center rounded-full bg-white/5 px-4 py-2.5 font-medium text-white ring-1 ring-white/12 transition hover:bg-white/10">Open app</a>
       </nav>
     </header>
 
     <main>
-      <!-- Hero: brand first, one composition -->
-      <section class="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-8 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12 md:px-8 md:pb-24 md:pt-14">
-        <div class="grid-dots absolute inset-x-0 top-0 -z-10 h-[70%] opacity-60 md:hidden"></div>
+      <section class="relative mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-6 md:grid-cols-[1.08fr_0.92fr] md:items-center md:gap-14 md:px-8 md:pb-28 md:pt-12">
+        <div class="mesh absolute inset-x-0 top-0 -z-10 h-[75%] opacity-70"></div>
         <div class="fade-up">
-          <p class="mb-4 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
+          <p class="font-display text-[2.75rem] font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[4.25rem]">
             Replyly
           </p>
-          <h1 class="max-w-xl text-2xl font-medium leading-snug text-leaf-100/95 sm:text-3xl md:text-[2rem]">
+          <h1 class="mt-4 max-w-xl text-xl font-medium leading-snug text-mist-100/95 sm:text-2xl md:text-[1.75rem] md:leading-snug">
             WhatsApp replies for messages bots can’t handle — in seconds, not after the customer leaves.
           </h1>
-          <p class="mt-5 max-w-lg text-base leading-relaxed text-ink-200/75 sm:text-lg">
+          <p class="mt-5 max-w-lg text-base leading-relaxed text-ink-200/72 sm:text-lg">
             Save your business profile, paste a tricky customer message (or tap a quick intent), get 3 ready-to-send replies — then copy or open WhatsApp to send.
           </p>
-          <div class="mt-8 flex flex-wrap items-center gap-3">
-            <a href="app.html" class="btn-primary inline-flex items-center justify-center rounded-full px-6 py-3.5 text-base font-semibold text-ink-950 transition">
+          <div class="mt-9 flex flex-wrap items-center gap-3">
+            <a href="app.html" class="btn-primary inline-flex min-h-[48px] items-center justify-center rounded-full px-7 py-3.5 text-base font-semibold text-ink-950">
               Try free — 5 replies/day
             </a>
-            <a href="#pricing" class="inline-flex items-center justify-center rounded-full px-5 py-3.5 text-base font-medium text-leaf-100 ring-1 ring-leaf-400/25 hover:bg-leaf-500/10">
+            <a href="#pricing" class="inline-flex min-h-[48px] items-center justify-center rounded-full px-5 py-3.5 text-base font-medium text-leaf-100 ring-1 ring-leaf-400/30 transition hover:bg-leaf-500/10">
               See Pro — $12/mo
             </a>
           </div>
-          <p class="mt-4 text-sm text-ink-200/50">No signup. Works on your phone. English + Arabic-friendly mix.</p>
+          <p class="mt-4 text-sm text-ink-200/48">No signup. Works on your phone. English + Arabic-friendly mix.</p>
         </div>
 
         <div class="fade-up fade-up-delay float-soft">
-          <div class="phone-frame mx-auto max-w-sm rounded-[2rem] p-4 shadow-glow sm:p-5">
-            <div class="mb-3 flex items-center gap-2 px-1">
-              <span class="h-2.5 w-2.5 rounded-full bg-leaf-400"></span>
-              <span class="text-xs font-medium text-leaf-200/70">Customer chat · demo</span>
+          <div class="phone-frame mx-auto max-w-sm rounded-[2.15rem] p-4 sm:p-5">
+            <div class="mb-3 flex items-center gap-2.5 px-1">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf-400 opacity-40"></span>
+                <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-leaf-400"></span>
+              </span>
+              <span class="text-xs font-medium tracking-wide text-leaf-200/70">Customer chat · demo</span>
             </div>
-            <div class="space-y-3 rounded-2xl bg-ink-950/60 p-4">
-              <div class="bubble-in max-w-[90%] rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed text-ink-100">
+            <div class="space-y-3 rounded-2xl bg-ink-950/70 p-4 ring-1 ring-white/5">
+              <div class="bubble-in max-w-[92%] rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed text-ink-100">
                 Hi, do you have appointments tomorrow afternoon? And what’s the price for a haircut + blow dry?
               </div>
-              <div class="bubble-out ml-auto max-w-[92%] rounded-2xl rounded-tr-md px-3.5 py-2.5 text-sm leading-relaxed text-white">
+              <div class="bubble-out ml-auto max-w-[94%] rounded-2xl rounded-tr-md px-3.5 py-2.5 text-sm leading-relaxed text-white">
                 Hi! Yes — we still have openings tomorrow after 2pm. Haircut + blow dry is $45. Want me to hold 2:30 or 4:00 for you?
               </div>
-              <div class="rounded-xl border border-dashed border-leaf-400/25 bg-leaf-500/5 px-3 py-2.5">
-                <p class="text-[11px] font-semibold uppercase tracking-wider text-leaf-300/80">Replyly suggestions</p>
-                <p class="mt-1 text-xs text-ink-200/70">Copy · Send on WhatsApp — uses your profile</p>
+              <div class="rounded-xl border border-dashed border-leaf-400/30 bg-leaf-500/[0.07] px-3.5 py-3">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Replyly suggestions</p>
+                <p class="mt-1 text-xs text-ink-200/65">Copy · Send on WhatsApp — uses your profile</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Before / after — messages bots can’t handle -->
-      <section id="examples" class="border-t border-white/5 bg-black/20">
-        <div class="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
-          <h2 class="font-display text-3xl font-semibold text-white md:text-4xl">Messy in. Polished out.</h2>
-          <p class="mt-3 max-w-2xl text-ink-200/70">
-            Real customers don’t type clean FAQ prompts. Replyly is for the messages bots can’t handle — half-finished questions, mixed Arabic/English, and “can you just…” chaos.
-          </p>
-          <div class="mt-10 grid gap-5 md:grid-cols-3">
+      <!-- Before / after -->
+      <section id="examples" class="relative border-t border-white/[0.06] bg-black/25">
+        <div class="mx-auto max-w-6xl px-5 py-18 md:px-8 md:py-24" style="padding-top: 4.5rem; padding-bottom: 4.5rem;">
+          <div class="max-w-2xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-300/70">Before → After</p>
+            <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">Messy in. Polished out.</h2>
+            <p class="mt-3 text-ink-200/68 leading-relaxed">
+              Real customers don’t type clean FAQ prompts. Replyly is for the messages bots can’t handle — half-finished questions, mixed Arabic/English, and “can you just…” chaos.
+            </p>
+          </div>
+
+          <div class="mt-12 grid gap-6 md:grid-cols-3">
             <!-- Salon -->
-            <article class="flex flex-col rounded-3xl bg-white/[0.03] p-5 ring-1 ring-white/10">
-              <p class="text-xs font-semibold uppercase tracking-wider text-leaf-300/80">Salon</p>
-              <div class="mt-4 space-y-3 flex-1">
+            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-white/10">
+              <div class="flex items-center justify-between gap-2 border-b border-white/[0.06] px-5 py-3.5">
+                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Salon</p>
+                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200/80">Booking + price</span>
+              </div>
+              <div class="flex flex-1 flex-col gap-0 p-5">
                 <div>
-                  <p class="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-ink-200/40">Customer</p>
-                  <div class="bubble-in rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed text-ink-100">
+                  <div class="mb-2 flex items-center gap-2">
+                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-200/45">Before</span>
+                    <span class="text-[10px] text-ink-200/35">raw WhatsApp</span>
+                  </div>
+                  <div class="bubble-messy rounded-2xl rounded-tl-md px-3.5 py-3 text-sm leading-relaxed">
                     hi do u have tmrw afternoon?? haircut + blow dry how much also can my sister come same time
                   </div>
                 </div>
-                <div class="flex items-center gap-2 text-[11px] text-leaf-300/70">
-                  <span class="h-px flex-1 bg-leaf-400/20"></span>
-                  Replyly
-                  <span class="h-px flex-1 bg-leaf-400/20"></span>
+                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-300/75">
+                  <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
+                  <span class="rounded-full bg-leaf-500/15 px-2.5 py-1 ring-1 ring-leaf-400/25">Replyly</span>
+                  <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                 </div>
                 <div>
-                  <p class="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-ink-200/40">Your reply</p>
-                  <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-2.5 text-sm leading-relaxed text-white">
+                  <div class="mb-2 flex items-center gap-2">
+                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200">After</span>
+                    <span class="text-[10px] text-ink-200/35">ready to send</span>
+                  </div>
+                  <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-3 text-sm leading-relaxed text-white">
                     Hi! Yes — we still have openings tomorrow after 2pm. Haircut + blow dry is $45. Happy to book you and your sister together — want 2:30 or 4:00?
                   </div>
                 </div>
               </div>
             </article>
+
             <!-- Clinic -->
-            <article class="flex flex-col rounded-3xl bg-white/[0.03] p-5 ring-1 ring-white/10">
-              <p class="text-xs font-semibold uppercase tracking-wider text-leaf-300/80">Clinic</p>
-              <div class="mt-4 space-y-3 flex-1">
+            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-white/10">
+              <div class="flex items-center justify-between gap-2 border-b border-white/[0.06] px-5 py-3.5">
+                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Clinic</p>
+                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200/80">Arabic mix</span>
+              </div>
+              <div class="flex flex-1 flex-col gap-0 p-5">
                 <div>
-                  <p class="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-ink-200/40">Customer</p>
-                  <div class="bubble-in rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed text-ink-100">
+                  <div class="mb-2 flex items-center gap-2">
+                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-200/45">Before</span>
+                    <span class="text-[10px] text-ink-200/35">raw WhatsApp</span>
+                  </div>
+                  <div class="bubble-messy rounded-2xl rounded-tl-md px-3.5 py-3 text-sm leading-relaxed" dir="auto">
                     السلام عليكم my tooth hurts since yesterday can I come today? how much for checkup and is Dr. Sara available
                   </div>
                 </div>
-                <div class="flex items-center gap-2 text-[11px] text-leaf-300/70">
-                  <span class="h-px flex-1 bg-leaf-400/20"></span>
-                  Replyly
-                  <span class="h-px flex-1 bg-leaf-400/20"></span>
+                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-300/75">
+                  <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
+                  <span class="rounded-full bg-leaf-500/15 px-2.5 py-1 ring-1 ring-leaf-400/25">Replyly</span>
+                  <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                 </div>
                 <div>
-                  <p class="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-ink-200/40">Your reply</p>
-                  <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-2.5 text-sm leading-relaxed text-white">
+                  <div class="mb-2 flex items-center gap-2">
+                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200">After</span>
+                    <span class="text-[10px] text-ink-200/35">ready to send</span>
+                  </div>
+                  <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-3 text-sm leading-relaxed text-white" dir="auto">
                     وعليكم السلام — sorry you’re in pain. We can see you today. Checkup is 150 AED. Dr. Sara has a 5:30pm slot — shall I hold it for you?
                   </div>
                 </div>
               </div>
             </article>
+
             <!-- Restaurant -->
-            <article class="flex flex-col rounded-3xl bg-white/[0.03] p-5 ring-1 ring-white/10">
-              <p class="text-xs font-semibold uppercase tracking-wider text-leaf-300/80">Restaurant</p>
-              <div class="mt-4 space-y-3 flex-1">
+            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-white/10">
+              <div class="flex items-center justify-between gap-2 border-b border-white/[0.06] px-5 py-3.5">
+                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Restaurant</p>
+                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200/80">Group booking</span>
+              </div>
+              <div class="flex flex-1 flex-col gap-0 p-5">
                 <div>
-                  <p class="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-ink-200/40">Customer</p>
-                  <div class="bubble-in rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed text-ink-100">
+                  <div class="mb-2 flex items-center gap-2">
+                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-200/45">Before</span>
+                    <span class="text-[10px] text-ink-200/35">raw WhatsApp</span>
+                  </div>
+                  <div class="bubble-messy rounded-2xl rounded-tl-md px-3.5 py-3 text-sm leading-relaxed">
                     table for 6 friday night?? kids menu? also one of us is vegetarian and we need high chairs pls
                   </div>
                 </div>
-                <div class="flex items-center gap-2 text-[11px] text-leaf-300/70">
-                  <span class="h-px flex-1 bg-leaf-400/20"></span>
-                  Replyly
-                  <span class="h-px flex-1 bg-leaf-400/20"></span>
+                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-300/75">
+                  <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
+                  <span class="rounded-full bg-leaf-500/15 px-2.5 py-1 ring-1 ring-leaf-400/25">Replyly</span>
+                  <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                 </div>
                 <div>
-                  <p class="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-ink-200/40">Your reply</p>
-                  <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-2.5 text-sm leading-relaxed text-white">
+                  <div class="mb-2 flex items-center gap-2">
+                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200">After</span>
+                    <span class="text-[10px] text-ink-200/35">ready to send</span>
+                  </div>
+                  <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-3 text-sm leading-relaxed text-white">
                     Hi! Happy to reserve Friday for 6 — 7:30 or 8:30? We have a kids menu, vegetarian options, and high chairs ready. Name for the booking?
                   </div>
                 </div>
               </div>
             </article>
           </div>
-          <p class="mt-8 text-center text-sm text-ink-200/55">
-            Bots stall on nuance. Staff shouldn’t. <a href="app.html" class="text-leaf-300 hover:underline">Try it free</a>
+          <p class="mt-10 text-center text-sm text-ink-200/55">
+            Bots stall on nuance. Staff shouldn’t. <a href="app.html" class="font-medium text-leaf-300 underline-offset-4 hover:underline">Try it free</a>
           </p>
         </div>
       </section>
 
       <!-- How -->
-      <section id="how" class="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
+      <section id="how" class="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
         <div>
-          <h2 class="font-display text-3xl font-semibold text-white md:text-4xl">How it works</h2>
-          <p class="mt-3 max-w-xl text-ink-200/70">Built for the messy WhatsApp questions bots fumble — pricing nuance, complaints, bookings, hours.</p>
-          <ol class="mt-10 grid gap-6 sm:grid-cols-3">
-            <li class="rounded-3xl bg-white/[0.03] p-6 ring-1 ring-white/10">
-              <span class="font-display text-3xl text-leaf-400/90">1</span>
-              <h3 class="mt-3 text-lg font-semibold text-white">Save your profile</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-200/65">Name, hours, services/prices, and area — so replies sound like your shop, not a generic bot.</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-300/70">Workflow</p>
+          <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">How it works</h2>
+          <p class="mt-3 max-w-xl text-ink-200/68">Built for the messy WhatsApp questions bots fumble — pricing nuance, complaints, bookings, hours.</p>
+          <ol class="mt-12 grid gap-5 sm:grid-cols-3">
+            <li class="surface relative rounded-[1.75rem] p-7 ring-1 ring-white/10">
+              <span class="font-display text-4xl font-semibold text-leaf-400/90">1</span>
+              <h3 class="mt-4 text-lg font-semibold text-white">Save your profile</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-200/62">Name, hours, services/prices, and area — so replies sound like your shop, not a generic bot.</p>
             </li>
-            <li class="rounded-3xl bg-white/[0.03] p-6 ring-1 ring-white/10">
-              <span class="font-display text-3xl text-leaf-400/90">2</span>
-              <h3 class="mt-3 text-lg font-semibold text-white">Paste or tap an intent</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-200/65">Drop in the customer message, or one-tap Price, Booking, Location, Hours, Complaint, Thanks.</p>
+            <li class="surface relative rounded-[1.75rem] p-7 ring-1 ring-white/10">
+              <span class="font-display text-4xl font-semibold text-leaf-400/90">2</span>
+              <h3 class="mt-4 text-lg font-semibold text-white">Paste or tap an intent</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-200/62">Drop in the customer message, or one-tap Price, Booking, Location, Hours, Complaint, Thanks.</p>
             </li>
-            <li class="rounded-3xl bg-white/[0.03] p-6 ring-1 ring-white/10">
-              <span class="font-display text-3xl text-leaf-400/90">3</span>
-              <h3 class="mt-3 text-lg font-semibold text-white">Copy or Send on WhatsApp</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-200/65">Get 3 suggestions. Copy, or open WhatsApp with the reply pre-filled — optional send-to your number.</p>
+            <li class="surface relative rounded-[1.75rem] p-7 ring-1 ring-white/10">
+              <span class="font-display text-4xl font-semibold text-leaf-400/90">3</span>
+              <h3 class="mt-4 text-lg font-semibold text-white">Copy or Send on WhatsApp</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-200/62">Get 3 suggestions. Copy, or open WhatsApp with the reply pre-filled — optional send-to your number.</p>
             </li>
           </ol>
         </div>
       </section>
 
       <!-- Who -->
-      <section class="border-t border-white/5 bg-black/20">
-        <div class="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
-          <h2 class="font-display text-3xl font-semibold text-white md:text-4xl">Built for local businesses</h2>
-          <p class="mt-3 max-w-xl text-ink-200/70">Same WhatsApp chaos. Different verticals. Replyly adapts the language.</p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Restaurants & cafés</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Clinics & dentists</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Salons & spas</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Real estate agents</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2 text-sm text-leaf-200 ring-1 ring-leaf-400/20">Retail shops</span>
+      <section class="border-t border-white/[0.06] bg-black/20">
+        <div class="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
+          <h2 class="font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">Built for local businesses</h2>
+          <p class="mt-3 max-w-xl text-ink-200/68">Same WhatsApp chaos. Different verticals. Replyly adapts the language.</p>
+          <div class="mt-9 flex flex-wrap gap-2.5">
+            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Restaurants &amp; cafés</span>
+            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Clinics &amp; dentists</span>
+            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Salons &amp; spas</span>
+            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Real estate agents</span>
+            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Retail shops</span>
           </div>
         </div>
       </section>
 
       <!-- Pricing -->
       <section id="pricing">
-        <div class="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
-          <h2 class="font-display text-3xl font-semibold text-white md:text-4xl">Simple pricing</h2>
-          <p class="mt-3 max-w-xl text-ink-200/70">Start free. Upgrade when WhatsApp gets busy.</p>
-          <div class="mt-10 grid gap-5 md:grid-cols-2 md:gap-6">
-            <div class="rounded-3xl bg-white/[0.03] p-7 ring-1 ring-white/10">
-              <p class="text-sm font-semibold uppercase tracking-wider text-ink-200/50">Free</p>
-              <p class="mt-2 font-display text-4xl font-semibold text-white">$0</p>
-              <ul class="mt-5 space-y-2.5 text-sm text-ink-200/70">
-                <li>5 reply generations per day</li>
-                <li>Business profile + quick intents</li>
-                <li>Copy & Send on WhatsApp</li>
-                <li>Arabic-friendly mix option</li>
+        <div class="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-300/70">Pricing</p>
+          <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">Simple pricing</h2>
+          <p class="mt-3 max-w-xl text-ink-200/68">Start free. Upgrade when WhatsApp gets busy.</p>
+          <div class="mt-12 grid gap-5 md:grid-cols-2 md:gap-6">
+            <div class="surface rounded-[1.75rem] p-8 ring-1 ring-white/10">
+              <p class="text-sm font-semibold uppercase tracking-[0.14em] text-ink-200/50">Free</p>
+              <p class="mt-3 font-display text-5xl font-semibold text-white">$0</p>
+              <ul class="mt-6 space-y-3 text-sm text-ink-200/70">
+                <li class="flex gap-2"><span class="text-leaf-400">✓</span> 5 reply generations per day</li>
+                <li class="flex gap-2"><span class="text-leaf-400">✓</span> Business profile + quick intents</li>
+                <li class="flex gap-2"><span class="text-leaf-400">✓</span> Copy &amp; Send on WhatsApp</li>
+                <li class="flex gap-2"><span class="text-leaf-400">✓</span> Arabic-friendly mix option</li>
               </ul>
-              <a href="app.html" class="mt-7 inline-flex w-full items-center justify-center rounded-full bg-white/10 py-3 font-semibold text-white ring-1 ring-white/15 hover:bg-white/15">Start free</a>
+              <a href="app.html" class="mt-8 inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-white/10 py-3.5 font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15">Start free</a>
             </div>
-            <div class="rounded-3xl bg-gradient-to-b from-leaf-500/15 to-transparent p-7 ring-1 ring-leaf-400/35 shadow-glow">
-              <p class="text-sm font-semibold uppercase tracking-wider text-leaf-300">Pro</p>
-              <p class="mt-2 font-display text-4xl font-semibold text-white">$12<span class="text-lg font-sans font-medium text-ink-200/60">/mo</span></p>
-              <ul class="mt-5 space-y-2.5 text-sm text-ink-200/80">
-                <li>Unlimited reply generations</li>
-                <li>Everything in Free (profile, WhatsApp send, history)</li>
-                <li>For messages bots can’t handle — all day</li>
-                <li>Optional bring-your-own Gemini key</li>
+            <div class="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-leaf-500/18 via-leaf-500/5 to-transparent p-8 ring-1 ring-leaf-400/40 shadow-glow">
+              <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-leaf-400/15 blur-2xl"></div>
+              <p class="relative text-sm font-semibold uppercase tracking-[0.14em] text-leaf-300">Pro</p>
+              <p class="relative mt-3 font-display text-5xl font-semibold text-white">$12<span class="text-lg font-sans font-medium text-ink-200/55">/mo</span></p>
+              <ul class="relative mt-6 space-y-3 text-sm text-ink-200/80">
+                <li class="flex gap-2"><span class="text-leaf-300">✓</span> Unlimited reply generations</li>
+                <li class="flex gap-2"><span class="text-leaf-300">✓</span> Everything in Free (profile, WhatsApp send, history)</li>
+                <li class="flex gap-2"><span class="text-leaf-300">✓</span> For messages bots can’t handle — all day</li>
+                <li class="flex gap-2"><span class="text-leaf-300">✓</span> Optional bring-your-own Gemini key</li>
               </ul>
-              <a href="app.html#upgrade" class="btn-primary mt-7 inline-flex w-full items-center justify-center rounded-full py-3 font-semibold text-ink-950">Get Replyly Pro</a>
+              <a href="app.html#upgrade" class="btn-primary relative mt-8 inline-flex min-h-[48px] w-full items-center justify-center rounded-full py-3.5 font-semibold text-ink-950">Get Replyly Pro</a>
             </div>
           </div>
         </div>
       </section>
 
       <!-- CTA -->
-      <section class="mx-auto max-w-6xl px-5 py-16 text-center md:px-8 md:py-24">
-        <h2 class="fade-up font-display text-3xl font-semibold text-white sm:text-4xl md:text-5xl">Stop typing the same reply twice.</h2>
-        <p class="fade-up fade-up-delay mx-auto mt-4 max-w-lg text-ink-200/70">Open Replyly on your phone next time a customer messages. Copy. Send. Done.</p>
-        <a href="app.html" class="fade-up fade-up-delay-2 btn-primary mt-8 inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold text-ink-950">
+      <section class="mx-auto max-w-6xl px-5 py-20 text-center md:px-8 md:py-28">
+        <h2 class="fade-up font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">Stop typing the same reply twice.</h2>
+        <p class="fade-up fade-up-delay mx-auto mt-4 max-w-lg text-ink-200/68">Open Replyly on your phone next time a customer messages. Copy. Send. Done.</p>
+        <a href="app.html" class="fade-up fade-up-delay-2 btn-primary mt-9 inline-flex min-h-[52px] items-center justify-center rounded-full px-9 py-4 text-base font-semibold text-ink-950">
           Open Replyly free
         </a>
       </section>
     </main>
 
-    <footer class="border-t border-white/5 px-5 py-8 text-center text-sm text-ink-200/45 md:px-8">
-      <p><span class="font-display text-leaf-300/80">Replyly</span> · WhatsApp reply assistant for small businesses</p>
-      <p class="mt-2">Messages stay in your browser · <a href="mailto:hello@replyly.app?subject=Replyly%20waitlist" class="text-leaf-300/70 underline-offset-2 hover:underline">Join waitlist</a></p>
+    <footer class="border-t border-white/[0.06] px-5 py-10 text-center text-sm text-ink-200/42 md:px-8" style="padding-bottom: max(2.5rem, env(safe-area-inset-bottom))">
+      <p><span class="font-display text-leaf-300/85">Replyly</span> · WhatsApp reply assistant for small businesses</p>
+      <p class="mt-2">Messages stay in your browser · <a href="mailto:hello@replyly.app?subject=Replyly%20waitlist" class="text-leaf-300/75 underline-offset-2 hover:underline">Join waitlist</a></p>
     </footer>
   </div>
   <script>
