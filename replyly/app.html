@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Replyly App — Generate WhatsApp Replies</title>
   <meta name="description" content="Paste a customer WhatsApp message and get 3 ready-to-send replies. Free 5/day." />
+  <meta name="theme-color" content="#14201a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Replyly" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
@@ -63,10 +71,24 @@
       to { opacity: 1; transform: translateY(0); }
     }
     [dir="rtl"] .reply-text { text-align: right; }
+    .a2hs-banner { animation: toastIn 0.3s ease both; }
   </style>
 </head>
 <body>
   <div class="mx-auto flex min-h-screen max-w-xl flex-col px-4 pb-10 pt-4 sm:px-5">
+    <!-- Add to Home Screen tip (mobile browsers) -->
+    <div id="a2hsBanner" class="a2hs-banner mb-3 hidden rounded-2xl bg-leaf-500/15 px-3.5 py-3 ring-1 ring-leaf-400/30">
+      <div class="flex items-start gap-3">
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-semibold text-leaf-100">Add Replyly to your Home Screen</p>
+          <p class="mt-0.5 text-xs leading-relaxed text-ink-200/65">
+            On iPhone: Share → <span class="text-white/90">Add to Home Screen</span>. On Android: menu → Install app / Add to Home screen. Works offline for the shell.
+          </p>
+        </div>
+        <button type="button" id="a2hsDismiss" class="shrink-0 rounded-lg px-2 py-1 text-xs text-ink-200/60 hover:bg-white/10 hover:text-white" aria-label="Dismiss">✕</button>
+      </div>
+    </div>
+
     <!-- Top bar -->
     <header class="flex items-center justify-between gap-3">
       <a href="index.html" class="flex items-center gap-2">
@@ -133,7 +155,73 @@
             class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
           <p class="mt-1 text-[11px] text-ink-200/40">Used for “Send on WhatsApp” to a specific number. Digits only in the link.</p>
         </div>
+        <div>
+          <label for="profNeverSay" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Never say <span class="normal-case font-normal text-ink-200/40">(comma-separated)</span></label>
+          <input id="profNeverSay" type="text" placeholder="e.g. cheap, ASAP, bro, guaranteed"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+        </div>
+        <div>
+          <label for="profAlwaysSay" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Always say / preferred phrases</label>
+          <input id="profAlwaysSay" type="text" placeholder="e.g. Dr., Jumeirah branch, thank you for choosing us"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+          <p class="mt-1 text-[11px] text-ink-200/40">Replies avoid “never” words and weave in “always” cues when natural.</p>
+        </div>
         <button type="button" id="saveProfileBtn" class="w-full rounded-xl bg-leaf-500/20 py-2.5 text-sm font-semibold text-leaf-200 ring-1 ring-leaf-400/30 hover:bg-leaf-500/30">Save profile</button>
+      </div>
+    </section>
+
+    <!-- Team mode -->
+    <section class="mt-4 rounded-2xl bg-white/[0.03] ring-1 ring-white/10">
+      <button type="button" id="teamToggle" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left" aria-expanded="false">
+        <div>
+          <p class="text-sm font-semibold text-white">Team mode</p>
+          <p id="teamSummary" class="text-xs text-ink-200/50">Share profile with 2–3 staff via invite code</p>
+        </div>
+        <span id="teamChevron" class="text-ink-200/50 transition">▾</span>
+      </button>
+      <div id="teamPanel" class="hidden border-t border-white/10 px-4 pb-4 pt-3 space-y-3">
+        <p class="text-xs leading-relaxed text-ink-200/55">
+          Paste invite code on each phone to sync profile. Codes encode your business profile + brand words (no live cloud sync).
+        </p>
+        <div>
+          <label for="teamName" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Team / shop label</label>
+          <input id="teamName" type="text" placeholder="e.g. Glow Salon front desk"
+            class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+        </div>
+        <div class="grid gap-2 sm:grid-cols-3">
+          <div>
+            <label for="staff1" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Staff 1</label>
+            <input id="staff1" type="text" placeholder="Name"
+              class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+          </div>
+          <div>
+            <label for="staff2" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Staff 2</label>
+            <input id="staff2" type="text" placeholder="Optional"
+              class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+          </div>
+          <div>
+            <label for="staff3" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Staff 3</label>
+            <input id="staff3" type="text" placeholder="Optional"
+              class="mt-1.5 w-full rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 text-sm text-white placeholder:text-ink-200/35 focus:border-leaf-400/40" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Replying as</label>
+          <div id="staffSwitcher" class="mt-2 flex flex-wrap gap-2"></div>
+        </div>
+        <button type="button" id="createInviteBtn" class="w-full rounded-xl bg-leaf-500/20 py-2.5 text-sm font-semibold text-leaf-200 ring-1 ring-leaf-400/30 hover:bg-leaf-500/30">Create invite code</button>
+        <div id="inviteOut" class="hidden space-y-2">
+          <label for="inviteCodeOut" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Invite code</label>
+          <textarea id="inviteCodeOut" rows="3" readonly
+            class="w-full resize-y rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 font-mono text-[11px] leading-relaxed text-leaf-100"></textarea>
+          <button type="button" id="copyInviteBtn" class="w-full rounded-xl bg-white/5 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/10">Copy invite code</button>
+        </div>
+        <div class="border-t border-white/10 pt-3">
+          <label for="inviteCodeIn" class="text-xs font-semibold uppercase tracking-wider text-ink-200/50">Join with code</label>
+          <textarea id="inviteCodeIn" rows="2" placeholder="Paste invite code from a teammate"
+            class="mt-1.5 w-full resize-y rounded-xl border border-white/10 bg-ink-950/60 px-3 py-2.5 font-mono text-[11px] text-white placeholder:text-ink-200/35 focus:border-leaf-400/40"></textarea>
+          <button type="button" id="joinInviteBtn" class="mt-2 w-full rounded-xl bg-white/5 py-2.5 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/10">Import shared profile</button>
+        </div>
       </div>
     </section>
 
@@ -265,7 +353,7 @@
   const FREE_LIMIT = 5;
   const PROMO_CODE = 'REPLYLY-PRO';
   const GUMROAD_URL = 'https://mariamtariq72.gumroad.com/l/replyly';
-  const HISTORY_MAX = 15;
+  const HISTORY_MAX = 20;
   const LS = {
     pro: 'replyly_pro',
     usage: 'replyly_usage',
@@ -275,6 +363,8 @@
     arabic: 'replyly_arabic',
     profile: 'replyly_profile',
     history: 'replyly_history',
+    team: 'replyly_team',
+    a2hs: 'replyly_a2hs_dismissed',
   };
 
   const BIZ = [
@@ -306,6 +396,15 @@
     hours: '',
     location: '',
     whatsapp: '',
+    neverSay: '',
+    alwaysSay: '',
+  };
+
+  const EMPTY_TEAM = {
+    teamName: '',
+    staff: ['', '', ''],
+    activeStaff: 0,
+    lastInvite: '',
   };
 
   let state = {
@@ -314,6 +413,7 @@
     arabic: localStorage.getItem(LS.arabic) === '1',
     forcedIntent: null,
     profileOpen: false,
+    teamOpen: false,
   };
 
   let lastReplies = [];
@@ -369,6 +469,8 @@
         hours: String(p.hours || '').trim(),
         location: String(p.location || '').trim(),
         whatsapp: String(p.whatsapp || '').trim(),
+        neverSay: String(p.neverSay || '').trim(),
+        alwaysSay: String(p.alwaysSay || '').trim(),
       };
     } catch {
       return Object.assign({}, EMPTY_PROFILE);
@@ -377,6 +479,151 @@
 
   function saveProfile(profile) {
     localStorage.setItem(LS.profile, JSON.stringify(profile));
+  }
+
+  function getTeam() {
+    try {
+      const raw = localStorage.getItem(LS.team);
+      if (!raw) return Object.assign({}, EMPTY_TEAM, { staff: ['', '', ''] });
+      const t = JSON.parse(raw);
+      const staff = Array.isArray(t.staff) ? t.staff.slice(0, 3) : ['', '', ''];
+      while (staff.length < 3) staff.push('');
+      return {
+        teamName: String(t.teamName || '').trim(),
+        staff: staff.map(function (s) { return String(s || '').trim(); }),
+        activeStaff: Math.min(2, Math.max(0, Number(t.activeStaff) || 0)),
+        lastInvite: String(t.lastInvite || ''),
+      };
+    } catch {
+      return Object.assign({}, EMPTY_TEAM, { staff: ['', '', ''] });
+    }
+  }
+
+  function saveTeam(team) {
+    localStorage.setItem(LS.team, JSON.stringify(team));
+  }
+
+  function splitCsv(str) {
+    return String(str || '')
+      .split(',')
+      .map(function (s) { return s.trim(); })
+      .filter(Boolean);
+  }
+
+  function escapeRegExp(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function applyBrandWords(text, profile) {
+    if (!profile || !text) return text;
+    let out = String(text);
+    const never = splitCsv(profile.neverSay);
+    const always = splitCsv(profile.alwaysSay);
+    const softSwap = {
+      cheap: 'affordable',
+      asap: 'as soon as we can',
+      bro: 'there',
+      guaranteed: 'happy to confirm',
+      'no problem': 'happy to help',
+      dude: 'there',
+      whatever: 'happy to check',
+    };
+
+    never.forEach(function (word) {
+      const key = word.toLowerCase();
+      const swap = softSwap[key];
+      const re = new RegExp('\\b' + escapeRegExp(word) + '\\b', 'gi');
+      if (swap) {
+        out = out.replace(re, swap);
+      } else {
+        out = out.replace(re, '');
+      }
+    });
+
+    always.forEach(function (phrase) {
+      if (!phrase) return;
+      if (out.toLowerCase().indexOf(phrase.toLowerCase()) !== -1) return;
+      // Titles / short cues: try to prefix near business name or greeting
+      if (phrase.length <= 8 && /^(dr\.?|mr\.?|ms\.?|mrs\.?)$/i.test(phrase)) {
+        const title = /dr/i.test(phrase) ? 'Dr.' : phrase.replace(/\.$/, '') + '.';
+        if (profile.name && out.indexOf(profile.name) !== -1 && out.indexOf(title) === -1) {
+          out = out.replace(profile.name, title + ' ' + profile.name);
+          return;
+        }
+        if (!/\bDr\./.test(out) && /clinic|doctor|dentist|appointment/i.test(out + ' ' + (profile.type || ''))) {
+          out = out.replace(/\b(available|our doctor|the doctor)\b/i, title + ' is available');
+          if (out.toLowerCase().indexOf(title.toLowerCase()) === -1) {
+            out = out.replace(/(\.|!|\?)\s*$/, '') + ' — ask for ' + title + '.';
+          }
+          return;
+        }
+      }
+      // Longer preferred phrases: append once if natural
+      if (phrase.length > 8) {
+        out = out.replace(/\s+$/, '');
+        const sep = /[.!?]$/.test(out) ? ' ' : '. ';
+        out = out + sep + phrase.replace(/^./, function (c) { return c.toUpperCase(); }).replace(/\.$/, '') + '.';
+      } else if (out.toLowerCase().indexOf(phrase.toLowerCase()) === -1) {
+        out = out.replace(/\s+$/, '');
+        out += ( /[.!?]$/.test(out) ? ' ' : '. ') + phrase;
+      }
+    });
+
+    return out.replace(/\s{2,}/g, ' ').replace(/\s+([,.!?])/g, '$1').trim();
+  }
+
+  function brandWordsPrompt(profile) {
+    if (!profile) return '';
+    const never = splitCsv(profile.neverSay);
+    const always = splitCsv(profile.alwaysSay);
+    if (!never.length && !always.length) return '';
+    let s = '\nBrand words:';
+    if (never.length) s += '\n- Never say / avoid these words or rephrase: ' + never.join(', ');
+    if (always.length) s += '\n- Prefer to include when natural: ' + always.join(', ');
+    return s + '\n';
+  }
+
+  function toBase64Url(str) {
+    const b64 = btoa(unescape(encodeURIComponent(str)));
+    return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  }
+
+  function fromBase64Url(str) {
+    let s = String(str || '').trim().replace(/^RPLY1\./i, '');
+    s = s.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    return decodeURIComponent(escape(atob(s)));
+  }
+
+  function buildInvitePayload(profile, team) {
+    return {
+      v: 1,
+      teamName: team.teamName || profile.name || '',
+      staff: (team.staff || []).filter(Boolean).slice(0, 3),
+      profile: {
+        name: profile.name || '',
+        type: profile.type || '',
+        services: profile.services || '',
+        hours: profile.hours || '',
+        location: profile.location || '',
+        whatsapp: profile.whatsapp || '',
+        neverSay: profile.neverSay || '',
+        alwaysSay: profile.alwaysSay || '',
+      },
+    };
+  }
+
+  function encodeInvite(payload) {
+    return 'RPLY1.' + toBase64Url(JSON.stringify(payload));
+  }
+
+  function decodeInvite(code) {
+    const raw = String(code || '').trim().replace(/\s+/g, '');
+    if (!raw) throw new Error('Paste an invite code first.');
+    const json = fromBase64Url(raw);
+    const data = JSON.parse(json);
+    if (!data || data.v !== 1 || !data.profile) throw new Error('Unrecognized invite code.');
+    return data;
   }
 
   function digitsOnly(phone) {
@@ -401,14 +648,36 @@
     }
   }
 
-  function pushHistory(replies) {
+  function pushHistory(replies, intentLabel) {
     const prev = getHistory();
     const stamp = Date.now();
     const entries = replies.map(function (text, i) {
-      return { id: stamp + '-' + i, text: text, at: stamp };
+      return {
+        id: stamp + '-' + i,
+        text: text,
+        at: stamp,
+        intent: intentLabel || '',
+      };
     });
     const next = entries.concat(prev).slice(0, HISTORY_MAX);
     localStorage.setItem(LS.history, JSON.stringify(next));
+  }
+
+  function formatRelativeTime(ts) {
+    const diff = Date.now() - (Number(ts) || 0);
+    if (!ts || diff < 0) return '';
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return mins + 'm ago';
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return hours + 'h ago';
+    const days = Math.floor(hours / 24);
+    if (days < 7) return days + 'd ago';
+    try {
+      return new Date(ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    } catch {
+      return '';
+    }
   }
 
   function clearHistory() {
@@ -502,6 +771,8 @@
     document.getElementById('profHours').value = p.hours;
     document.getElementById('profLocation').value = p.location;
     document.getElementById('profWhatsapp').value = p.whatsapp;
+    document.getElementById('profNeverSay').value = p.neverSay;
+    document.getElementById('profAlwaysSay').value = p.alwaysSay;
     updateProfileSummary();
   }
 
@@ -512,8 +783,9 @@
       const bits = [p.name];
       if (p.location) bits.push(p.location);
       if (p.hours) bits.push('hours set');
+      if (p.neverSay || p.alwaysSay) bits.push('brand words');
       el.textContent = bits.join(' · ');
-    } else if (p.hours || p.services || p.location) {
+    } else if (p.hours || p.services || p.location || p.neverSay || p.alwaysSay) {
       el.textContent = 'Profile saved — replies will use your details';
     } else {
       el.textContent = 'Optional — replies use your name, hours, services & area';
@@ -533,6 +805,83 @@
       panel.classList.add('hidden');
       chevron.style.transform = 'rotate(0)';
     }
+  }
+
+  function setTeamOpen(open) {
+    state.teamOpen = open;
+    const panel = document.getElementById('teamPanel');
+    const chevron = document.getElementById('teamChevron');
+    const btn = document.getElementById('teamToggle');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      panel.classList.remove('hidden');
+      chevron.style.transform = 'rotate(180deg)';
+    } else {
+      panel.classList.add('hidden');
+      chevron.style.transform = 'rotate(0)';
+    }
+  }
+
+  function loadTeamForm() {
+    const t = getTeam();
+    document.getElementById('teamName').value = t.teamName;
+    document.getElementById('staff1').value = t.staff[0] || '';
+    document.getElementById('staff2').value = t.staff[1] || '';
+    document.getElementById('staff3').value = t.staff[2] || '';
+    if (t.lastInvite) {
+      document.getElementById('inviteOut').classList.remove('hidden');
+      document.getElementById('inviteCodeOut').value = t.lastInvite;
+    }
+    renderStaffSwitcher();
+    updateTeamSummary();
+  }
+
+  function readTeamFromForm() {
+    return {
+      teamName: document.getElementById('teamName').value.trim(),
+      staff: [
+        document.getElementById('staff1').value.trim(),
+        document.getElementById('staff2').value.trim(),
+        document.getElementById('staff3').value.trim(),
+      ],
+      activeStaff: getTeam().activeStaff,
+      lastInvite: getTeam().lastInvite,
+    };
+  }
+
+  function updateTeamSummary() {
+    const t = getTeam();
+    const el = document.getElementById('teamSummary');
+    const named = t.staff.filter(Boolean);
+    if (t.teamName || named.length) {
+      const who = named[t.activeStaff] || named[0];
+      const bits = [];
+      if (t.teamName) bits.push(t.teamName);
+      bits.push((named.length || 1) + ' staff');
+      if (who) bits.push('as ' + who);
+      el.textContent = bits.join(' · ');
+    } else {
+      el.textContent = 'Share profile with 2–3 staff via invite code';
+    }
+  }
+
+  function renderStaffSwitcher() {
+    const t = getTeam();
+    const el = document.getElementById('staffSwitcher');
+    const labels = t.staff.map(function (name, i) {
+      return name || ('Staff ' + (i + 1));
+    });
+    // Only show slots that have names, or at least slot 1
+    const slots = [];
+    for (let i = 0; i < 3; i++) {
+      if (t.staff[i] || i === 0) slots.push(i);
+    }
+    el.innerHTML = slots.map(function (i) {
+      const active = t.activeStaff === i;
+      return '<button type="button" data-staff="' + i + '" class="rounded-full px-3 py-1.5 text-sm ring-1 transition ' +
+        (active ? 'chip-active ring-leaf-400/45' : 'bg-white/5 text-ink-200/80 ring-white/10 hover:bg-white/10') + '">' +
+        labels[i] + '</button>';
+    }).join('');
   }
 
   // ——— Intent / keyword detection ———
@@ -958,9 +1307,9 @@
     }
 
     if (tone === 'short') {
-      return (g + ' ' + body + (extra ? extra : '')).replace(/\s+/g, ' ').trim();
+      return applyBrandWords((g + ' ' + body + (extra ? extra : '')).replace(/\s+/g, ' ').trim(), profile);
     }
-    return (g + ' ' + body + extra + ' ' + c).replace(/\s+/g, ' ').trim();
+    return applyBrandWords((g + ' ' + body + extra + ' ' + c).replace(/\s+/g, ' ').trim(), profile);
   }
 
   function generateTemplateReplies(message, biz, tone, arabic, profile) {
@@ -979,7 +1328,7 @@
     while (out.length < 3) {
       out.push(buildOneReply(message, biz, tone, arabic, out.length + 10, profile));
     }
-    return out;
+    return out.map(function (r) { return applyBrandWords(r, profile); });
   }
 
   function profilePromptBlock(profile) {
@@ -989,8 +1338,9 @@
     if (profile.hours) lines.push('Hours: ' + profile.hours);
     if (profile.location) lines.push('Location/area: ' + profile.location);
     if (profile.services) lines.push('Services/prices notes: ' + profile.services);
-    if (!lines.length) return '';
-    return '\nBusiness profile (use these facts when relevant — do not invent conflicting details):\n' + lines.join('\n') + '\n';
+    if (!lines.length && !profile.neverSay && !profile.alwaysSay) return '';
+    return '\nBusiness profile (use these facts when relevant — do not invent conflicting details):\n' +
+      lines.join('\n') + brandWordsPrompt(profile) + '\n';
   }
 
   async function generateGeminiReplies(message, biz, tone, arabic, apiKey, profile) {
@@ -1024,7 +1374,9 @@
     if (!match) throw new Error('Unexpected Gemini response');
     const arr = JSON.parse(match[0]);
     if (!Array.isArray(arr) || arr.length < 3) throw new Error('Need 3 replies');
-    return arr.slice(0, 3).map(String);
+    return arr.slice(0, 3).map(function (s) {
+      return applyBrandWords(String(s), profile);
+    });
   }
 
   function copyText(text, btn) {
@@ -1088,10 +1440,13 @@
     section.classList.remove('hidden');
     const profile = getProfile();
     list.innerHTML = items.map(function (item) {
-      const preview = item.text.length > 110 ? item.text.slice(0, 107) + '…' : item.text;
       const waHref = waMeUrl(item.text, profile.whatsapp);
+      const when = formatRelativeTime(item.at);
+      const intent = item.intent ? String(item.intent) : '';
+      const meta = [intent, when].filter(Boolean).join(' · ');
       return (
         '<article class="rounded-xl bg-white/[0.03] px-3 py-2.5 ring-1 ring-white/10" data-hist="' + item.id + '">' +
+          (meta ? '<p class="mb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-200/45">' + meta + '</p>' : '') +
           '<p class="text-sm leading-snug text-ink-100/90" dir="auto"></p>' +
           '<div class="mt-2 flex flex-wrap gap-2">' +
             '<button type="button" data-hist-copy="' + item.id + '" class="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-medium text-leaf-200 ring-1 ring-white/10 hover:bg-white/10">Copy</button>' +
@@ -1102,8 +1457,10 @@
     }).join('');
     const articles = list.querySelectorAll('[data-hist]');
     items.forEach(function (item, i) {
-      const p = articles[i].querySelector('p');
-      p.textContent = previewFor(item.text);
+      const p = articles[i].querySelector('p:last-of-type') || articles[i].querySelector('p');
+      // Prefer the reply preview paragraph (not the meta line)
+      const paras = articles[i].querySelectorAll('p');
+      paras[paras.length - 1].textContent = previewFor(item.text);
     });
     list.querySelectorAll('[data-hist-copy]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -1160,8 +1517,11 @@
         setUsage(u.count + 1);
       }
       updateUsageBadge();
+      replies = replies.map(function (r) { return applyBrandWords(r, profile); });
       renderReplies(replies, engine);
-      pushHistory(replies);
+      const intentIds = resolveIntents(message);
+      const intentLabel = intentIds.slice(0, 2).join(', ');
+      pushHistory(replies, intentLabel);
       renderHistory();
 
       if (!isPro() && remaining() <= 0) {
@@ -1225,6 +1585,10 @@
     setProfileOpen(!state.profileOpen);
   });
 
+  document.getElementById('teamToggle').addEventListener('click', function () {
+    setTeamOpen(!state.teamOpen);
+  });
+
   document.getElementById('saveProfileBtn').addEventListener('click', function () {
     const type = document.getElementById('profType').value || state.biz;
     const profile = {
@@ -1234,6 +1598,8 @@
       hours: document.getElementById('profHours').value.trim(),
       location: document.getElementById('profLocation').value.trim(),
       whatsapp: document.getElementById('profWhatsapp').value.trim(),
+      neverSay: document.getElementById('profNeverSay').value.trim(),
+      alwaysSay: document.getElementById('profAlwaysSay').value.trim(),
     };
     saveProfile(profile);
     state.biz = type;
@@ -1241,6 +1607,98 @@
     renderChips();
     updateProfileSummary();
     showToast('Business profile saved');
+  });
+
+  document.getElementById('staffSwitcher').addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-staff]');
+    if (!btn) return;
+    const team = readTeamFromForm();
+    team.activeStaff = Number(btn.getAttribute('data-staff')) || 0;
+    saveTeam(team);
+    renderStaffSwitcher();
+    updateTeamSummary();
+  });
+
+  ['teamName', 'staff1', 'staff2', 'staff3'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', function () {
+      const team = readTeamFromForm();
+      saveTeam(team);
+      renderStaffSwitcher();
+      updateTeamSummary();
+    });
+  });
+
+  document.getElementById('createInviteBtn').addEventListener('click', function () {
+    // Persist latest profile + team before encoding
+    document.getElementById('saveProfileBtn').click();
+    const team = readTeamFromForm();
+    const profile = getProfile();
+    if (!profile.name && !profile.hours && !profile.services && !profile.location) {
+      showToast('Save a business profile first');
+      setProfileOpen(true);
+      return;
+    }
+    const named = team.staff.filter(Boolean);
+    if (!named.length) {
+      team.staff[0] = 'Staff 1';
+      document.getElementById('staff1').value = 'Staff 1';
+    }
+    const code = encodeInvite(buildInvitePayload(profile, team));
+    team.lastInvite = code;
+    saveTeam(team);
+    document.getElementById('inviteOut').classList.remove('hidden');
+    document.getElementById('inviteCodeOut').value = code;
+    renderStaffSwitcher();
+    updateTeamSummary();
+    showToast('Invite code ready — share with staff');
+  });
+
+  document.getElementById('copyInviteBtn').addEventListener('click', function () {
+    const code = document.getElementById('inviteCodeOut').value;
+    if (code) copyText(code, document.getElementById('copyInviteBtn'));
+  });
+
+  document.getElementById('joinInviteBtn').addEventListener('click', function () {
+    const err = document.getElementById('errorMsg');
+    err.classList.add('hidden');
+    try {
+      const data = decodeInvite(document.getElementById('inviteCodeIn').value);
+      const p = data.profile || {};
+      const profile = {
+        name: String(p.name || '').trim(),
+        type: String(p.type || state.biz).trim(),
+        services: String(p.services || '').trim(),
+        hours: String(p.hours || '').trim(),
+        location: String(p.location || '').trim(),
+        whatsapp: String(p.whatsapp || '').trim(),
+        neverSay: String(p.neverSay || '').trim(),
+        alwaysSay: String(p.alwaysSay || '').trim(),
+      };
+      saveProfile(profile);
+      if (profile.type) {
+        state.biz = profile.type;
+        localStorage.setItem(LS.biz, state.biz);
+      }
+      const staff = Array.isArray(data.staff) ? data.staff.slice(0, 3) : [];
+      while (staff.length < 3) staff.push('');
+      const team = {
+        teamName: String(data.teamName || profile.name || '').trim(),
+        staff: staff.map(function (s) { return String(s || '').trim(); }),
+        activeStaff: 0,
+        lastInvite: String(document.getElementById('inviteCodeIn').value || '').trim().replace(/\s+/g, ''),
+      };
+      if (!team.staff.filter(Boolean).length) team.staff[0] = 'Staff 1';
+      saveTeam(team);
+      loadProfileForm();
+      loadTeamForm();
+      renderChips();
+      setTeamOpen(true);
+      setProfileOpen(true);
+      showToast('Shared profile imported');
+    } catch (e) {
+      err.textContent = (e && e.message) || 'Could not import invite code.';
+      err.classList.remove('hidden');
+    }
   });
 
   document.getElementById('profType').addEventListener('change', function () {
@@ -1304,6 +1762,32 @@
 
   document.getElementById('payBtn').href = GUMROAD_URL;
 
+  function maybeShowA2HS() {
+    const banner = document.getElementById('a2hsBanner');
+    if (!banner) return;
+    if (localStorage.getItem(LS.a2hs) === '1') return;
+    const standalone = window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+    if (standalone) return;
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+      (window.matchMedia && window.matchMedia('(max-width: 768px)').matches);
+    if (!isMobile) return;
+    banner.classList.remove('hidden');
+  }
+
+  document.getElementById('a2hsDismiss').addEventListener('click', function () {
+    localStorage.setItem(LS.a2hs, '1');
+    document.getElementById('a2hsBanner').classList.add('hidden');
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js').catch(function () {
+        // Local file:// or blocked SW — ignore
+      });
+    });
+  }
+
   // Init
   const savedProfile = getProfile();
   if (savedProfile.type) state.biz = savedProfile.type;
@@ -1312,7 +1796,9 @@
   setArabicUI();
   updateUsageBadge();
   loadProfileForm();
+  loadTeamForm();
   renderHistory();
+  maybeShowA2HS();
 
   if (location.hash === '#upgrade') {
     openModal('upgradeModal');
