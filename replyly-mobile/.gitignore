@@ -1,0 +1,17 @@
+node_modules/
+.expo/
+dist/
+dist-smoke/
+web-build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+.env
+.env.*
+npm-debug.*
+*.log
+.DS_Store
+expo-env.d.ts

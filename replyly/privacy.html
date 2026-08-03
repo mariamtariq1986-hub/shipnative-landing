@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Replyly — Privacy Policy</title>
+  <meta name="description" content="Privacy policy for Replyly web and mobile apps." />
+  <meta name="theme-color" content="#0a1612" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      font-family: Outfit, system-ui, sans-serif;
+      background: linear-gradient(165deg, #07110d 0%, #0f1c16 48%, #0a1612 100%);
+      color: #e8eeea;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    main { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    h1 { font-family: Fraunces, Georgia, serif; font-size: 2.2rem; letter-spacing: -0.03em; margin: 0 0 0.5rem; }
+    h2 { font-family: Fraunces, Georgia, serif; font-size: 1.25rem; margin-top: 2rem; }
+    p, li { color: rgba(232, 238, 234, 0.78); }
+    a { color: #86efb0; }
+    .meta { color: rgba(197, 208, 201, 0.55); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="meta"><a href="/">← Replyly</a></p>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Last updated: August 3, 2026</p>
+
+    <p>Replyly (“we”, “the app”) helps small businesses draft WhatsApp replies. This policy covers the <strong>web app</strong> at replyly-kappa.vercel.app and the <strong>Replyly mobile apps</strong> for iOS and Android.</p>
+
+    <h2>What we store</h2>
+    <ul>
+      <li><strong>On your device only:</strong> business profile, brand words, team invite codes, reply history, favorites, usage counters, theme preference, and optional Pro unlock flag. These use browser <code>localStorage</code> (web) or AsyncStorage (mobile).</li>
+      <li><strong>Customer messages</strong> you paste stay on your device for generating replies. We do not operate a Replyly backend that receives them for the default template engine.</li>
+    </ul>
+
+    <h2>Optional third parties</h2>
+    <ul>
+      <li><strong>Gumroad</strong> — if you purchase Pro, payment is handled by Gumroad under their privacy policy. We only receive what you choose to redeem (e.g. an unlock code you enter locally).</li>
+      <li><strong>Google Gemini (optional, web):</strong> only if you paste your own API key. Then the draft request is sent to Google. We never see that key on a Replyly server.</li>
+      <li><strong>Apple / Google</strong> — store distribution, crash diagnostics you opt into via the OS, and in-app review prompts may involve platform services.</li>
+    </ul>
+
+    <h2>Notifications</h2>
+    <p>The mobile app may request notification permission for optional local “reply reminders.” These are scheduled on-device and do not require a Replyly account or push server.</p>
+
+    <h2>Team invite codes</h2>
+    <p>Invite codes (<code>RPLY1.…</code>) encode your business profile as base64 JSON. Treat them like shared shop notes — anyone with the code can import the profile on their device.</p>
+
+    <h2>Children</h2>
+    <p>Replyly is intended for business users, not children under 13.</p>
+
+    <h2>Contact</h2>
+    <p>Questions: <a href="mailto:hello@replyly.app">hello@replyly.app</a></p>
+
+    <h2>Changes</h2>
+    <p>We may update this page as the product evolves. Continued use after changes means you accept the updated policy.</p>
+  </main>
+</body>
+</html>
