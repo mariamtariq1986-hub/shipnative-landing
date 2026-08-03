@@ -16,6 +16,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       infoPlist: {
         NSUserNotificationsUsageDescription:
           'Replyly can remind you to follow up on unanswered customer messages.',
+        ITSAppUsesNonExemptEncryption: false,
       },
     },
     android: {
@@ -55,7 +56,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     extra: {
       eas: {
-        projectId: 'replace-after-eas-init',
+        projectId: 'f7976a6e-92d4-46b0-82fd-c2487ff958e5',
       },
       privacyUrl: 'https://replyly-kappa.vercel.app/privacy',
       gumroadUrl: 'https://mariamtariq72.gumroad.com/l/replyly',
