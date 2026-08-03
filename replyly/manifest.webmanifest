@@ -1,7 +1,7 @@
 {
   "name": "Replyly — WhatsApp Reply Assistant",
   "short_name": "Replyly",
-  "description": "WhatsApp replies for messages bots can’t handle. Business profile, 3 suggestions, copy or send.",
+  "description": "WhatsApp replies for messages bots can’t handle. Business profile, 3 suggestions, copy or send. Free 5/day.",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
@@ -9,6 +9,7 @@
   "background_color": "#07110d",
   "theme_color": "#0a1612",
   "lang": "en",
+  "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
       "src": "/icons/icon.svg",

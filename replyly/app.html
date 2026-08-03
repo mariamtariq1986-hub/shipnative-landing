@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -40,42 +40,82 @@
       }
     }
   </script>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('replyly_theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
   <style>
     :root {
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --sticky-h: calc(4.75rem + var(--safe-bottom));
+      --bg0: #07110d;
+      --bg1: #0f1c16;
+      --fg: #e8eeea;
+      --fg-muted: rgba(197, 208, 201, 0.58);
+      --field-bg: rgba(7, 17, 13, 0.55);
+      --field-border: rgba(255,255,255,0.1);
+      --panel: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+      --sticky-fade: linear-gradient(180deg, rgba(7, 17, 13, 0), rgba(7, 17, 13, 0.92) 28%, #07110d 70%);
+      --modal-bg: #0f1c16;
+      --chip-idle-fg: rgba(197, 208, 201, 0.85);
     }
+    html[data-theme="light"] {
+      --bg0: #f3faf5;
+      --bg1: #e8f5ec;
+      --fg: #0f1c16;
+      --fg-muted: rgba(61, 74, 66, 0.62);
+      --field-bg: rgba(255,255,255,0.85);
+      --field-border: rgba(15, 28, 22, 0.12);
+      --panel: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.75));
+      --sticky-fade: linear-gradient(180deg, rgba(243, 250, 245, 0), rgba(243, 250, 245, 0.92) 28%, #f3faf5 70%);
+      --modal-bg: #ffffff;
+      --chip-idle-fg: rgba(61, 74, 66, 0.85);
+      color-scheme: light;
+    }
+    html[data-theme="dark"] { color-scheme: dark; }
     body {
       font-family: 'Outfit', system-ui, sans-serif;
       background:
         radial-gradient(900px 420px at 0% 0%, rgba(37, 211, 102, 0.16), transparent 55%),
         radial-gradient(700px 380px at 100% 8%, rgba(159, 212, 176, 0.08), transparent 50%),
-        linear-gradient(165deg, #07110d 0%, #0f1c16 48%, #0a1612 100%);
-      color: #e8eeea;
+        linear-gradient(165deg, var(--bg0) 0%, var(--bg1) 48%, var(--bg0) 100%);
+      color: var(--fg);
       min-height: 100vh;
       min-height: 100dvh;
     }
+    html[data-theme="light"] body {
+      background:
+        radial-gradient(800px 400px at 0% 0%, rgba(37, 211, 102, 0.12), transparent 55%),
+        linear-gradient(165deg, #f7fcf8 0%, #eef8f1 48%, #f3faf5 100%);
+    }
     .field {
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(7, 17, 13, 0.55);
+      border: 1px solid var(--field-border);
+      background: var(--field-bg);
+      color: var(--fg);
       transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
-    .field:hover { border-color: rgba(255,255,255,0.16); }
+    .field:hover { border-color: rgba(74, 222, 128, 0.35); }
     .field:focus {
       outline: none;
       border-color: rgba(74, 222, 128, 0.45);
       box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.16);
-      background: rgba(7, 17, 13, 0.75);
     }
     .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
     }
     .btn-primary {
       background: linear-gradient(135deg, #2be06f 0%, #25d366 42%, #16a34a 100%);
       box-shadow: 0 12px 30px -12px rgba(37, 211, 102, 0.7), 0 1px 0 rgba(255,255,255,0.22) inset;
       transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+      color: #07110d;
     }
     .btn-primary:hover:not(:disabled) {
       filter: brightness(1.05);
@@ -89,7 +129,6 @@
       padding: 0.45rem 0.95rem;
       font-size: 0.875rem;
       font-weight: 500;
-      ring-width: 1px;
       transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
     }
     .chip:active { transform: scale(0.97); }
@@ -98,18 +137,17 @@
       color: #dcfce9;
       box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.5), 0 8px 20px -12px rgba(37, 211, 102, 0.55);
     }
+    html[data-theme="light"] .chip-active { color: #14532d; }
     .chip-idle {
       background: rgba(255,255,255,0.04);
-      color: rgba(197, 208, 201, 0.85);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+      color: var(--chip-idle-fg);
+      box-shadow: 0 0 0 1px var(--field-border);
     }
-    .chip-idle:hover {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-    }
+    html[data-theme="light"] .chip-idle { background: rgba(15,28,22,0.04); }
+    .chip-idle:hover { background: rgba(37, 211, 102, 0.1); }
     .reply-card {
-      background: linear-gradient(165deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
-      box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 16px 36px -28px rgba(0,0,0,0.65);
+      background: var(--panel);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 16px 36px -28px rgba(0,0,0,0.35);
       animation: cardIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
     .reply-card:nth-child(2) { animation-delay: 0.06s; }
@@ -124,10 +162,11 @@
       z-index: 40;
       margin-top: 1.25rem;
       padding: 0.75rem 0 calc(0.75rem + var(--safe-bottom));
-      background: linear-gradient(180deg, rgba(7, 17, 13, 0), rgba(7, 17, 13, 0.92) 28%, #07110d 70%);
+      background: var(--sticky-fade);
       backdrop-filter: blur(8px);
     }
     .modal-backdrop { background: rgba(5, 12, 9, 0.78); backdrop-filter: blur(8px); }
+    .modal-card { background: var(--modal-bg); }
     .toast { animation: toastIn 0.25s ease both; }
     @keyframes toastIn {
       from { opacity: 0; transform: translateY(8px); }
@@ -141,8 +180,29 @@
     }
     .panel-toggle .chevron { transition: transform 0.22s ease; }
     .panel-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+    .meter-track { background: rgba(255,255,255,0.08); }
+    html[data-theme="light"] .meter-track { background: rgba(15,28,22,0.08); }
+    .meter-fill { background: linear-gradient(90deg, #25d366, #4ade80); transition: width 0.35s ease; }
+    .muted { color: var(--fg-muted); }
+    .icon-btn {
+      min-height: 40px; min-width: 40px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 0 1px var(--field-border);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    html[data-theme="light"] .icon-btn { background: rgba(15,28,22,0.04); }
+    .fav-pinned { color: #fbbf24; }
+    .empty-state {
+      border: 1px dashed var(--field-border);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .step-dot { width: 8px; height: 8px; border-radius: 9999px; background: rgba(255,255,255,0.2); }
+    .step-dot.on { background: #25d366; box-shadow: 0 0 0 3px rgba(37,211,102,0.2); }
     @media (prefers-reduced-motion: reduce) {
-      .reply-card, .a2hs-banner, .toast, .chip, .btn-primary, .panel-toggle .chevron {
+      .reply-card, .a2hs-banner, .toast, .chip, .btn-primary, .panel-toggle .chevron, .meter-fill {
         animation: none !important;
         transition: none !important;
       }
@@ -173,27 +233,49 @@
             <path d="M8.5 13.2h7M8.5 10.5h4.5" stroke="#86efb0" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
         </span>
-        <span class="font-display text-lg font-semibold tracking-tight text-white">Replyly</span>
+        <span class="font-display text-lg font-semibold tracking-tight">Replyly</span>
       </a>
       <div class="flex items-center gap-2">
-        <span id="usageBadge" class="rounded-full bg-white/5 px-3 py-1.5 text-xs font-medium text-ink-200/80 ring-1 ring-white/10">5 left today</span>
-        <button type="button" id="settingsBtn" class="min-h-[40px] rounded-full bg-white/5 px-3.5 py-2 text-xs font-medium text-white ring-1 ring-white/12 transition hover:bg-white/10">Settings</button>
+        <span id="usageBadge" class="rounded-full bg-white/5 px-3 py-1.5 text-xs font-medium muted ring-1 ring-white/10">5 left today</span>
+        <button type="button" id="themeToggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
+          <svg id="themeIconSun" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4l1.4-1.4M17 7l1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <svg id="themeIconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A7.5 7.5 0 0 1 9.5 4 6.5 6.5 0 1 0 20 14.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" id="settingsBtn" class="min-h-[40px] rounded-full bg-white/5 px-3.5 py-2 text-xs font-medium ring-1 ring-white/12 transition hover:bg-white/10">Settings</button>
       </div>
     </header>
 
-    <p class="mt-5 text-sm leading-relaxed text-ink-200/58">For messages bots can’t handle — paste a customer WhatsApp message, or tap a quick intent, and get 3 replies.</p>
+    <p class="mt-5 text-sm leading-relaxed muted">For messages bots can’t handle — paste a customer WhatsApp message, or tap a quick intent, and get 3 replies.</p>
+
+    <!-- Soft Pro banner -->
+    <div id="proBanner" class="mt-4 hidden rounded-2xl bg-leaf-500/10 px-4 py-3.5 ring-1 ring-leaf-400/30">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-leaf-200">Unlock Replyly Pro</p>
+          <p class="mt-0.5 text-xs leading-relaxed muted">Unlimited replies · team invite · unlimited favorites. Local favorites sync note: saved on this device.</p>
+        </div>
+        <button type="button" id="proBannerCta" class="shrink-0 rounded-full bg-leaf-500/20 px-3 py-1.5 text-xs font-semibold text-leaf-100 ring-1 ring-leaf-400/35">Upgrade</button>
+      </div>
+    </div>
 
     <!-- Business profile -->
     <section class="panel mt-5 overflow-hidden rounded-2xl ring-1 ring-white/10">
       <button type="button" id="profileToggle" class="panel-toggle flex min-h-[56px] w-full items-center justify-between gap-3 px-4 py-3.5 text-left" aria-expanded="false">
         <div class="flex min-w-0 items-start gap-3">
           <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-leaf-500/12 text-sm text-leaf-300 ring-1 ring-leaf-400/25" aria-hidden="true">◎</span>
-          <div class="min-w-0">
-            <p class="text-sm font-semibold text-white">Business profile</p>
-            <p id="profileSummary" class="mt-0.5 text-xs leading-snug text-ink-200/50">Optional — replies use your name, hours, services &amp; area</p>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm font-semibold">Business profile</p>
+              <span id="profilePct" class="rounded-full bg-leaf-500/12 px-2 py-0.5 text-[10px] font-semibold text-leaf-300 ring-1 ring-leaf-400/25">0%</span>
+            </div>
+            <div class="meter-track mt-2 h-1.5 w-full overflow-hidden rounded-full">
+              <div id="profileMeter" class="meter-fill h-full rounded-full" style="width:0%"></div>
+            </div>
+            <p id="profileSummary" class="mt-1.5 text-xs leading-snug muted">Optional — replies use your name, hours, services &amp; area</p>
+            <p id="profileNudge" class="mt-1 hidden text-xs font-medium text-leaf-300/90"></p>
           </div>
         </div>
-        <span id="profileChevron" class="chevron shrink-0 text-ink-200/50">▾</span>
+        <span id="profileChevron" class="chevron shrink-0 muted">▾</span>
       </button>
       <div id="profilePanel" class="hidden border-t border-white/[0.08] px-4 pb-4 pt-3.5 space-y-3.5">
         <div>
@@ -257,14 +339,20 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM16.5 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3.5 19c0-2.5 2.2-4.5 5.5-4.5s5.5 2 5.5 4.5M14 14.5c2.8.3 5 2 5 4.5" stroke="#86efb0" stroke-width="1.7" stroke-linecap="round"/></svg>
           </span>
           <div class="min-w-0">
-            <p class="text-sm font-semibold text-white">Team mode</p>
-            <p id="teamSummary" class="mt-0.5 text-xs leading-snug text-ink-200/50">Share profile with 2–3 staff via invite code</p>
+            <p class="text-sm font-semibold">Team mode <span class="ml-1 rounded-full bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">Pro</span></p>
+            <p id="teamSummary" class="mt-0.5 text-xs leading-snug muted">Share profile with 2–3 staff via invite code</p>
           </div>
         </div>
-        <span id="teamChevron" class="chevron shrink-0 text-ink-200/50">▾</span>
+        <span id="teamChevron" class="chevron shrink-0 muted">▾</span>
       </button>
       <div id="teamPanel" class="hidden border-t border-white/[0.08] px-4 pb-4 pt-3.5 space-y-3.5">
-        <p class="text-xs leading-relaxed text-ink-200/55">
+        <div id="teamProLock" class="hidden rounded-xl bg-leaf-500/10 px-3.5 py-3 ring-1 ring-leaf-400/30">
+          <p class="text-sm font-semibold text-leaf-200">Team mode is a Pro feature</p>
+          <p class="mt-1 text-xs leading-relaxed muted">Invite 2–3 staff with your profile + brand words. Unlock with Pro or code <span class="font-mono text-leaf-300">REPLYLY-PRO</span>.</p>
+          <button type="button" id="teamUpgradeBtn" class="mt-2.5 min-h-[40px] w-full rounded-xl bg-leaf-500/20 py-2 text-sm font-semibold text-leaf-100 ring-1 ring-leaf-400/35">Upgrade to Pro</button>
+        </div>
+        <div id="teamProBody">
+        <p class="text-xs leading-relaxed muted">
           Paste invite code on each phone to sync profile. Codes encode your business profile + brand words (no live cloud sync).
         </p>
         <div>
@@ -304,34 +392,52 @@
           <label for="inviteCodeIn" class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-200/50">Join with code</label>
           <textarea id="inviteCodeIn" rows="2" placeholder="Paste invite code from a teammate"
             class="field mt-1.5 w-full resize-y rounded-xl px-3.5 py-3 font-mono text-[11px] text-white placeholder:text-ink-200/35"></textarea>
-          <button type="button" id="joinInviteBtn" class="mt-2.5 min-h-[44px] w-full rounded-xl bg-white/5 py-2.5 text-sm font-semibold text-white ring-1 ring-white/12 transition hover:bg-white/10">Import shared profile</button>
+          <button type="button" id="joinInviteBtn" class="mt-2.5 min-h-[44px] w-full rounded-xl bg-white/5 py-2.5 text-sm font-semibold ring-1 ring-white/12 transition hover:bg-white/10">Import shared profile</button>
         </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Favorites -->
+    <section id="favoritesSection" class="panel mt-3.5 rounded-2xl p-4 ring-1 ring-white/10">
+      <div class="flex items-center justify-between gap-2">
+        <div>
+          <h2 class="text-sm font-semibold">Pinned favorites</h2>
+          <p id="favLimitHint" class="mt-0.5 text-[11px] muted">Free: 3 pins · Pro: unlimited</p>
+        </div>
+        <button type="button" id="clearFavsBtn" class="min-h-[36px] rounded-lg px-2 text-xs muted transition hover:bg-white/5">Clear</button>
+      </div>
+      <div id="favoritesList" class="mt-3 space-y-2"></div>
+      <div id="favoritesEmpty" class="empty-state mt-3">
+        <p class="text-sm font-medium">No favorites yet</p>
+        <p class="mt-1 text-xs muted">Pin a generated reply to reuse it in one tap.</p>
       </div>
     </section>
 
     <!-- Business type (quick chips — synced with profile) -->
     <section class="mt-6">
-      <label class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-200/50">Business type</label>
+      <label class="text-[11px] font-semibold uppercase tracking-[0.12em] muted">Business type</label>
       <div id="bizTypes" class="mt-2.5 flex flex-wrap gap-2"></div>
     </section>
 
     <!-- Quick intents -->
     <section class="mt-5">
-      <label class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-200/50">Quick intent</label>
-      <p class="mt-1 text-xs text-ink-200/45">One tap — works with or without a pasted message</p>
+      <label class="text-[11px] font-semibold uppercase tracking-[0.12em] muted">Quick intent</label>
+      <p class="mt-1 text-xs muted" style="opacity:0.85">One tap — works with or without a pasted message</p>
       <div id="intentBtns" class="mt-2.5 flex flex-wrap gap-2"></div>
     </section>
 
     <!-- Message -->
     <section class="mt-5">
-      <label for="message" class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-200/50">Customer message <span class="normal-case font-normal tracking-normal text-ink-200/40">(optional if intent selected)</span></label>
+      <label for="message" class="text-[11px] font-semibold uppercase tracking-[0.12em] muted">Customer message <span class="normal-case font-normal tracking-normal" style="opacity:0.7">(optional if intent selected)</span></label>
       <textarea id="message" rows="4" placeholder="e.g. Hi, do you have appointments tomorrow? What's the price?"
-        class="field mt-2 w-full resize-y rounded-2xl px-4 py-3.5 text-[15px] leading-relaxed text-white placeholder:text-ink-200/35"></textarea>
+        class="field mt-2 w-full resize-y rounded-2xl px-4 py-3.5 text-[15px] leading-relaxed placeholder:opacity-40"></textarea>
+      <p class="mt-1.5 text-[11px] muted">Tip: <kbd class="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px]">Ctrl</kbd>+<kbd class="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px]">Enter</kbd> to generate</p>
     </section>
 
     <!-- Tone -->
     <section class="mt-5">
-      <label class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-200/50">Tone</label>
+      <label class="text-[11px] font-semibold uppercase tracking-[0.12em] muted">Tone</label>
       <div id="tones" class="mt-2.5 flex flex-wrap gap-2"></div>
     </section>
 
@@ -357,76 +463,129 @@
     <!-- Results -->
     <section id="results" class="mt-2 hidden space-y-3">
       <div class="flex items-center justify-between gap-2">
-        <h2 class="font-display text-lg font-semibold tracking-tight text-white">Suggestions</h2>
-        <span id="engineLabel" class="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-medium text-ink-200/50 ring-1 ring-white/8">Template engine</span>
+        <h2 class="font-display text-lg font-semibold tracking-tight">Suggestions</h2>
+        <span id="engineLabel" class="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-medium muted ring-1 ring-white/8">Template engine</span>
       </div>
       <div id="replies" class="space-y-3"></div>
     </section>
 
     <!-- History -->
-    <section id="historySection" class="panel mt-8 hidden rounded-2xl p-4 ring-1 ring-white/10">
+    <section id="historySection" class="panel mt-8 rounded-2xl p-4 ring-1 ring-white/10">
       <div class="flex items-center justify-between gap-2">
-        <h2 class="font-display text-lg font-semibold tracking-tight text-white">Recent replies</h2>
-        <button type="button" id="clearHistoryBtn" class="min-h-[36px] rounded-lg px-2 text-xs text-ink-200/45 transition hover:bg-white/5 hover:text-white">Clear</button>
+        <h2 class="font-display text-lg font-semibold tracking-tight">Recent replies</h2>
+        <button type="button" id="clearHistoryBtn" class="min-h-[36px] rounded-lg px-2 text-xs muted transition hover:bg-white/5">Clear</button>
       </div>
+      <input id="historySearch" type="search" placeholder="Search history…"
+        class="field mt-3 w-full rounded-xl px-3.5 py-2.5 text-sm placeholder:opacity-40" />
       <div id="historyList" class="mt-3 space-y-2.5"></div>
+      <div id="historyEmpty" class="empty-state mt-3">
+        <p class="text-sm font-medium">No history yet</p>
+        <p class="mt-1 text-xs muted">Your last 20 replies appear here after you generate.</p>
+      </div>
     </section>
 
     <p id="errorMsg" class="mt-4 hidden rounded-xl bg-red-500/10 px-3 py-2.5 text-sm text-red-200 ring-1 ring-red-400/25"></p>
 
-    <footer class="mt-auto pt-8 pb-4 text-center text-xs text-ink-200/40" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
+    <footer class="mt-auto pt-8 pb-4 text-center text-xs muted" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
       <a href="index.html" class="hover:text-leaf-300">← Replyly home</a>
+      · <a href="privacy.html" class="hover:text-leaf-300">Privacy</a>
       · Free 5/day · <button type="button" id="upgradeLink" class="text-leaf-300/80 hover:underline">Pro $12/mo</button>
     </footer>
   </div>
 
+  <!-- Onboarding wizard -->
+  <div id="onboardingModal" class="modal-backdrop fixed inset-0 z-[55] hidden items-center justify-center p-4" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
+    <div class="modal-card w-full max-w-md rounded-3xl p-6 shadow-2xl ring-1 ring-leaf-400/30" role="dialog" aria-labelledby="onboardTitle" aria-modal="true">
+      <div class="mb-4 flex items-center gap-2" id="onboardDots" aria-hidden="true">
+        <span class="step-dot on" data-dot="0"></span>
+        <span class="step-dot" data-dot="1"></span>
+        <span class="step-dot" data-dot="2"></span>
+      </div>
+      <div id="onboardStep0">
+        <h2 id="onboardTitle" class="font-display text-2xl font-semibold tracking-tight">Welcome to Replyly</h2>
+        <p class="mt-2 text-sm leading-relaxed muted">WhatsApp replies for messages bots can’t handle — pricing nuance, bookings, complaints, Arabic mix.</p>
+      </div>
+      <div id="onboardStep1" class="hidden">
+        <h2 class="font-display text-2xl font-semibold tracking-tight">Save your business profile</h2>
+        <p class="mt-2 text-sm leading-relaxed muted">Add name, hours, services, and area once. Every reply sounds like your shop — not a generic bot.</p>
+      </div>
+      <div id="onboardStep2" class="hidden">
+        <h2 class="font-display text-2xl font-semibold tracking-tight">Generate · copy · send</h2>
+        <p class="mt-2 text-sm leading-relaxed muted">Paste a message or tap an intent. Get 3 replies. Pin favorites. Free: 5/day. Pro unlocks unlimited + team.</p>
+      </div>
+      <div class="mt-6 flex gap-2">
+        <button type="button" id="onboardSkip" class="min-h-[48px] flex-1 rounded-2xl bg-white/5 py-3 text-sm font-medium ring-1 ring-white/12">Skip</button>
+        <button type="button" id="onboardNext" class="btn-primary min-h-[48px] flex-1 rounded-2xl py-3 text-sm font-semibold">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Soft upsell after 3rd generate -->
+  <div id="softUpsellModal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
+    <div class="modal-card w-full max-w-md rounded-3xl p-6 shadow-2xl ring-1 ring-leaf-400/30" role="dialog" aria-labelledby="softUpsellTitle" aria-modal="true">
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-400">You’re on a roll</p>
+      <h2 id="softUpsellTitle" class="mt-2 font-display text-2xl font-semibold tracking-tight">Loving the replies?</h2>
+      <p class="mt-2 text-sm leading-relaxed muted">
+        Pro removes the daily limit and unlocks team invite + unlimited favorites — for shops that live on WhatsApp.
+      </p>
+      <ul class="mt-4 space-y-2 text-sm muted">
+        <li class="flex gap-2"><span class="text-leaf-400">✓</span> Unlimited generations</li>
+        <li class="flex gap-2"><span class="text-leaf-400">✓</span> Team profile sharing</li>
+        <li class="flex gap-2"><span class="text-leaf-400">✓</span> Unlimited pinned favorites</li>
+      </ul>
+      <button type="button" id="softUpsellUpgrade" class="btn-primary mt-5 flex min-h-[48px] w-full items-center justify-center rounded-2xl py-3 font-semibold">See Pro — $12/mo</button>
+      <button type="button" id="softUpsellDismiss" class="mt-3 min-h-[40px] w-full text-center text-sm muted transition hover:opacity-100">Keep using free</button>
+    </div>
+  </div>
+
   <!-- Upgrade modal -->
   <div id="upgradeModal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
-    <div class="w-full max-w-md rounded-3xl bg-ink-900 p-6 shadow-2xl ring-1 ring-leaf-400/30" role="dialog" aria-labelledby="upgradeTitle">
-      <h2 id="upgradeTitle" class="font-display text-2xl font-semibold tracking-tight text-white">You've used today's free replies</h2>
-      <p class="mt-2 text-sm leading-relaxed text-ink-200/70">
-        Replyly Pro is <strong class="text-leaf-300">$12/mo</strong> for unlimited WhatsApp reply suggestions — built for busy shops.
+    <div class="modal-card w-full max-w-md rounded-3xl p-6 shadow-2xl ring-1 ring-leaf-400/30" role="dialog" aria-labelledby="upgradeTitle" aria-modal="true">
+      <h2 id="upgradeTitle" class="font-display text-2xl font-semibold tracking-tight">Upgrade to Replyly Pro</h2>
+      <p class="mt-2 text-sm leading-relaxed muted">
+        <strong class="text-leaf-300">$12/mo</strong> — unlimited replies, team invite, unlimited favorites. Favorites stay on this device (local sync note).
       </p>
       <a id="payBtn" href="https://mariamtariq72.gumroad.com/l/replyly" target="_blank" rel="noopener"
-        class="btn-primary mt-5 flex min-h-[48px] w-full items-center justify-center rounded-2xl py-3 font-semibold text-ink-950">
+        class="btn-primary mt-5 flex min-h-[48px] w-full items-center justify-center rounded-2xl py-3 font-semibold">
         Pay $12/mo on Gumroad
       </a>
       <a href="mailto:hello@replyly.app?subject=Replyly%20Pro%20waitlist&body=I'd%20like%20unlimited%20WhatsApp%20replies."
-        class="mt-3 flex min-h-[48px] w-full items-center justify-center rounded-2xl bg-white/5 py-3 text-sm font-medium text-white ring-1 ring-white/12 transition hover:bg-white/10">
-        Coming soon — join waitlist
+        class="mt-3 flex min-h-[48px] w-full items-center justify-center rounded-2xl bg-white/5 py-3 text-sm font-medium ring-1 ring-white/12 transition hover:bg-white/10">
+        Join waitlist
       </a>
       <div class="mt-5 border-t border-white/10 pt-4">
-        <label for="promoCode" class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-200/50">Have a Pro code?</label>
+        <label for="promoCode" class="text-[11px] font-semibold uppercase tracking-[0.12em] muted">Have a Pro code?</label>
         <div class="mt-2 flex gap-2">
           <input id="promoCode" type="text" placeholder="REPLYLY-PRO" autocomplete="off"
-            class="field flex-1 rounded-xl px-3.5 py-3 text-sm text-white placeholder:text-ink-200/35" />
+            class="field flex-1 rounded-xl px-3.5 py-3 text-sm placeholder:opacity-40" />
           <button type="button" id="unlockBtn" class="min-h-[44px] rounded-xl bg-leaf-500/18 px-4 py-2.5 text-sm font-semibold text-leaf-100 ring-1 ring-leaf-400/35 transition hover:bg-leaf-500/28">Unlock</button>
         </div>
         <p id="promoError" class="mt-2 hidden text-xs text-red-300">Invalid code. Try REPLYLY-PRO for demo.</p>
       </div>
-      <button type="button" id="closeUpgrade" class="mt-5 min-h-[40px] w-full text-center text-sm text-ink-200/50 transition hover:text-white">Not now</button>
+      <button type="button" id="closeUpgrade" class="mt-5 min-h-[40px] w-full text-center text-sm muted transition">Not now</button>
     </div>
   </div>
 
   <!-- Settings modal -->
   <div id="settingsModal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
-    <div class="w-full max-w-md rounded-3xl bg-ink-900 p-6 shadow-2xl ring-1 ring-white/15" role="dialog" aria-labelledby="settingsTitle">
-      <h2 id="settingsTitle" class="font-display text-2xl font-semibold tracking-tight text-white">Settings</h2>
-      <p class="mt-2 text-sm text-ink-200/65">Optional advanced: paste your own Gemini API key for richer AI replies. Stored only in this browser.</p>
-      <label for="geminiKey" class="mt-5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-200/50">Gemini API key</label>
+    <div class="modal-card w-full max-w-md rounded-3xl p-6 shadow-2xl ring-1 ring-white/15" role="dialog" aria-labelledby="settingsTitle" aria-modal="true">
+      <h2 id="settingsTitle" class="font-display text-2xl font-semibold tracking-tight">Settings</h2>
+      <p class="mt-2 text-sm muted">Optional: paste your own Gemini API key for richer AI replies. Stored only in this browser.</p>
+      <label for="geminiKey" class="mt-5 block text-[11px] font-semibold uppercase tracking-[0.12em] muted">Gemini API key</label>
       <input id="geminiKey" type="password" placeholder="AIza… (optional)"
-        class="field mt-2 w-full rounded-xl px-3.5 py-3 text-sm text-white placeholder:text-ink-200/35" />
+        class="field mt-2 w-full rounded-xl px-3.5 py-3 text-sm placeholder:opacity-40" />
       <div class="mt-3 flex gap-2">
         <button type="button" id="saveKeyBtn" class="min-h-[44px] flex-1 rounded-xl bg-leaf-500/18 py-2.5 text-sm font-semibold text-leaf-100 ring-1 ring-leaf-400/35 transition hover:bg-leaf-500/28">Save key</button>
-        <button type="button" id="clearKeyBtn" class="min-h-[44px] rounded-xl bg-white/5 px-4 py-2.5 text-sm text-ink-200 ring-1 ring-white/12 transition hover:bg-white/10">Clear</button>
+        <button type="button" id="clearKeyBtn" class="min-h-[44px] rounded-xl bg-white/5 px-4 py-2.5 text-sm muted ring-1 ring-white/12 transition hover:bg-white/10">Clear</button>
       </div>
-      <p id="keyStatus" class="mt-2 text-xs text-ink-200/45">No key saved — using free template engine.</p>
+      <p id="keyStatus" class="mt-2 text-xs muted">No key saved — using free template engine.</p>
       <div class="panel mt-5 rounded-2xl p-4 ring-1 ring-white/10">
-        <p class="text-sm font-medium text-white">Pro status</p>
-        <p id="proStatus" class="mt-1 text-xs text-ink-200/60">Free plan</p>
+        <p class="text-sm font-medium">Pro status</p>
+        <p id="proStatus" class="mt-1 text-xs muted">Free plan</p>
         <button type="button" id="openUpgradeFromSettings" class="mt-3 text-sm font-medium text-leaf-300 hover:underline">Upgrade / enter code</button>
       </div>
-      <button type="button" id="closeSettings" class="mt-5 min-h-[40px] w-full text-center text-sm text-ink-200/50 transition hover:text-white">Close</button>
+      <p class="mt-4 text-xs muted"><a href="privacy.html" class="text-leaf-300 hover:underline">Privacy policy</a></p>
+      <button type="button" id="closeSettings" class="mt-4 min-h-[40px] w-full text-center text-sm muted transition">Close</button>
     </div>
   </div>
 
@@ -438,9 +597,11 @@
   'use strict';
 
   const FREE_LIMIT = 5;
+  const FREE_FAV_LIMIT = 3;
   const PROMO_CODE = 'REPLYLY-PRO';
   const GUMROAD_URL = 'https://mariamtariq72.gumroad.com/l/replyly';
   const HISTORY_MAX = 20;
+  const FAV_MAX = 50;
   const LS = {
     pro: 'replyly_pro',
     usage: 'replyly_usage',
@@ -450,8 +611,14 @@
     arabic: 'replyly_arabic',
     profile: 'replyly_profile',
     history: 'replyly_history',
+    favorites: 'replyly_favorites',
     team: 'replyly_team',
     a2hs: 'replyly_a2hs_dismissed',
+    theme: 'replyly_theme',
+    onboarding: 'replyly_onboarding_done',
+    lifetimeGens: 'replyly_lifetime_gens',
+    softUpsell: 'replyly_soft_upsell_dismissed',
+    proBanner: 'replyly_pro_banner_dismissed',
   };
 
   const BIZ = [
@@ -501,9 +668,191 @@
     forcedIntent: null,
     profileOpen: false,
     teamOpen: false,
+    historyQuery: '',
+    onboardStep: 0,
   };
 
   let lastReplies = [];
+
+  function safeEl(id) {
+    return document.getElementById(id);
+  }
+
+  function getTheme() {
+    try {
+      const t = localStorage.getItem(LS.theme);
+      if (t === 'light' || t === 'dark') return t;
+    } catch (e) { /* ignore */ }
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  }
+
+  function setTheme(theme) {
+    const t = theme === 'light' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem(LS.theme, t); } catch (e) { /* ignore */ }
+    const sun = safeEl('themeIconSun');
+    const moon = safeEl('themeIconMoon');
+    if (sun && moon) {
+      sun.classList.toggle('hidden', t !== 'light');
+      moon.classList.toggle('hidden', t === 'light');
+    }
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', t === 'light' ? '#e8f5ec' : '#0a1612');
+  }
+
+  function getFavorites() {
+    try {
+      const raw = localStorage.getItem(LS.favorites);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr.slice(0, FAV_MAX) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveFavorites(list) {
+    localStorage.setItem(LS.favorites, JSON.stringify((list || []).slice(0, FAV_MAX)));
+  }
+
+  function isFavorited(text) {
+    const t = String(text || '').trim();
+    return getFavorites().some(function (f) { return f && f.text === t; });
+  }
+
+  function toggleFavorite(text) {
+    const t = String(text || '').trim();
+    if (!t) return false;
+    let list = getFavorites();
+    const idx = list.findIndex(function (f) { return f && f.text === t; });
+    if (idx >= 0) {
+      list.splice(idx, 1);
+      saveFavorites(list);
+      showToast('Removed from favorites');
+      renderFavorites();
+      return true;
+    }
+    if (!isPro() && list.length >= FREE_FAV_LIMIT) {
+      showToast('Free plan: 3 favorites — upgrade for more');
+      openModal('upgradeModal');
+      return false;
+    }
+    list.unshift({ id: String(Date.now()), text: t, at: Date.now() });
+    saveFavorites(list);
+    showToast('Pinned to favorites');
+    renderFavorites();
+    return true;
+  }
+
+  function profileCompleteness(profile) {
+    const p = profile || getProfile();
+    const checks = [
+      !!(p.name && p.name.trim()),
+      !!(p.type || state.biz),
+      !!(p.services && p.services.trim()),
+      !!(p.hours && p.hours.trim()),
+      !!(p.location && p.location.trim()),
+      !!(p.whatsapp && p.whatsapp.trim()),
+      !!(p.neverSay && p.neverSay.trim()) || !!(p.alwaysSay && p.alwaysSay.trim()),
+    ];
+    const filled = checks.filter(Boolean).length;
+    return Math.round((filled / checks.length) * 100);
+  }
+
+  function updateProfileCompletenessUI() {
+    const pct = profileCompleteness();
+    const meter = safeEl('profileMeter');
+    const label = safeEl('profilePct');
+    const nudge = safeEl('profileNudge');
+    if (meter) meter.style.width = pct + '%';
+    if (label) label.textContent = pct + '%';
+    if (nudge) {
+      if (pct < 100) {
+        nudge.classList.remove('hidden');
+        if (pct < 40) nudge.textContent = 'Add your shop name & hours — replies get sharper.';
+        else if (pct < 70) nudge.textContent = 'Nice start. Add services + area for better quotes.';
+        else nudge.textContent = 'Almost there — brand words make replies sound like you.';
+      } else {
+        nudge.classList.add('hidden');
+        nudge.textContent = '';
+      }
+    }
+  }
+
+  function updateProBanner() {
+    const banner = safeEl('proBanner');
+    if (!banner) return;
+    if (isPro() || localStorage.getItem(LS.proBanner) === '1') {
+      banner.classList.add('hidden');
+    } else {
+      banner.classList.remove('hidden');
+    }
+  }
+
+  function updateTeamProUI() {
+    const lock = safeEl('teamProLock');
+    const body = safeEl('teamProBody');
+    if (!lock || !body) return;
+    if (isPro()) {
+      lock.classList.add('hidden');
+      body.classList.remove('hidden');
+    } else {
+      lock.classList.remove('hidden');
+      body.classList.add('hidden');
+    }
+  }
+
+  function bumpLifetimeGens() {
+    let n = 0;
+    try { n = Number(localStorage.getItem(LS.lifetimeGens) || 0) || 0; } catch (e) { n = 0; }
+    n += 1;
+    try { localStorage.setItem(LS.lifetimeGens, String(n)); } catch (e) { /* ignore */ }
+    return n;
+  }
+
+  function maybeSoftUpsell() {
+    if (isPro()) return;
+    if (localStorage.getItem(LS.softUpsell) === '1') return;
+    let n = 0;
+    try { n = Number(localStorage.getItem(LS.lifetimeGens) || 0) || 0; } catch (e) { n = 0; }
+    if (n === 3) {
+      setTimeout(function () { openModal('softUpsellModal'); }, 700);
+    }
+  }
+
+  function finishOnboarding(goProfile) {
+    try { localStorage.setItem(LS.onboarding, '1'); } catch (e) { /* ignore */ }
+    closeModal('onboardingModal');
+    if (goProfile) {
+      setProfileOpen(true);
+      const name = safeEl('profName');
+      if (name) setTimeout(function () { name.focus(); }, 120);
+      showToast('Save your business profile');
+    }
+  }
+
+  function renderOnboardStep() {
+    for (let i = 0; i < 3; i++) {
+      const step = safeEl('onboardStep' + i);
+      if (step) step.classList.toggle('hidden', i !== state.onboardStep);
+    }
+    const dots = document.querySelectorAll('#onboardDots .step-dot');
+    dots.forEach(function (d) {
+      const n = Number(d.getAttribute('data-dot'));
+      d.classList.toggle('on', n === state.onboardStep);
+    });
+    const next = safeEl('onboardNext');
+    if (next) next.textContent = state.onboardStep >= 2 ? 'Save business profile' : 'Next';
+  }
+
+  function maybeShowOnboarding() {
+    try {
+      if (localStorage.getItem(LS.onboarding) === '1') return;
+    } catch (e) { /* ignore */ }
+    state.onboardStep = 0;
+    renderOnboardStep();
+    openModal('onboardingModal');
+  }
 
   // ——— Storage helpers ———
   function todayKey() {
@@ -832,20 +1181,23 @@
 
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
+    if (!t) return;
+    t.textContent = msg || 'Done';
     t.classList.remove('hidden');
     clearTimeout(showToast._timer);
-    showToast._timer = setTimeout(function () { t.classList.add('hidden'); }, 1600);
+    showToast._timer = setTimeout(function () { t.classList.add('hidden'); }, 1800);
   }
 
   function openModal(id) {
     const el = document.getElementById(id);
+    if (!el) return;
     el.classList.remove('hidden');
     el.classList.add('flex');
   }
 
   function closeModal(id) {
     const el = document.getElementById(id);
+    if (!el) return;
     el.classList.add('hidden');
     el.classList.remove('flex');
   }
@@ -866,6 +1218,7 @@
   function updateProfileSummary() {
     const p = getProfile();
     const el = document.getElementById('profileSummary');
+    if (!el) return;
     if (p.name) {
       const bits = [p.name];
       if (p.location) bits.push(p.location);
@@ -877,6 +1230,7 @@
     } else {
       el.textContent = 'Optional — replies use your name, hours, services & area';
     }
+    updateProfileCompletenessUI();
   }
 
   function setProfileOpen(open) {
@@ -1467,31 +1821,42 @@
   }
 
   function copyText(text, btn) {
-    navigator.clipboard.writeText(text).then(function () {
+    const value = String(text || '');
+    if (!value) {
+      showToast('Nothing to copy');
+      return;
+    }
+    const done = function () {
       showToast('Copied to clipboard');
       if (btn) {
         const prev = btn.textContent;
         btn.textContent = 'Copied';
         setTimeout(function () { btn.textContent = prev; }, 1200);
       }
-    }).catch(function () {
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(value).then(done).catch(function () {
+        showToast('Copy failed — select manually');
+      });
+    } else {
       showToast('Copy failed — select manually');
-    });
+    }
   }
 
   function renderReplies(list, engine) {
-    lastReplies = list.slice();
+    lastReplies = (list || []).slice();
     const box = document.getElementById('replies');
+    const results = document.getElementById('results');
+    const engineLabel = document.getElementById('engineLabel');
+    if (!box || !results) return;
     const profile = getProfile();
     const waNumber = profile.whatsapp;
-    document.getElementById('engineLabel').textContent = engine;
-    document.getElementById('results').classList.remove('hidden');
-    box.innerHTML = list.map(function (text, i) {
+    if (engineLabel) engineLabel.textContent = engine || 'Template engine';
+    results.classList.remove('hidden');
+    box.innerHTML = lastReplies.map(function (text, i) {
       const labels = ['Option A', 'Option B', 'Option C'];
       const waHref = waMeUrl(text, waNumber);
-      const waLabel = waNumber
-        ? 'Send on WhatsApp'
-        : 'Send on WhatsApp';
+      const pinned = isFavorited(text);
       return (
         '<article class="reply-card rounded-2xl p-4 ring-1 ring-white/12">' +
           '<div class="mb-2.5 flex items-center justify-between gap-2">' +
@@ -1499,64 +1864,175 @@
               '<span class="flex h-5 w-5 items-center justify-center rounded-md bg-leaf-500/20 text-[10px] text-leaf-200 ring-1 ring-leaf-400/30">' + String.fromCharCode(65 + i) + '</span>' +
               labels[i] +
             '</span>' +
+            '<button type="button" data-fav="' + i + '" class="min-h-[36px] rounded-full px-3 py-1.5 text-[11px] font-semibold ring-1 ring-white/12 transition hover:bg-white/10 ' +
+              (pinned ? 'fav-pinned bg-amber-500/10' : 'muted') + '" aria-label="Pin favorite">' +
+              (pinned ? '★ Pinned' : '☆ Pin') +
+            '</button>' +
           '</div>' +
-          '<p class="reply-text text-[15px] leading-relaxed text-ink-100 whitespace-pre-wrap" ' + (state.arabic ? 'dir="auto"' : '') + '></p>' +
+          '<p class="reply-text text-[15px] leading-relaxed whitespace-pre-wrap" ' + (state.arabic ? 'dir="auto"' : '') + '></p>' +
           '<div class="mt-3.5 flex flex-wrap gap-2">' +
             '<button type="button" data-copy="' + i + '" class="min-h-[40px] rounded-full bg-leaf-500/15 px-4 py-2 text-xs font-semibold text-leaf-100 ring-1 ring-leaf-400/35 transition hover:bg-leaf-500/28">Copy</button>' +
-            '<a data-wa="' + i + '" href="' + waHref + '" target="_blank" rel="noopener" class="min-h-[40px] inline-flex items-center rounded-full bg-[#25d366]/18 px-4 py-2 text-xs font-semibold text-[#bbf7d4] ring-1 ring-[#25d366]/40 transition hover:bg-[#25d366]/28">' + waLabel + '</a>' +
+            '<a data-wa="' + i + '" href="' + waHref + '" target="_blank" rel="noopener" class="min-h-[40px] inline-flex items-center rounded-full bg-[#25d366]/18 px-4 py-2 text-xs font-semibold text-[#bbf7d4] ring-1 ring-[#25d366]/40 transition hover:bg-[#25d366]/28">Send on WhatsApp</a>' +
           '</div>' +
         '</article>'
       );
     }).join('');
     const nodes = box.querySelectorAll('.reply-text');
-    list.forEach(function (text, i) { nodes[i].textContent = text; });
+    lastReplies.forEach(function (text, i) {
+      if (nodes[i]) nodes[i].textContent = text;
+    });
     box.querySelectorAll('[data-copy]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const idx = Number(btn.getAttribute('data-copy'));
-        copyText(list[idx], btn);
+        if (lastReplies[idx]) copyText(lastReplies[idx], btn);
+      });
+    });
+    box.querySelectorAll('[data-fav]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const idx = Number(btn.getAttribute('data-fav'));
+        if (lastReplies[idx]) {
+          toggleFavorite(lastReplies[idx]);
+          renderReplies(lastReplies, engineLabel ? engineLabel.textContent : 'Template engine');
+        }
+      });
+    });
+  }
+
+  function renderFavorites() {
+    const listEl = safeEl('favoritesList');
+    const empty = safeEl('favoritesEmpty');
+    const hint = safeEl('favLimitHint');
+    if (!listEl) return;
+    const items = getFavorites();
+    if (hint) {
+      hint.textContent = isPro()
+        ? 'Pro · unlimited pins · saved on this device'
+        : ('Free: ' + items.length + '/' + FREE_FAV_LIMIT + ' pins · Pro: unlimited');
+    }
+    if (!items.length) {
+      listEl.innerHTML = '';
+      if (empty) empty.classList.remove('hidden');
+      return;
+    }
+    if (empty) empty.classList.add('hidden');
+    listEl.innerHTML = items.map(function (item) {
+      return (
+        '<article class="rounded-xl px-3.5 py-3 ring-1 ring-white/10" data-fav-id="' + item.id + '">' +
+          '<p class="text-sm leading-snug" dir="auto"></p>' +
+          '<div class="mt-2.5 flex flex-wrap gap-2">' +
+            '<button type="button" data-fav-insert="' + item.id + '" class="min-h-[36px] rounded-full bg-leaf-500/15 px-3 py-1.5 text-[11px] font-semibold text-leaf-100 ring-1 ring-leaf-400/35">Insert</button>' +
+            '<button type="button" data-fav-copy="' + item.id + '" class="min-h-[36px] rounded-full bg-white/5 px-3 py-1.5 text-[11px] font-medium ring-1 ring-white/12">Copy</button>' +
+            '<button type="button" data-fav-unpin="' + item.id + '" class="min-h-[36px] rounded-full px-3 py-1.5 text-[11px] font-medium muted ring-1 ring-white/12">Unpin</button>' +
+          '</div>' +
+        '</article>'
+      );
+    }).join('');
+    const articles = listEl.querySelectorAll('[data-fav-id]');
+    items.forEach(function (item, i) {
+      const p = articles[i] && articles[i].querySelector('p');
+      if (p) p.textContent = previewFor(item.text);
+    });
+    listEl.querySelectorAll('[data-fav-insert]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = btn.getAttribute('data-fav-insert');
+        const found = items.find(function (x) { return x.id === id; });
+        if (!found) return;
+        const msg = safeEl('message');
+        if (msg) {
+          msg.value = found.text;
+          msg.focus();
+        }
+        showToast('Inserted into message');
+      });
+    });
+    listEl.querySelectorAll('[data-fav-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = btn.getAttribute('data-fav-copy');
+        const found = items.find(function (x) { return x.id === id; });
+        if (found) copyText(found.text, btn);
+      });
+    });
+    listEl.querySelectorAll('[data-fav-unpin]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = btn.getAttribute('data-fav-unpin');
+        const found = items.find(function (x) { return x.id === id; });
+        if (found) toggleFavorite(found.text);
       });
     });
   }
 
   function renderHistory() {
     const items = getHistory();
-    const section = document.getElementById('historySection');
     const list = document.getElementById('historyList');
+    const empty = safeEl('historyEmpty');
+    const searchEl = safeEl('historySearch');
+    if (!list) return;
+    const q = (state.historyQuery || (searchEl && searchEl.value) || '').trim().toLowerCase();
+    const filtered = q
+      ? items.filter(function (item) {
+          return String(item.text || '').toLowerCase().indexOf(q) !== -1 ||
+            String(item.intent || '').toLowerCase().indexOf(q) !== -1;
+        })
+      : items;
+
     if (!items.length) {
-      section.classList.add('hidden');
       list.innerHTML = '';
+      if (empty) {
+        empty.classList.remove('hidden');
+        empty.querySelector('p') && (empty.querySelector('p').textContent = 'No history yet');
+      }
+      if (searchEl) searchEl.classList.add('hidden');
       return;
     }
-    section.classList.remove('hidden');
+    if (searchEl) searchEl.classList.remove('hidden');
+    if (!filtered.length) {
+      list.innerHTML = '';
+      if (empty) {
+        empty.classList.remove('hidden');
+        const title = empty.querySelector('p');
+        if (title) title.textContent = 'No matches';
+        const sub = empty.querySelectorAll('p')[1];
+        if (sub) sub.textContent = 'Try a different search term.';
+      }
+      return;
+    }
+    if (empty) empty.classList.add('hidden');
     const profile = getProfile();
-    list.innerHTML = items.map(function (item) {
+    list.innerHTML = filtered.map(function (item) {
       const waHref = waMeUrl(item.text, profile.whatsapp);
       const when = formatRelativeTime(item.at);
       const intent = item.intent ? String(item.intent) : '';
       const meta = [intent, when].filter(Boolean).join(' · ');
       return (
-        '<article class="rounded-xl bg-ink-950/40 px-3.5 py-3 ring-1 ring-white/10" data-hist="' + item.id + '">' +
+        '<article class="rounded-xl px-3.5 py-3 ring-1 ring-white/10" data-hist="' + item.id + '">' +
           (meta ? '<p class="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-leaf-300/55">' + meta + '</p>' : '') +
-          '<p class="text-sm leading-snug text-ink-100/90" dir="auto"></p>' +
+          '<p class="text-sm leading-snug" dir="auto"></p>' +
           '<div class="mt-2.5 flex flex-wrap gap-2">' +
             '<button type="button" data-hist-copy="' + item.id + '" class="min-h-[36px] rounded-full bg-white/5 px-3 py-1.5 text-[11px] font-medium text-leaf-200 ring-1 ring-white/12 transition hover:bg-white/10">Copy</button>' +
+            '<button type="button" data-hist-fav="' + item.id + '" class="min-h-[36px] rounded-full bg-white/5 px-3 py-1.5 text-[11px] font-medium ring-1 ring-white/12">Pin</button>' +
             '<a href="' + waHref + '" target="_blank" rel="noopener" class="min-h-[36px] inline-flex items-center rounded-full bg-[#25d366]/12 px-3 py-1.5 text-[11px] font-medium text-[#86efb0] ring-1 ring-[#25d366]/30 transition hover:bg-[#25d366]/22">WhatsApp</a>' +
           '</div>' +
         '</article>'
       );
     }).join('');
     const articles = list.querySelectorAll('[data-hist]');
-    items.forEach(function (item, i) {
-      const p = articles[i].querySelector('p:last-of-type') || articles[i].querySelector('p');
-      // Prefer the reply preview paragraph (not the meta line)
+    filtered.forEach(function (item, i) {
+      if (!articles[i]) return;
       const paras = articles[i].querySelectorAll('p');
       paras[paras.length - 1].textContent = previewFor(item.text);
     });
     list.querySelectorAll('[data-hist-copy]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         const id = btn.getAttribute('data-hist-copy');
-        const found = items.find(function (x) { return x.id === id; });
+        const found = filtered.find(function (x) { return x.id === id; });
         if (found) copyText(found.text, btn);
+      });
+    });
+    list.querySelectorAll('[data-hist-fav]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = btn.getAttribute('data-hist-fav');
+        const found = filtered.find(function (x) { return x.id === id; });
+        if (found) toggleFavorite(found.text);
       });
     });
   }
@@ -1566,22 +2042,31 @@
   }
 
   async function onGenerate() {
-    const message = document.getElementById('message').value.trim();
+    const messageEl = document.getElementById('message');
+    const message = messageEl ? messageEl.value.trim() : '';
     const err = document.getElementById('errorMsg');
-    err.classList.add('hidden');
+    if (err) err.classList.add('hidden');
     if (!message && !state.forcedIntent) {
-      err.textContent = 'Paste a customer message or tap a quick intent first.';
-      err.classList.remove('hidden');
+      if (err) {
+        err.textContent = 'Paste a customer message or tap a quick intent first.';
+        err.classList.remove('hidden');
+      }
+      showToast('Add a message or pick an intent');
+      if (messageEl) messageEl.focus();
       return;
     }
     if (!isPro() && remaining() <= 0) {
+      const title = safeEl('upgradeTitle');
+      if (title) title.textContent = "You've used today's free replies";
       openModal('upgradeModal');
       return;
     }
 
     const btn = document.getElementById('generateBtn');
-    btn.disabled = true;
-    btn.textContent = 'Generating…';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Generating…';
+    }
 
     const profile = getProfile();
     const biz = profile.type || state.biz;
@@ -1602,27 +2087,47 @@
         replies = generateTemplateReplies(message, biz, state.tone, state.arabic, profile);
       }
 
+      if (!Array.isArray(replies) || !replies.length) {
+        throw new Error('No replies generated. Try again.');
+      }
+
       if (!isPro()) {
         const u = getUsage();
         setUsage(u.count + 1);
       }
+      bumpLifetimeGens();
       updateUsageBadge();
+      updateProBanner();
       replies = replies.map(function (r) { return applyBrandWords(r, profile); });
       renderReplies(replies, engine);
       const intentIds = resolveIntents(message);
       const intentLabel = intentIds.slice(0, 2).join(', ');
       pushHistory(replies, intentLabel);
       renderHistory();
+      showToast('3 replies ready');
+      maybeSoftUpsell();
 
       if (!isPro() && remaining() <= 0) {
+        const title = safeEl('upgradeTitle');
+        if (title) title.textContent = "You've used today's free replies";
         setTimeout(function () { openModal('upgradeModal'); }, 600);
       }
+
+      const results = document.getElementById('results');
+      if (results) {
+        try { results.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e2) { /* ignore */ }
+      }
     } catch (e) {
-      err.textContent = (e && e.message) || 'Something went wrong.';
-      err.classList.remove('hidden');
+      if (err) {
+        err.textContent = (e && e.message) || 'Something went wrong.';
+        err.classList.remove('hidden');
+      }
+      showToast('Could not generate — try again');
     } finally {
-      btn.disabled = false;
-      btn.textContent = 'Generate 3 replies';
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Generate 3 replies';
+      }
     }
   }
 
@@ -1677,6 +2182,7 @@
 
   document.getElementById('teamToggle').addEventListener('click', function () {
     setTeamOpen(!state.teamOpen);
+    updateTeamProUI();
   });
 
   document.getElementById('saveProfileBtn').addEventListener('click', function () {
@@ -1699,6 +2205,111 @@
     showToast('Business profile saved');
   });
 
+  const teamUpgradeBtn = safeEl('teamUpgradeBtn');
+  if (teamUpgradeBtn) {
+    teamUpgradeBtn.addEventListener('click', function () {
+      const title = safeEl('upgradeTitle');
+      if (title) title.textContent = 'Unlock team mode with Pro';
+      openModal('upgradeModal');
+    });
+  }
+
+  const clearFavsBtn = safeEl('clearFavsBtn');
+  if (clearFavsBtn) {
+    clearFavsBtn.addEventListener('click', function () {
+      saveFavorites([]);
+      renderFavorites();
+      if (lastReplies.length) {
+        const engineLabel = safeEl('engineLabel');
+        renderReplies(lastReplies, engineLabel ? engineLabel.textContent : 'Template engine');
+      }
+      showToast('Favorites cleared');
+    });
+  }
+
+  const historySearch = safeEl('historySearch');
+  if (historySearch) {
+    historySearch.addEventListener('input', function () {
+      state.historyQuery = historySearch.value || '';
+      renderHistory();
+    });
+  }
+
+  const themeToggle = safeEl('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      setTheme(getTheme() === 'light' ? 'dark' : 'light');
+      showToast(getTheme() === 'light' ? 'Light mode' : 'Dark mode');
+    });
+  }
+
+  const proBannerCta = safeEl('proBannerCta');
+  if (proBannerCta) {
+    proBannerCta.addEventListener('click', function () {
+      const title = safeEl('upgradeTitle');
+      if (title) title.textContent = 'Unlock Replyly Pro';
+      openModal('upgradeModal');
+    });
+  }
+
+  const onboardNext = safeEl('onboardNext');
+  const onboardSkip = safeEl('onboardSkip');
+  if (onboardNext) {
+    onboardNext.addEventListener('click', function () {
+      if (state.onboardStep < 2) {
+        state.onboardStep += 1;
+        renderOnboardStep();
+      } else {
+        finishOnboarding(true);
+      }
+    });
+  }
+  if (onboardSkip) {
+    onboardSkip.addEventListener('click', function () {
+      finishOnboarding(false);
+    });
+  }
+
+  const softUpsellUpgrade = safeEl('softUpsellUpgrade');
+  const softUpsellDismiss = safeEl('softUpsellDismiss');
+  if (softUpsellUpgrade) {
+    softUpsellUpgrade.addEventListener('click', function () {
+      try { localStorage.setItem(LS.softUpsell, '1'); } catch (e) { /* ignore */ }
+      closeModal('softUpsellModal');
+      const title = safeEl('upgradeTitle');
+      if (title) title.textContent = 'Unlock Replyly Pro';
+      openModal('upgradeModal');
+    });
+  }
+  if (softUpsellDismiss) {
+    softUpsellDismiss.addEventListener('click', function () {
+      try { localStorage.setItem(LS.softUpsell, '1'); } catch (e) { /* ignore */ }
+      closeModal('softUpsellModal');
+    });
+  }
+  const softUpsellModal = safeEl('softUpsellModal');
+  if (softUpsellModal) {
+    softUpsellModal.addEventListener('click', function (e) {
+      if (e.target.id === 'softUpsellModal') {
+        try { localStorage.setItem(LS.softUpsell, '1'); } catch (err) { /* ignore */ }
+        closeModal('softUpsellModal');
+      }
+    });
+  }
+
+  // Keyboard: Ctrl/Cmd+Enter to generate
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      onGenerate();
+    }
+    if (e.key === 'Escape') {
+      closeModal('upgradeModal');
+      closeModal('settingsModal');
+      closeModal('softUpsellModal');
+    }
+  });
+
   document.getElementById('staffSwitcher').addEventListener('click', function (e) {
     const btn = e.target.closest('[data-staff]');
     if (!btn) return;
@@ -1719,6 +2330,12 @@
   });
 
   document.getElementById('createInviteBtn').addEventListener('click', function () {
+    if (!isPro()) {
+      const title = safeEl('upgradeTitle');
+      if (title) title.textContent = 'Unlock team mode with Pro';
+      openModal('upgradeModal');
+      return;
+    }
     // Persist latest profile + team before encoding
     document.getElementById('saveProfileBtn').click();
     const team = readTeamFromForm();
@@ -1749,8 +2366,14 @@
   });
 
   document.getElementById('joinInviteBtn').addEventListener('click', function () {
+    if (!isPro()) {
+      const title = safeEl('upgradeTitle');
+      if (title) title.textContent = 'Unlock team mode with Pro';
+      openModal('upgradeModal');
+      return;
+    }
     const err = document.getElementById('errorMsg');
-    err.classList.add('hidden');
+    if (err) err.classList.add('hidden');
     try {
       const data = decodeInvite(document.getElementById('inviteCodeIn').value);
       const p = data.profile || {};
@@ -1786,8 +2409,11 @@
       setProfileOpen(true);
       showToast('Shared profile imported');
     } catch (e) {
-      err.textContent = (e && e.message) || 'Could not import invite code.';
-      err.classList.remove('hidden');
+      if (err) {
+        err.textContent = (e && e.message) || 'Could not import invite code.';
+        err.classList.remove('hidden');
+      }
+      showToast((e && e.message) || 'Could not import invite');
     }
   });
 
@@ -1814,13 +2440,17 @@
     const pe = document.getElementById('promoError');
     if (code === PROMO_CODE) {
       setPro(true);
-      pe.classList.add('hidden');
+      if (pe) pe.classList.add('hidden');
       updateUsageBadge();
+      updateProBanner();
+      updateTeamProUI();
+      renderFavorites();
       refreshSettingsUI();
       closeModal('upgradeModal');
       showToast('Replyly Pro unlocked');
     } else {
-      pe.classList.remove('hidden');
+      if (pe) pe.classList.remove('hidden');
+      showToast('Invalid Pro code');
     }
   });
 
@@ -1879,18 +2509,25 @@
   }
 
   // Init
+  setTheme(getTheme());
   const savedProfile = getProfile();
   if (savedProfile.type) state.biz = savedProfile.type;
   renderChips();
   renderIntentBtns();
   setArabicUI();
   updateUsageBadge();
+  updateProBanner();
+  updateTeamProUI();
   loadProfileForm();
   loadTeamForm();
+  renderFavorites();
   renderHistory();
   maybeShowA2HS();
+  maybeShowOnboarding();
 
   if (location.hash === '#upgrade') {
+    const title = safeEl('upgradeTitle');
+    if (title) title.textContent = 'Unlock Replyly Pro';
     openModal('upgradeModal');
   }
 })();

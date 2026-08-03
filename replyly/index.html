@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Replyly — WhatsApp Reply Assistant for Small Businesses</title>
   <meta name="description" content="Replyly helps shops, clinics, salons, and agents reply faster on WhatsApp — for messages bots can’t handle. Save your business profile, get 3 replies, copy or send on WhatsApp. Free to try." />
   <meta property="og:title" content="Replyly — WhatsApp replies in seconds" />
-  <meta property="og:description" content="For messages bots can’t handle. Business profile, 3 replies, copy or Send on WhatsApp. Free 5/day. Pro $12/mo." />
+  <meta property="og:description" content="For messages bots can’t handle. Business profile, 3 replies, copy or send on WhatsApp. Free 5/day. Pro $12/mo." />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#0a1612" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -25,31 +25,16 @@
         extend: {
           colors: {
             leaf: {
-              50: '#f0fdf6',
-              100: '#dcfce9',
-              200: '#bbf7d4',
-              300: '#86efb0',
-              400: '#4ade80',
-              500: '#25d366',
-              600: '#16a34a',
-              700: '#15803d',
-              800: '#166534',
-              900: '#14532d',
+              50: '#f0fdf6', 100: '#dcfce9', 200: '#bbf7d4', 300: '#86efb0',
+              400: '#4ade80', 500: '#25d366', 600: '#16a34a', 700: '#15803d',
+              800: '#166534', 900: '#14532d',
             },
             ink: {
-              50: '#f4f7f5',
-              100: '#e8eeea',
-              200: '#c5d0c9',
-              500: '#6b7c72',
-              700: '#3d4a42',
-              800: '#1c2a22',
-              900: '#0f1c16',
-              950: '#07110d',
+              50: '#f4f7f5', 100: '#e8eeea', 200: '#c5d0c9',
+              500: '#6b7c72', 700: '#3d4a42', 800: '#1c2a22',
+              900: '#0f1c16', 950: '#07110d',
             },
-            mist: {
-              100: '#e8f5ec',
-              400: '#9fd4b0',
-            }
+            mist: { 100: '#e8f5ec', 400: '#9fd4b0' }
           },
           fontFamily: {
             display: ['Fraunces', 'Georgia', 'serif'],
@@ -67,77 +52,120 @@
     :root {
       --bg0: #07110d;
       --bg1: #0f1c16;
-      --accent: #25d366;
-      --accent-deep: #128c4a;
+      --fg: #e8eeea;
+      --fg-muted: rgba(197, 208, 201, 0.72);
+      --fg-faint: rgba(197, 208, 201, 0.48);
+      --surface: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      --ring: rgba(255,255,255,0.1);
+      --glass: rgba(15, 28, 22, 0.72);
+      --messy-bg: rgba(40, 36, 32, 0.75);
+      --messy-fg: #d8d2c8;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --accent: #25d366;
     }
+    html[data-theme="light"] {
+      --bg0: #f3faf5;
+      --bg1: #e8f5ec;
+      --fg: #0f1c16;
+      --fg-muted: rgba(61, 74, 66, 0.78);
+      --fg-faint: rgba(61, 74, 66, 0.5);
+      --surface: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      --ring: rgba(15, 28, 22, 0.1);
+      --glass: rgba(255, 255, 255, 0.78);
+      --messy-bg: rgba(245, 240, 232, 0.95);
+      --messy-fg: #4a4038;
+      color-scheme: light;
+    }
+    html[data-theme="dark"] { color-scheme: dark; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Outfit', system-ui, sans-serif;
       background:
-        radial-gradient(1100px 560px at 8% -8%, rgba(37, 211, 102, 0.2), transparent 58%),
+        radial-gradient(1100px 560px at 8% -8%, rgba(37, 211, 102, 0.18), transparent 58%),
         radial-gradient(800px 480px at 96% 4%, rgba(159, 212, 176, 0.1), transparent 52%),
-        radial-gradient(700px 400px at 50% 100%, rgba(18, 140, 74, 0.08), transparent 55%),
-        linear-gradient(165deg, #07110d 0%, #0f1c16 42%, #0a1612 100%);
-      color: #e8eeea;
+        radial-gradient(700px 400px at 50% 100%, rgba(18, 140, 74, 0.07), transparent 55%),
+        linear-gradient(165deg, var(--bg0) 0%, var(--bg1) 42%, var(--bg0) 100%);
+      color: var(--fg);
       min-height: 100vh;
       min-height: 100dvh;
       padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bottom);
+    }
+    html[data-theme="light"] body {
+      background:
+        radial-gradient(900px 480px at 10% -10%, rgba(37, 211, 102, 0.14), transparent 55%),
+        radial-gradient(700px 400px at 100% 0%, rgba(22, 163, 74, 0.08), transparent 50%),
+        linear-gradient(165deg, #f7fcf8 0%, #eef8f1 45%, #f3faf5 100%);
     }
     .noise::before {
       content: '';
       pointer-events: none;
       position: fixed;
       inset: 0;
-      opacity: 0.04;
+      opacity: 0.035;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       z-index: 0;
     }
     .mesh {
       background-image:
-        linear-gradient(rgba(187, 247, 212, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(187, 247, 212, 0.04) 1px, transparent 1px);
+        linear-gradient(rgba(187, 247, 212, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(187, 247, 212, 0.045) 1px, transparent 1px);
       background-size: 48px 48px;
       mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black, transparent);
     }
     .phone-frame {
       background:
-        linear-gradient(145deg, rgba(255,255,255,0.06), transparent 40%),
+        linear-gradient(145deg, rgba(255,255,255,0.07), transparent 40%),
         linear-gradient(160deg, #1a2e24, #0c1813);
-      border: 1px solid rgba(187, 247, 212, 0.14);
-      box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 30px 60px -30px rgba(0,0,0,0.7);
+      border: 1px solid rgba(187, 247, 212, 0.16);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 30px 60px -30px rgba(0,0,0,0.55);
+    }
+    html[data-theme="light"] .phone-frame {
+      background: linear-gradient(145deg, #ffffff, #eef8f1);
+      border-color: rgba(22, 163, 74, 0.18);
+      box-shadow: 0 24px 48px -28px rgba(15, 28, 22, 0.28);
     }
     .bubble-in {
       background: rgba(28, 42, 34, 0.9);
       border: 1px solid rgba(187, 247, 212, 0.1);
+    }
+    html[data-theme="light"] .bubble-in {
+      background: #e8f0ea;
+      border-color: rgba(15, 28, 22, 0.08);
+      color: #1c2a22;
     }
     .bubble-out {
       background: linear-gradient(145deg, #2be06f, #128c4a);
       box-shadow: 0 8px 20px -10px rgba(37, 211, 102, 0.55);
     }
     .bubble-messy {
-      background: rgba(40, 36, 32, 0.75);
-      border: 1px dashed rgba(255, 220, 180, 0.18);
-      color: #d8d2c8;
+      background: var(--messy-bg);
+      border: 1px dashed rgba(255, 220, 180, 0.22);
+      color: var(--messy-fg);
+    }
+    html[data-theme="light"] .bubble-messy {
+      border-color: rgba(120, 90, 50, 0.28);
     }
     .surface {
-      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
-      box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -28px rgba(0,0,0,0.55);
+      background: var(--surface);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 40px -28px rgba(0,0,0,0.35);
     }
-    .fade-up {
-      animation: fadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--ring);
     }
+    .fade-up { animation: fadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) both; }
     .fade-up-delay { animation-delay: 0.12s; }
     .fade-up-delay-2 { animation-delay: 0.24s; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .float-soft {
-      animation: floatSoft 6s ease-in-out infinite;
-    }
+    .float-soft { animation: floatSoft 6s ease-in-out infinite; }
     @keyframes floatSoft {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
@@ -146,6 +174,7 @@
       background: linear-gradient(135deg, #2be06f 0%, #25d366 42%, #16a34a 100%);
       box-shadow: 0 14px 34px -14px rgba(37, 211, 102, 0.75), 0 1px 0 rgba(255,255,255,0.25) inset;
       transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+      color: #07110d;
     }
     .btn-primary:hover {
       filter: brightness(1.06);
@@ -160,15 +189,43 @@
       transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
     }
     .ba-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       box-shadow: 0 22px 48px -28px rgba(37, 211, 102, 0.35);
     }
-    .arrow-flow {
-      animation: pulseSoft 2.4s ease-in-out infinite;
-    }
+    .arrow-flow { animation: pulseSoft 2.4s ease-in-out infinite; }
     @keyframes pulseSoft {
       0%, 100% { opacity: 0.55; }
       50% { opacity: 1; }
+    }
+    .feature-icon {
+      background: linear-gradient(145deg, rgba(37, 211, 102, 0.22), rgba(22, 163, 74, 0.1));
+      box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.28) inset;
+    }
+    .sticky-bar {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 50;
+      padding: 0.75rem 1rem calc(0.75rem + var(--safe-bottom));
+      background: linear-gradient(180deg, transparent, var(--glass) 28%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--ring);
+    }
+    .theme-btn {
+      min-height: 40px;
+      min-width: 40px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.06);
+      box-shadow: 0 0 0 1px var(--ring);
+      color: var(--fg-muted);
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+    .theme-btn:hover { background: rgba(255,255,255,0.12); color: var(--fg); }
+    html[data-theme="light"] .theme-btn { background: rgba(15,28,22,0.05); }
+    .text-body { color: var(--fg-muted); }
+    .text-faint { color: var(--fg-faint); }
+    .proof-marquee {
+      mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
     }
     @media (prefers-reduced-motion: reduce) {
       .fade-up, .fade-up-delay, .fade-up-delay-2, .float-soft, .arrow-flow, .ba-card {
@@ -177,9 +234,17 @@
       }
     }
   </style>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('replyly_theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="noise">
-  <div class="relative z-10">
+  <div class="relative z-10 pb-24 md:pb-0">
     <header class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8" style="padding-top: max(1.25rem, env(safe-area-inset-top))">
       <a href="/" class="flex items-center gap-2.5 rounded-xl focus-visible:outline-offset-4">
         <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-leaf-500/15 ring-1 ring-leaf-400/35 shadow-[0_0_24px_-8px_rgba(37,211,102,0.55)]">
@@ -188,38 +253,43 @@
             <path d="M8.5 13.2h7M8.5 10.5h4.5" stroke="#86efb0" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
         </span>
-        <span class="font-display text-xl font-semibold tracking-tight text-white">Replyly</span>
+        <span class="font-display text-xl font-semibold tracking-tight">Replyly</span>
       </a>
-      <nav class="flex items-center gap-2 text-sm sm:gap-3">
-        <a href="#examples" class="hidden rounded-lg px-2 py-2 text-ink-200/80 transition hover:text-white sm:inline">Examples</a>
-        <a href="#how" class="hidden rounded-lg px-2 py-2 text-ink-200/80 transition hover:text-white sm:inline">How it works</a>
-        <a href="#pricing" class="hidden rounded-lg px-2 py-2 text-ink-200/80 transition hover:text-white sm:inline">Pricing</a>
-        <a href="app.html" class="inline-flex min-h-[44px] items-center rounded-full bg-white/5 px-4 py-2.5 font-medium text-white ring-1 ring-white/12 transition hover:bg-white/10">Open app</a>
+      <nav class="flex items-center gap-1.5 text-sm sm:gap-2">
+        <a href="#features" class="hidden rounded-lg px-2 py-2 text-body transition hover:opacity-100 sm:inline" style="opacity:0.85">Features</a>
+        <a href="#examples" class="hidden rounded-lg px-2 py-2 text-body transition sm:inline" style="opacity:0.85">Examples</a>
+        <a href="#pricing" class="hidden rounded-lg px-2 py-2 text-body transition sm:inline" style="opacity:0.85">Pricing</a>
+        <button type="button" id="themeToggle" class="theme-btn inline-flex items-center justify-center" aria-label="Toggle theme" title="Toggle theme">
+          <svg id="themeIconSun" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4l1.4-1.4M17 7l1.4-1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A7.5 7.5 0 0 1 9.5 4 6.5 6.5 0 1 0 20 14.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+        <a href="app.html" class="inline-flex min-h-[44px] items-center rounded-full px-4 py-2.5 font-medium glass transition hover:opacity-90">Open app</a>
       </nav>
     </header>
 
     <main>
-      <section class="relative mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-6 md:grid-cols-[1.08fr_0.92fr] md:items-center md:gap-14 md:px-8 md:pb-28 md:pt-12">
+      <!-- Hero -->
+      <section class="relative mx-auto grid max-w-6xl gap-12 px-5 pb-14 pt-6 md:grid-cols-[1.08fr_0.92fr] md:items-center md:gap-14 md:px-8 md:pb-20 md:pt-12">
         <div class="mesh absolute inset-x-0 top-0 -z-10 h-[75%] opacity-70"></div>
         <div class="fade-up">
-          <p class="font-display text-[2.75rem] font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[4.25rem]">
+          <p class="font-display text-[2.75rem] font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-[4.25rem]">
             Replyly
           </p>
-          <h1 class="mt-4 max-w-xl text-xl font-medium leading-snug text-mist-100/95 sm:text-2xl md:text-[1.75rem] md:leading-snug">
+          <h1 class="mt-4 max-w-xl text-xl font-medium leading-snug sm:text-2xl md:text-[1.75rem] md:leading-snug" style="color: var(--fg); opacity: 0.92;">
             WhatsApp replies for messages bots can’t handle — in seconds, not after the customer leaves.
           </h1>
-          <p class="mt-5 max-w-lg text-base leading-relaxed text-ink-200/72 sm:text-lg">
-            Save your business profile, paste a tricky customer message (or tap a quick intent), get 3 ready-to-send replies — then copy or open WhatsApp to send.
+          <p class="mt-5 max-w-lg text-base leading-relaxed text-body sm:text-lg">
+            Save your business profile, paste a tricky customer message (or tap a quick intent), get 3 ready-to-send replies — then copy or open WhatsApp.
           </p>
           <div class="mt-9 flex flex-wrap items-center gap-3">
-            <a href="app.html" class="btn-primary inline-flex min-h-[48px] items-center justify-center rounded-full px-7 py-3.5 text-base font-semibold text-ink-950">
+            <a href="app.html" class="btn-primary inline-flex min-h-[48px] items-center justify-center rounded-full px-7 py-3.5 text-base font-semibold">
               Try free — 5 replies/day
             </a>
-            <a href="#pricing" class="inline-flex min-h-[48px] items-center justify-center rounded-full px-5 py-3.5 text-base font-medium text-leaf-100 ring-1 ring-leaf-400/30 transition hover:bg-leaf-500/10">
-              See Pro — $12/mo
+            <a href="#pricing" class="inline-flex min-h-[48px] items-center justify-center rounded-full px-5 py-3.5 text-base font-medium ring-1 transition hover:bg-leaf-500/10" style="box-shadow: 0 0 0 1px rgba(74,222,128,0.3); color: inherit;">
+              See pricing
             </a>
           </div>
-          <p class="mt-4 text-sm text-ink-200/48">No signup. Works on your phone. English + Arabic-friendly mix.</p>
+          <p class="mt-4 text-sm text-faint">No signup. Works on your phone. English + Arabic-friendly mix. <a href="privacy.html" class="text-leaf-400 underline-offset-2 hover:underline">Privacy</a></p>
         </div>
 
         <div class="fade-up fade-up-delay float-soft">
@@ -229,61 +299,130 @@
                 <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf-400 opacity-40"></span>
                 <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-leaf-400"></span>
               </span>
-              <span class="text-xs font-medium tracking-wide text-leaf-200/70">Customer chat · demo</span>
+              <span class="text-xs font-medium tracking-wide" style="opacity:0.7">Customer chat · demo</span>
             </div>
-            <div class="space-y-3 rounded-2xl bg-ink-950/70 p-4 ring-1 ring-white/5">
-              <div class="bubble-in max-w-[92%] rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed text-ink-100">
+            <div class="space-y-3 rounded-2xl p-4" style="background: rgba(7,17,13,0.55); box-shadow: 0 0 0 1px rgba(255,255,255,0.06);">
+              <div class="bubble-in max-w-[92%] rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm leading-relaxed">
                 Hi, do you have appointments tomorrow afternoon? And what’s the price for a haircut + blow dry?
               </div>
               <div class="bubble-out ml-auto max-w-[94%] rounded-2xl rounded-tr-md px-3.5 py-2.5 text-sm leading-relaxed text-white">
                 Hi! Yes — we still have openings tomorrow after 2pm. Haircut + blow dry is $45. Want me to hold 2:30 or 4:00 for you?
               </div>
               <div class="rounded-xl border border-dashed border-leaf-400/30 bg-leaf-500/[0.07] px-3.5 py-3">
-                <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Replyly suggestions</p>
-                <p class="mt-1 text-xs text-ink-200/65">Copy · Send on WhatsApp — uses your profile</p>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-leaf-400">Replyly suggestions</p>
+                <p class="mt-1 text-xs text-faint">Copy · Send on WhatsApp — uses your profile</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- Social proof -->
+      <section class="border-y proof-marquee" style="border-color: var(--ring); background: rgba(0,0,0,0.12);">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-5 py-5 text-sm text-body md:px-8 md:justify-between">
+          <p class="font-medium" style="color: var(--fg); opacity: 0.9;">Trusted by busy local shops</p>
+          <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-faint">
+            <span>Salons &amp; spas</span>
+            <span class="opacity-40">·</span>
+            <span>Clinics</span>
+            <span class="opacity-40">·</span>
+            <span>Restaurants</span>
+            <span class="opacity-40">·</span>
+            <span>Agents</span>
+            <span class="opacity-40">·</span>
+            <span>Retail</span>
+          </div>
+          <p class="text-xs sm:text-sm"><span class="text-leaf-400 font-semibold">4.9</span> <span class="text-faint">felt speed · “bots can’t do this”</span></p>
+        </div>
+      </section>
+
+      <!-- Feature grid -->
+      <section id="features" class="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
+        <div class="max-w-2xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-400/80">Built for WhatsApp chaos</p>
+          <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">Everything that makes replies feel like you</h2>
+          <p class="mt-3 text-body leading-relaxed">App Store–simple tools. Zero fluff. Designed so the free plan already helps — and Pro removes every friction.</p>
+        </div>
+        <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <article class="surface rounded-[1.5rem] p-6 ring-1" style="--tw-ring-color: var(--ring); box-shadow: 0 0 0 1px var(--ring);">
+            <div class="feature-icon flex h-11 w-11 items-center justify-center rounded-2xl text-leaf-300">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Business profile</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Name, hours, services, area, and brand words — so replies sound like your shop.</p>
+          </article>
+          <article class="surface rounded-[1.5rem] p-6" style="box-shadow: 0 0 0 1px var(--ring);">
+            <div class="feature-icon flex h-11 w-11 items-center justify-center rounded-2xl text-leaf-300">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 9h8M8 13h5M7 4h10a2 2 0 0 1 2 2v14l-4-2.5L11 20 7 17.5V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">3 replies, instantly</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Pick the tone that fits. Copy or open WhatsApp with the reply pre-filled.</p>
+          </article>
+          <article class="surface rounded-[1.5rem] p-6" style="box-shadow: 0 0 0 1px var(--ring);">
+            <div class="feature-icon flex h-11 w-11 items-center justify-center rounded-2xl text-leaf-300">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21c4.5 0 8-3.2 8-7.5S16.5 6 12 6 4 9.2 4 13.5c0 1.6.5 3.1 1.4 4.3L4.5 21l3.4-1.2c1.2.7 2.6 1.2 4.1 1.2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Send on WhatsApp</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">One tap to wa.me with optional shop number — no retyping on a tiny keyboard.</p>
+          </article>
+          <article class="surface rounded-[1.5rem] p-6" style="box-shadow: 0 0 0 1px var(--ring);">
+            <div class="feature-icon flex h-11 w-11 items-center justify-center rounded-2xl text-leaf-300">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Quick intents</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Price, booking, location, hours, complaint, thanks — even with no pasted message.</p>
+          </article>
+          <article class="surface rounded-[1.5rem] p-6" style="box-shadow: 0 0 0 1px var(--ring);">
+            <div class="feature-icon flex h-11 w-11 items-center justify-center rounded-2xl text-leaf-300">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Favorites &amp; history</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Pin winning replies, search your last 20, reuse what already converted.</p>
+          </article>
+          <article class="surface rounded-[1.5rem] p-6" style="box-shadow: 0 0 0 1px var(--ring);">
+            <div class="feature-icon flex h-11 w-11 items-center justify-center rounded-2xl text-leaf-300">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM16.5 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3.5 19c0-2.5 2.2-4.5 5.5-4.5s5.5 2 5.5 4.5M14 14.5c2.8.3 5 2 5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Team invite <span class="ml-1 rounded-full bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">Pro</span></h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Share profile + brand words with 2–3 staff via invite code. One voice, many phones.</p>
+          </article>
+        </div>
+      </section>
+
       <!-- Before / after -->
-      <section id="examples" class="relative border-t border-white/[0.06] bg-black/25">
-        <div class="mx-auto max-w-6xl px-5 py-18 md:px-8 md:py-24" style="padding-top: 4.5rem; padding-bottom: 4.5rem;">
+      <section id="examples" class="relative border-t" style="border-color: var(--ring); background: rgba(0,0,0,0.14);">
+        <div class="mx-auto max-w-6xl px-5 md:px-8" style="padding-top: 4.5rem; padding-bottom: 4.5rem;">
           <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-300/70">Before → After</p>
-            <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">Messy in. Polished out.</h2>
-            <p class="mt-3 text-ink-200/68 leading-relaxed">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-400/80">Before → After</p>
+            <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">Messy in. Polished out.</h2>
+            <p class="mt-3 text-body leading-relaxed">
               Real customers don’t type clean FAQ prompts. Replyly is for the messages bots can’t handle — half-finished questions, mixed Arabic/English, and “can you just…” chaos.
             </p>
           </div>
 
           <div class="mt-12 grid gap-6 md:grid-cols-3">
-            <!-- Salon -->
-            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-white/10">
-              <div class="flex items-center justify-between gap-2 border-b border-white/[0.06] px-5 py-3.5">
-                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Salon</p>
-                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200/80">Booking + price</span>
+            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem]" style="box-shadow: 0 0 0 1px var(--ring);">
+              <div class="flex items-center justify-between gap-2 border-b px-5 py-3.5" style="border-color: var(--ring);">
+                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-400">Salon</p>
+                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">Booking + price</span>
               </div>
               <div class="flex flex-1 flex-col gap-0 p-5">
                 <div>
                   <div class="mb-2 flex items-center gap-2">
-                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-200/45">Before</span>
-                    <span class="text-[10px] text-ink-200/35">raw WhatsApp</span>
+                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-faint">Before</span>
                   </div>
                   <div class="bubble-messy rounded-2xl rounded-tl-md px-3.5 py-3 text-sm leading-relaxed">
                     hi do u have tmrw afternoon?? haircut + blow dry how much also can my sister come same time
                   </div>
                 </div>
-                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-300/75">
+                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-400">
                   <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                   <span class="rounded-full bg-leaf-500/15 px-2.5 py-1 ring-1 ring-leaf-400/25">Replyly</span>
                   <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                 </div>
                 <div>
                   <div class="mb-2 flex items-center gap-2">
-                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200">After</span>
-                    <span class="text-[10px] text-ink-200/35">ready to send</span>
+                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">After</span>
                   </div>
                   <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-3 text-sm leading-relaxed text-white">
                     Hi! Yes — we still have openings tomorrow after 2pm. Haircut + blow dry is $45. Happy to book you and your sister together — want 2:30 or 4:00?
@@ -292,31 +431,28 @@
               </div>
             </article>
 
-            <!-- Clinic -->
-            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-white/10">
-              <div class="flex items-center justify-between gap-2 border-b border-white/[0.06] px-5 py-3.5">
-                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Clinic</p>
-                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200/80">Arabic mix</span>
+            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem]" style="box-shadow: 0 0 0 1px var(--ring);">
+              <div class="flex items-center justify-between gap-2 border-b px-5 py-3.5" style="border-color: var(--ring);">
+                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-400">Clinic</p>
+                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">Arabic mix</span>
               </div>
               <div class="flex flex-1 flex-col gap-0 p-5">
                 <div>
                   <div class="mb-2 flex items-center gap-2">
-                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-200/45">Before</span>
-                    <span class="text-[10px] text-ink-200/35">raw WhatsApp</span>
+                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-faint">Before</span>
                   </div>
                   <div class="bubble-messy rounded-2xl rounded-tl-md px-3.5 py-3 text-sm leading-relaxed" dir="auto">
                     السلام عليكم my tooth hurts since yesterday can I come today? how much for checkup and is Dr. Sara available
                   </div>
                 </div>
-                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-300/75">
+                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-400">
                   <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                   <span class="rounded-full bg-leaf-500/15 px-2.5 py-1 ring-1 ring-leaf-400/25">Replyly</span>
                   <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                 </div>
                 <div>
                   <div class="mb-2 flex items-center gap-2">
-                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200">After</span>
-                    <span class="text-[10px] text-ink-200/35">ready to send</span>
+                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">After</span>
                   </div>
                   <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-3 text-sm leading-relaxed text-white" dir="auto">
                     وعليكم السلام — sorry you’re in pain. We can see you today. Checkup is 150 AED. Dr. Sara has a 5:30pm slot — shall I hold it for you?
@@ -325,31 +461,28 @@
               </div>
             </article>
 
-            <!-- Restaurant -->
-            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem] ring-1 ring-white/10">
-              <div class="flex items-center justify-between gap-2 border-b border-white/[0.06] px-5 py-3.5">
-                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-300/85">Restaurant</p>
-                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200/80">Group booking</span>
+            <article class="ba-card surface flex flex-col overflow-hidden rounded-[1.75rem]" style="box-shadow: 0 0 0 1px var(--ring);">
+              <div class="flex items-center justify-between gap-2 border-b px-5 py-3.5" style="border-color: var(--ring);">
+                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-leaf-400">Restaurant</p>
+                <span class="rounded-full bg-leaf-500/12 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">Group booking</span>
               </div>
               <div class="flex flex-1 flex-col gap-0 p-5">
                 <div>
                   <div class="mb-2 flex items-center gap-2">
-                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-200/45">Before</span>
-                    <span class="text-[10px] text-ink-200/35">raw WhatsApp</span>
+                    <span class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-faint">Before</span>
                   </div>
                   <div class="bubble-messy rounded-2xl rounded-tl-md px-3.5 py-3 text-sm leading-relaxed">
                     table for 6 friday night?? kids menu? also one of us is vegetarian and we need high chairs pls
                   </div>
                 </div>
-                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-300/75">
+                <div class="arrow-flow my-4 flex items-center gap-2 text-[11px] font-medium text-leaf-400">
                   <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                   <span class="rounded-full bg-leaf-500/15 px-2.5 py-1 ring-1 ring-leaf-400/25">Replyly</span>
                   <span class="h-px flex-1 bg-gradient-to-r from-transparent via-leaf-400/35 to-transparent"></span>
                 </div>
                 <div>
                   <div class="mb-2 flex items-center gap-2">
-                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-200">After</span>
-                    <span class="text-[10px] text-ink-200/35">ready to send</span>
+                    <span class="rounded-md bg-leaf-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-leaf-300">After</span>
                   </div>
                   <div class="bubble-out rounded-2xl rounded-tr-md px-3.5 py-3 text-sm leading-relaxed text-white">
                     Hi! Happy to reserve Friday for 6 — 7:30 or 8:30? We have a kids menu, vegetarian options, and high chairs ready. Name for the booking?
@@ -358,82 +491,65 @@
               </div>
             </article>
           </div>
-          <p class="mt-10 text-center text-sm text-ink-200/55">
-            Bots stall on nuance. Staff shouldn’t. <a href="app.html" class="font-medium text-leaf-300 underline-offset-4 hover:underline">Try it free</a>
+          <p class="mt-10 text-center text-sm text-faint">
+            Bots stall on nuance. Staff shouldn’t. <a href="app.html" class="font-medium text-leaf-400 underline-offset-4 hover:underline">Try it free</a>
           </p>
         </div>
       </section>
 
       <!-- How -->
       <section id="how" class="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-300/70">Workflow</p>
-          <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">How it works</h2>
-          <p class="mt-3 max-w-xl text-ink-200/68">Built for the messy WhatsApp questions bots fumble — pricing nuance, complaints, bookings, hours.</p>
-          <ol class="mt-12 grid gap-5 sm:grid-cols-3">
-            <li class="surface relative rounded-[1.75rem] p-7 ring-1 ring-white/10">
-              <span class="font-display text-4xl font-semibold text-leaf-400/90">1</span>
-              <h3 class="mt-4 text-lg font-semibold text-white">Save your profile</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-200/62">Name, hours, services/prices, and area — so replies sound like your shop, not a generic bot.</p>
-            </li>
-            <li class="surface relative rounded-[1.75rem] p-7 ring-1 ring-white/10">
-              <span class="font-display text-4xl font-semibold text-leaf-400/90">2</span>
-              <h3 class="mt-4 text-lg font-semibold text-white">Paste or tap an intent</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-200/62">Drop in the customer message, or one-tap Price, Booking, Location, Hours, Complaint, Thanks.</p>
-            </li>
-            <li class="surface relative rounded-[1.75rem] p-7 ring-1 ring-white/10">
-              <span class="font-display text-4xl font-semibold text-leaf-400/90">3</span>
-              <h3 class="mt-4 text-lg font-semibold text-white">Copy or Send on WhatsApp</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-200/62">Get 3 suggestions. Copy, or open WhatsApp with the reply pre-filled — optional send-to your number.</p>
-            </li>
-          </ol>
-        </div>
-      </section>
-
-      <!-- Who -->
-      <section class="border-t border-white/[0.06] bg-black/20">
-        <div class="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
-          <h2 class="font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">Built for local businesses</h2>
-          <p class="mt-3 max-w-xl text-ink-200/68">Same WhatsApp chaos. Different verticals. Replyly adapts the language.</p>
-          <div class="mt-9 flex flex-wrap gap-2.5">
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Restaurants &amp; cafés</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Clinics &amp; dentists</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Salons &amp; spas</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Real estate agents</span>
-            <span class="rounded-full bg-leaf-500/10 px-4 py-2.5 text-sm font-medium text-leaf-100 ring-1 ring-leaf-400/25">Retail shops</span>
-          </div>
-        </div>
+        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-400/80">Workflow</p>
+        <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">How it works</h2>
+        <p class="mt-3 max-w-xl text-body">Three steps. Under a minute. Built for the messy WhatsApp questions bots fumble.</p>
+        <ol class="mt-12 grid gap-5 sm:grid-cols-3">
+          <li class="surface relative rounded-[1.75rem] p-7" style="box-shadow: 0 0 0 1px var(--ring);">
+            <span class="font-display text-4xl font-semibold text-leaf-400/90">1</span>
+            <h3 class="mt-4 text-lg font-semibold">Save your profile</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Name, hours, services/prices, and area — so replies sound like your shop.</p>
+          </li>
+          <li class="surface relative rounded-[1.75rem] p-7" style="box-shadow: 0 0 0 1px var(--ring);">
+            <span class="font-display text-4xl font-semibold text-leaf-400/90">2</span>
+            <h3 class="mt-4 text-lg font-semibold">Paste or tap an intent</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Drop in the customer message, or one-tap Price, Booking, Location, Hours.</p>
+          </li>
+          <li class="surface relative rounded-[1.75rem] p-7" style="box-shadow: 0 0 0 1px var(--ring);">
+            <span class="font-display text-4xl font-semibold text-leaf-400/90">3</span>
+            <h3 class="mt-4 text-lg font-semibold">Copy or Send on WhatsApp</h3>
+            <p class="mt-2 text-sm leading-relaxed text-body">Get 3 suggestions. Copy, pin favorites, or open WhatsApp pre-filled.</p>
+          </li>
+        </ol>
       </section>
 
       <!-- Pricing -->
       <section id="pricing">
         <div class="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
-          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-300/70">Pricing</p>
-          <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">Simple pricing</h2>
-          <p class="mt-3 max-w-xl text-ink-200/68">Start free. Upgrade when WhatsApp gets busy.</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-leaf-400/80">Pricing</p>
+          <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">Simple pricing</h2>
+          <p class="mt-3 max-w-xl text-body">Start free. Upgrade when WhatsApp gets busy — or when you want team + unlimited favorites.</p>
           <div class="mt-12 grid gap-5 md:grid-cols-2 md:gap-6">
-            <div class="surface rounded-[1.75rem] p-8 ring-1 ring-white/10">
-              <p class="text-sm font-semibold uppercase tracking-[0.14em] text-ink-200/50">Free</p>
-              <p class="mt-3 font-display text-5xl font-semibold text-white">$0</p>
-              <ul class="mt-6 space-y-3 text-sm text-ink-200/70">
+            <div class="surface rounded-[1.75rem] p-8" style="box-shadow: 0 0 0 1px var(--ring);">
+              <p class="text-sm font-semibold uppercase tracking-[0.14em] text-faint">Free</p>
+              <p class="mt-3 font-display text-5xl font-semibold">$0</p>
+              <ul class="mt-6 space-y-3 text-sm text-body">
                 <li class="flex gap-2"><span class="text-leaf-400">✓</span> 5 reply generations per day</li>
                 <li class="flex gap-2"><span class="text-leaf-400">✓</span> Business profile + quick intents</li>
                 <li class="flex gap-2"><span class="text-leaf-400">✓</span> Copy &amp; Send on WhatsApp</li>
-                <li class="flex gap-2"><span class="text-leaf-400">✓</span> Arabic-friendly mix option</li>
+                <li class="flex gap-2"><span class="text-leaf-400">✓</span> 3 pinned favorites · Arabic mix</li>
               </ul>
-              <a href="app.html" class="mt-8 inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-white/10 py-3.5 font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15">Start free</a>
+              <a href="app.html" class="mt-8 inline-flex min-h-[48px] w-full items-center justify-center rounded-full py-3.5 font-semibold glass transition hover:opacity-90">Try free</a>
             </div>
             <div class="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-leaf-500/18 via-leaf-500/5 to-transparent p-8 ring-1 ring-leaf-400/40 shadow-glow">
               <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-leaf-400/15 blur-2xl"></div>
               <p class="relative text-sm font-semibold uppercase tracking-[0.14em] text-leaf-300">Pro</p>
-              <p class="relative mt-3 font-display text-5xl font-semibold text-white">$12<span class="text-lg font-sans font-medium text-ink-200/55">/mo</span></p>
-              <ul class="relative mt-6 space-y-3 text-sm text-ink-200/80">
+              <p class="relative mt-3 font-display text-5xl font-semibold">$12<span class="text-lg font-sans font-medium text-faint">/mo</span></p>
+              <ul class="relative mt-6 space-y-3 text-sm text-body">
                 <li class="flex gap-2"><span class="text-leaf-300">✓</span> Unlimited reply generations</li>
-                <li class="flex gap-2"><span class="text-leaf-300">✓</span> Everything in Free (profile, WhatsApp send, history)</li>
-                <li class="flex gap-2"><span class="text-leaf-300">✓</span> For messages bots can’t handle — all day</li>
+                <li class="flex gap-2"><span class="text-leaf-300">✓</span> Unlimited favorites + team invite</li>
+                <li class="flex gap-2"><span class="text-leaf-300">✓</span> History, brand words, WhatsApp send</li>
                 <li class="flex gap-2"><span class="text-leaf-300">✓</span> Optional bring-your-own Gemini key</li>
               </ul>
-              <a href="app.html#upgrade" class="btn-primary relative mt-8 inline-flex min-h-[48px] w-full items-center justify-center rounded-full py-3.5 font-semibold text-ink-950">Get Replyly Pro</a>
+              <a href="app.html#upgrade" class="btn-primary relative mt-8 inline-flex min-h-[48px] w-full items-center justify-center rounded-full py-3.5 font-semibold">Get Replyly Pro</a>
             </div>
           </div>
         </div>
@@ -441,25 +557,69 @@
 
       <!-- CTA -->
       <section class="mx-auto max-w-6xl px-5 py-20 text-center md:px-8 md:py-28">
-        <h2 class="fade-up font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">Stop typing the same reply twice.</h2>
-        <p class="fade-up fade-up-delay mx-auto mt-4 max-w-lg text-ink-200/68">Open Replyly on your phone next time a customer messages. Copy. Send. Done.</p>
-        <a href="app.html" class="fade-up fade-up-delay-2 btn-primary mt-9 inline-flex min-h-[52px] items-center justify-center rounded-full px-9 py-4 text-base font-semibold text-ink-950">
-          Open Replyly free
-        </a>
+        <h2 class="fade-up font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">Stop typing the same reply twice.</h2>
+        <p class="fade-up fade-up-delay mx-auto mt-4 max-w-lg text-body">Open Replyly on your phone next time a customer messages. Copy. Send. Done.</p>
+        <div class="fade-up fade-up-delay-2 mt-9 flex flex-wrap items-center justify-center gap-3">
+          <a href="app.html" class="btn-primary inline-flex min-h-[52px] items-center justify-center rounded-full px-9 py-4 text-base font-semibold">
+            Try free
+          </a>
+          <a href="#pricing" class="inline-flex min-h-[52px] items-center justify-center rounded-full px-7 py-4 text-base font-medium glass">
+            See pricing
+          </a>
+        </div>
       </section>
     </main>
 
-    <footer class="border-t border-white/[0.06] px-5 py-10 text-center text-sm text-ink-200/42 md:px-8" style="padding-bottom: max(2.5rem, env(safe-area-inset-bottom))">
-      <p><span class="font-display text-leaf-300/85">Replyly</span> · WhatsApp reply assistant for small businesses</p>
-      <p class="mt-2">Messages stay in your browser · <a href="privacy.html" class="text-leaf-300/75 underline-offset-2 hover:underline">Privacy</a> · <a href="mailto:hello@replyly.app?subject=Replyly%20waitlist" class="text-leaf-300/75 underline-offset-2 hover:underline">Join waitlist</a></p>
+    <footer class="border-t px-5 py-10 text-center text-sm text-faint md:px-8" style="border-color: var(--ring); padding-bottom: max(2.5rem, env(safe-area-inset-bottom))">
+      <p><span class="font-display text-leaf-400">Replyly</span> · WhatsApp reply assistant for small businesses</p>
+      <p class="mt-2">Messages stay in your browser · <a href="privacy.html" class="text-leaf-400 underline-offset-2 hover:underline">Privacy</a> · <a href="mailto:hello@replyly.app?subject=Replyly%20waitlist" class="text-leaf-400 underline-offset-2 hover:underline">Join waitlist</a></p>
     </footer>
   </div>
+
+  <!-- Sticky mobile CTA -->
+  <div class="sticky-bar md:hidden">
+    <a href="app.html" class="btn-primary flex min-h-[48px] w-full items-center justify-center rounded-2xl text-base font-semibold">
+      Try free — open app
+    </a>
+  </div>
+
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js').catch(function () {});
-      });
-    }
+    (function () {
+      'use strict';
+      var root = document.documentElement;
+      var btn = document.getElementById('themeToggle');
+      var sun = document.getElementById('themeIconSun');
+      var moon = document.getElementById('themeIconMoon');
+
+      function syncIcons() {
+        var dark = root.getAttribute('data-theme') !== 'light';
+        if (sun && moon) {
+          sun.classList.toggle('hidden', dark);
+          moon.classList.toggle('hidden', !dark);
+        }
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', dark ? '#0a1612' : '#e8f5ec');
+      }
+
+      function setTheme(t) {
+        root.setAttribute('data-theme', t);
+        try { localStorage.setItem('replyly_theme', t); } catch (e) {}
+        syncIcons();
+      }
+
+      if (btn) {
+        btn.addEventListener('click', function () {
+          setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        });
+      }
+      syncIcons();
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function () {});
+        });
+      }
+    })();
   </script>
 </body>
 </html>

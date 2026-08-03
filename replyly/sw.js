@@ -1,10 +1,12 @@
 /* Replyly — basic offline shell */
-const CACHE = 'replyly-shell-v2';
+const CACHE = 'replyly-shell-v3';
 const SHELL = [
   '/',
   '/index.html',
   '/app',
   '/app.html',
+  '/privacy',
+  '/privacy.html',
   '/manifest.webmanifest',
   '/icons/icon.svg',
   '/icons/icon-192.png',
@@ -50,10 +52,35 @@ self.addEventListener('fetch', function (event) {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
+  // Network-first for HTML so users get fresh overhaul after deploy
+  const isHtml = url.pathname.endsWith('.html') ||
+    url.pathname === '/' ||
+    url.pathname === '/app' ||
+    url.pathname === '/privacy';
+
+  if (isHtml) {
+    event.respondWith(
+      fetch(req).then(function (res) {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then(function (cache) {
+            cache.put(req, copy);
+          });
+        }
+        return res;
+      }).catch(function () {
+        return caches.match(req).then(function (cached) {
+          return cached || caches.match('/app.html') || caches.match('/index.html');
+        });
+      })
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(req).then(function (cached) {
       const network = fetch(req).then(function (res) {
-        if (res && res.ok && (url.pathname.endsWith('.html') || url.pathname === '/' || url.pathname === '/app' || url.pathname.endsWith('.js') || url.pathname.endsWith('.webmanifest') || url.pathname.startsWith('/icons/'))) {
+        if (res && res.ok && (url.pathname.endsWith('.js') || url.pathname.endsWith('.webmanifest') || url.pathname.startsWith('/icons/'))) {
           const copy = res.clone();
           caches.open(CACHE).then(function (cache) {
             cache.put(req, copy);
